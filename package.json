@@ -1,0 +1,17 @@
+{
+  "name": "craps",
+  "version": "0.0.1",
+  "description": "Craps game for CSCE 431",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mgyarmathy/craps.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mgyarmathy/craps/issues"
+  },
+  "homepage": "https://github.com/mgyarmathy/craps",
+  "dependencies": {
+    "express": "~3.4.8",
+    "socket.io": "~0.9.16"
+  }
+}
