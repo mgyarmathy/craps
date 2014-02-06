@@ -12,6 +12,10 @@ app.get('/', function (req, res) {
   res.sendfile(__dirname + '/index.html');
 });
 
+app.get('/phone', function (req, res) {
+  res.sendfile(__dirname + '/phone.html');
+});
+
 io.sockets.on('connection', function (socket) {
   setInterval(function(){
    socket.emit('news', { hello: 'world' });
