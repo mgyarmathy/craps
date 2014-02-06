@@ -39,19 +39,26 @@
   		display: none;
 	}
 	</style>
-	<script type="text/javascript" src="js/external/three.min.r55.js"></script>
-	<script type="text/javascript" src="js/external/stats.js"></script>
-	<script type="text/javascript" src="js/external/physi.r55.js"></script>
-	<script type="text/javascript" src="js/external/dat.gui.min.js"></script>
-	<script type="text/javascript" src="js/diceroller.js"></script>
+	<script type="text/javascript" src="/js/external/three.min.r55.js"></script>
+	<script type="text/javascript" src="/js/external/stats.js"></script>
+	<script type="text/javascript" src="/js/external/physi.r55.js"></script>
+	<script type="text/javascript" src="/js/external/dat.gui.min.js"></script>
+	<script type="text/javascript" src="/js/diceroller.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
 	<script type="text/javascript">
-	Physijs.scripts.worker = 'js/external/physijs_worker.js';
+	Physijs.scripts.worker = '/js/external/physijs_worker.js';
 	window.onload = function() {
 		Roller.init();
 	  	gui = new dat.GUI();
-	  	gui.add(Roller, 'd6').min(0).max(10).step(1);
-	  	gui.add(Roller, 'd20').min(0).max(10).step(1);
 	  	gui.add(Roller, 'roll');
+	  	//Roller.roll();
+
+	  	var socket = io.connect('http://localhost');
+	  	socket.on('news', function (data) {
+	    console.log(data);
+	    Roller.roll();
+	    //socket.emit('my other event', { my: 'data' });
+	  	});
 	}
 	</script>
 </head>

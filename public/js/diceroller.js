@@ -9,7 +9,7 @@ var Roller = (function() {
 
     options = {
         'requestedDice': [],
-        'd6': 0,
+        'd6': 2,
         'd20': 0,
     }
 
@@ -160,7 +160,7 @@ var Roller = (function() {
         ceiling.position.set(0, 20, 0)
         scene.add(ceiling);
     };
-    
+
     var initScene = function() {
         var aspectRatio = window.innerWidth / window.innerHeight;
         var width = 1280;
@@ -174,13 +174,13 @@ var Roller = (function() {
         renderer.domElement.style.width = '100%';
         renderer.domElement.style.height = '100%';
         viewport.appendChild(renderer.domElement);
-        
+
         render_stats = new Stats();
         render_stats.domElement.style.position = 'absolute';
         render_stats.domElement.style.top = '0px';
         render_stats.domElement.style.zIndex = 100;
         viewport.appendChild(render_stats.domElement);
-        
+
         physics_stats = new Stats();
         physics_stats.domElement.style.position = 'absolute';
         physics_stats.domElement.style.top = '50px';
@@ -202,7 +202,7 @@ var Roller = (function() {
                 calculateResults();
             }
         });
-        
+
         // Lights
         light = new THREE.DirectionalLight(0xFFFFFF);
         light.position.set(60, 100, -60);
@@ -226,10 +226,10 @@ var Roller = (function() {
             1, // near
             1000 // far
         );
-        camera.position.set(0, 94, 0); 
+        camera.position.set(0, 94, 0);
         //camera.position.set(60, 60, 60); // for debugging purposes
         camera.lookAt(scene.position);
-        scene.add(camera);          
+        scene.add(camera);
 
         // Action !
         initDiceBox();
@@ -294,7 +294,7 @@ var Roller = (function() {
                                        // messes up lightning on the die
             die.castShadow = true;
             die.id = ++ids;
-            
+
             die.reposition = function() {
                 this.collisions = 0;
                 this.stillRolling = true;
@@ -336,7 +336,7 @@ var Roller = (function() {
             scene.add(die);
         };
     };
-    
+
     var render = function() {
         // FIXME let user stop rendering
         if (!renderingStopped) {
