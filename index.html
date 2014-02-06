@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Web Die Roller - alpha</title>
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<meta charset="UTF-8" />
+	<style>
+	html, body {
+		margin: 0;
+		padding: 0;
+		background: #000;
+		overflow: hidden;
+	}
+
+	body {
+		font-family: sans-serif;
+		height: 100%;
+		width: 100%;
+		position: absolute;
+	}
+
+	canvas {
+		position: absolute;
+        top: 0;
+        left: 0;
+	}
+
+	#total {
+		background: rgba(0, 0, 0, 0.5);
+		color: rgb(220, 220, 220);
+		font-weight: bold;
+		font-size: 200%;
+		position: absolute;
+		padding: 1em;
+		top: 40%;
+  		left: 0;
+  		right: 0;
+  		text-align: center;
+  		display: none;
+	}
+	</style>
+	<script type="text/javascript" src="js/external/three.min.r55.js"></script>
+	<script type="text/javascript" src="js/external/stats.js"></script>
+	<script type="text/javascript" src="js/external/physi.r55.js"></script>
+	<script type="text/javascript" src="js/external/dat.gui.min.js"></script>
+	<script type="text/javascript" src="js/diceroller.js"></script>
+	<script type="text/javascript">
+	Physijs.scripts.worker = 'js/external/physijs_worker.js';
+	window.onload = function() {
+		Roller.init();
+	  	gui = new dat.GUI();
+	  	gui.add(Roller, 'd6').min(0).max(10).step(1);
+	  	gui.add(Roller, 'd20').min(0).max(10).step(1);
+	  	gui.add(Roller, 'roll');
+	}
+	</script>
+</head>
+<body>
+	<div id="viewport"></div>
+	<div id="total"></div>
+</body>
+</html>
