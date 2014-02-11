@@ -2,9 +2,11 @@ var express = require('express'),
     app = express()
   , http = require('http')
   , server = http.createServer(app)
-  , io = require('socket.io').listen(server);
+  , io = require('socket.io').listen(server)
+  , port = process.env.PORT || 3000;
 
-server.listen(3000);
+
+server.listen(port);
 
 app.use(express.static('public'));
 
@@ -17,10 +19,7 @@ app.get('/phone', function (req, res) {
 });
 
 io.sockets.on('connection', function (socket) {
-  setInterval(function(){
-   socket.emit('news', { hello: 'world' });
-  },5000);
-  /*socket.on('my other event', function (data) {
-    console.log(data);
-  });*/
+  socket.on('roll', function (data) {
+    socket.broadcast.emit('dice', {number: '2'});
+  });
 });

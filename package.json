@@ -2,6 +2,7 @@
   "name": "craps",
   "version": "0.0.1",
   "description": "Craps game for CSCE 431",
+  "main": "app.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/mgyarmathy/craps.git"

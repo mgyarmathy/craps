@@ -54,7 +54,7 @@
 	  	//Roller.roll();
 
 	  	var socket = io.connect('http://localhost');
-	  	socket.on('news', function (data) {
+	  	socket.on('dice', function (data) {
 	    console.log(data);
 	    Roller.roll();
 	    //socket.emit('my other event', { my: 'data' });
