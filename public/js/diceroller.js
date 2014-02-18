@@ -102,6 +102,8 @@ var Roller = (function() {
             var total = 'Total: ' + values.reduce(function(a, b) {
                 return a + b;
             });
+            document.getElementById('rollVal').textContent = values.reduce(function(a,b) { return a + b} );
+            document.getElementById('rollVal').style.display = 'none';
             if (values.length > 1) {
                 total += ' (' + results + ')';
             }

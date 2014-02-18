@@ -8,7 +8,7 @@
    <script src="/socket.io/socket.io.js"></script>
    <script>
    window.onload = function() {
-      var socket = io.connect('http://localhost');
+      var socket = io.connect('http://localhost:3000');
       socket.emit('roll', {});
    }
    </script>
