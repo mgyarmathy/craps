@@ -38,11 +38,26 @@
   		text-align: center;
   		display: none;
 	}
+	
+	#roundStatus {
+		background: rgba(0, 0, 0, 0.5);
+		color: rgb(220, 220, 220);
+		font-weight: bold;
+		font-size: 200%;
+		position: absolute;
+		padding: 1em;
+		top: 60%;
+  		left: 0;
+  		right: 0;
+  		text-align: center;
+  		display: none;
+	}
 	</style>
 	<script type="text/javascript" src="/js/external/three.min.r55.js"></script>
 	<script type="text/javascript" src="/js/external/stats.js"></script>
 	<script type="text/javascript" src="/js/external/physi.r55.js"></script>
 	<script type="text/javascript" src="/js/external/dat.gui.min.js"></script>
+	<script type="text/javascript" src="/js/round.js"></script>
 	<script type="text/javascript" src="/js/diceroller.js"></script>
 	<script src="/socket.io/socket.io.js"></script>
 	<script type="text/javascript">
@@ -66,5 +81,6 @@
 	<div id="viewport"></div>
 	<div id="total"></div>
 	<div id="rollVal"></div>
+	<div id="roundStatus"></div>
 </body>
 </html>

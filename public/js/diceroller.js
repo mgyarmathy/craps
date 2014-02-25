@@ -100,6 +100,7 @@ var Roller = (function() {
             });
             var results = values.join(', ');
             var total = 'Total: ' + values.reduce(function(a, b) {
+				doRound(a+b);
                 return a + b;
             });
             document.getElementById('rollVal').textContent = values.reduce(function(a,b) { return a + b} );
@@ -364,6 +365,7 @@ var Roller = (function() {
             }
         });
         document.getElementById('total').style.display = 'none';
+		document.getElementById('roundStatus').style.display = 'none';
         done = false;
         console.log(options.requestedDice);
         if (options.requestedDice.length) {
