@@ -2,15 +2,67 @@
 <html>
 <head>
    <title>Success</title>
+   <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 </head>
 <body>
-   <h1>Hello MOTO</h1>
+   <h1>Hello Phone.</h1>
    <script src="/socket.io/socket.io.js"></script>
+   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
    <script>
    window.onload = function() {
-      var socket = io.connect('http://localhost:3000');
-      socket.emit('roll', {});
+      var socket = io.connect('http://craps.ngrok.com');
+
+      socket.on('roll', function(data) {
+         $('#result').text(data.text);
+      });
+
+      $('button').click(function() {
+         socket.emit('roll' , {});
+      })
+
+      if (window.DeviceMotionEvent) {
+         window.addEventListener('devicemotion', deviceMotionHandler, false);
+      }
+
+      function deviceMotionHandler(eventData) {
+         var info, xyz = "[X, Y, Z]";
+
+         // Grab the acceleration from the results
+         var acceleration = eventData.acceleration;
+         if ( (acceleration.x > 8.0 || acceleration.y > 8.0 || acceleration.z > 8.0) && $('#rollenable').is(':checked')) {
+            $('#result').text('successful roll');
+            socket.emit('roll' , {});
+         }
+         /*
+         info = xyz.replace("X", acceleration.x);
+         info = info.replace("Y", acceleration.y);
+         info = info.replace("Z", acceleration.z);
+         document.getElementById("moAccel").innerHTML = info;
+
+         // Grab the acceleration including gravity from the results
+         acceleration = eventData.accelerationIncludingGravity;
+         info = xyz.replace("X", acceleration.x);
+         info = info.replace("Y", acceleration.y);
+         info = info.replace("Z", acceleration.z);
+         document.getElementById("moAccelGrav").innerHTML = info;
+
+         // Grab the rotation rate from the results
+         var rotation = eventData.rotationRate;
+         info = xyz.replace("X", rotation.alpha);
+         info = info.replace("Y", rotation.beta);
+         info = info.replace("Z", rotation.gamma);
+         document.getElementById("moRotation").innerHTML = info;
+
+         // Grab the refresh interval from the results
+         info = eventData.interval;
+         document.getElementById("moInterval").innerHTML = info;
+         */
+      }
    }
    </script>
+
+   <button style="width: 100%; height: 300px; font-size:72px;">ROLL</button>
+   <div id="result" style="font-size: 24px">abc</div>
+   <input id="rollenable" type="checkbox">Acceleration enabled</input>
 </body>
 </html>

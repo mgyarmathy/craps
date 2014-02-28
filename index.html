@@ -9,7 +9,7 @@
 		margin: 0;
 		padding: 0;
 		background: #000;
-		overflow: hidden;
+		xoverflow: hidden;
 	}
 
 	body {
@@ -52,6 +52,10 @@
   		text-align: center;
   		display: none;
 	}
+
+	#viewport {
+		height: 400px;
+	}
 	</style>
 	<script type="text/javascript" src="/js/external/three.min.r55.js"></script>
 	<script type="text/javascript" src="/js/external/stats.js"></script>
@@ -60,19 +64,18 @@
 	<script type="text/javascript" src="/js/round.js"></script>
 	<script type="text/javascript" src="/js/diceroller.js"></script>
 	<script src="/socket.io/socket.io.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 	<script type="text/javascript">
 	Physijs.scripts.worker = '/js/external/physijs_worker.js';
 	window.onload = function() {
 		Roller.init();
 	  	gui = new dat.GUI();
 	  	gui.add(Roller, 'roll');
-	  	//Roller.roll();
 
 	  	var socket = io.connect('http://localhost:3000');
-	  	socket.on('dice', function (data) {
-	    console.log(data);
-	    Roller.roll();
-	    //socket.emit('my other event', { my: 'data' });
+	  	socket.on('roll', function (data) {
+	    	console.log(data);
+	    	Roller.roll();
 	  	});
 	}
 	</script>

@@ -167,10 +167,11 @@ var Roller = (function() {
     var initScene = function() {
         var aspectRatio = window.innerWidth / window.innerHeight;
         var width = 1280;
+        var width = 800;
         var height = width / aspectRatio;
         var viewport = document.getElementById('viewport');
 
-        renderer = new THREE.WebGLRenderer({ antialias: true });        
+        renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(width, height);
         renderer.shadowMapEnabled = true;
         renderer.shadowMapSoft = true;
