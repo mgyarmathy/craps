@@ -30,6 +30,7 @@
          // Grab the acceleration from the results
          var acceleration = eventData.acceleration;
          if ( (acceleration.x > 8.0 || acceleration.y > 8.0 || acceleration.z > 8.0) && $('#rollenable').is(':checked')) {
+            $('#rollenable').prop('checked', false);
             $('#result').text('successful roll');
             socket.emit('roll' , {});
          }

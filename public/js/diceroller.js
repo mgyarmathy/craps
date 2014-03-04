@@ -135,39 +135,45 @@ var Roller = (function() {
         ground.receiveShadow = true;
         scene.add(ground);
 
-        var bumper_material = ground_material.clone();
-        bumper_material.visible = false;
-        bumper_material.wireframe = true;
+        var bumper_material = Physijs.createMaterial(
+            new THREE.MeshLambertMaterial({ 
+                map: THREE.ImageUtils.loadTexture('models/textures/bumper-wood.jpg')
+            }),
+            .7, // medium friction
+            .3 // low restitution
+        );
+        bumper_material.visible = true;
+        bumper_material.wireframe = false;
 
-        var bumper_geom = new THREE.CubeGeometry(1, 20, 30);
-        var bumper_geom_sides = new THREE.CubeGeometry(1, 20, 50);
+        var bumper_geom = new THREE.CubeGeometry(1, 15, 30);
+        var bumper_geom_sides = new THREE.CubeGeometry(1, 15, 50);
         var bumper = new Physijs.BoxMesh(bumper_geom, bumper_material, 0);
-        bumper.position.set(25, 10, 0);
+        bumper.position.set(25, 3, 0);
         scene.add(bumper);
         
         bumper = new Physijs.BoxMesh(bumper_geom, bumper_material, 0);
-        bumper.position.set(-25, 10, 0);
+        bumper.position.set(-25, 3, 0);
         scene.add(bumper);
         
         bumper = new Physijs.BoxMesh(bumper_geom_sides, bumper_material, 0);
-        bumper.position.set(0, 10, -15);
+        bumper.position.set(0, 3, -15);
         bumper.rotation.set(0, Math.PI / 2, 0);
         scene.add(bumper);
         
         bumper = new Physijs.BoxMesh(bumper_geom_sides, bumper_material, 0);
-        bumper.position.set(0, 10, 15);
+        bumper.position.set(0, 3, 15);
         bumper.rotation.set(0, Math.PI / 2, 0);
         scene.add(bumper);
 
-        var ceiling = new Physijs.BoxMesh(ground_geom, bumper_material, 0);
-        ceiling.position.set(0, 20, 0)
-        scene.add(ceiling);
+        //var ceiling = new Physijs.BoxMesh(ground_geom, bumper_material, 0);
+        //ceiling.position.set(0, 20, 0)
+        //scene.add(ceiling);
     };
 
     var initScene = function() {
         var aspectRatio = window.innerWidth / window.innerHeight;
         var width = 1280;
-        var width = 800;
+        var width = 1280;
         var height = width / aspectRatio;
         var viewport = document.getElementById('viewport');
 
@@ -179,7 +185,7 @@ var Roller = (function() {
         renderer.domElement.style.height = '100%';
         viewport.appendChild(renderer.domElement);
 
-        render_stats = new Stats();
+        /*render_stats = new Stats();
         render_stats.domElement.style.position = 'absolute';
         render_stats.domElement.style.top = '0px';
         render_stats.domElement.style.zIndex = 100;
@@ -190,7 +196,7 @@ var Roller = (function() {
         physics_stats.domElement.style.top = '50px';
         physics_stats.domElement.style.zIndex = 100;
         viewport.appendChild(physics_stats.domElement);
-
+        */
         scene = new Physijs.Scene({ 
             reportsize: options.requestedDice.length + 6,
             fixedTimeStep: 1 / 60,
@@ -202,7 +208,7 @@ var Roller = (function() {
                 // help us ensure the dice doesn't fall off the board, or
                 // affect performance, look into that.
                 scene.simulate(undefined, 2);
-                physics_stats.update();
+                //physics_stats.update();
                 calculateResults();
             }
         });
@@ -230,8 +236,8 @@ var Roller = (function() {
             1, // near
             1000 // far
         );
-        camera.position.set(0, 94, 0);
-        //camera.position.set(60, 60, 60); // for debugging purposes
+        //camera.position.set(0, 94, 0);
+        camera.position.set(65, 65, 0); // for debugging purposes
         camera.lookAt(scene.position);
         scene.add(camera);
 
@@ -346,7 +352,7 @@ var Roller = (function() {
         if (!renderingStopped) {
             requestAnimationFrame(render);
             renderer.render(scene, camera);
-            render_stats.update();
+            //render_stats.update();
         }
     };
 
