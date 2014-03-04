@@ -9,32 +9,32 @@
 		margin: 0;
 		padding: 0;
 		background: #000;
-		overflow: hidden;
+		xoverflow: hidden;
 	}
-
+/*
 	body {
 		font-family: sans-serif;
-		height: 100%;
-		width: 100%;
-		position: absolute;
+		xheight: 100%;
+		xwidth: 100%;
+		xposition: absolute;
 	}
 
 	canvas {
 		position: absolute;
-        top: 0;
-        left: 0;
-	}
+      top: 0;
+      left: 0;
+	}*/
 
 	#total {
 		background: rgba(0, 0, 0, 0.5);
 		color: rgb(220, 220, 220);
 		font-weight: bold;
 		font-size: 200%;
-		position: absolute;
+		xposition: absolute;
 		padding: 1em;
-		top: 40%;
-  		left: 0;
-  		right: 0;
+		xtop: 40%;
+  		xleft: 0;
+  		xright: 0;
   		text-align: center;
   		display: none;
 	}
@@ -44,14 +44,19 @@
 		color: rgb(220, 220, 220);
 		font-weight: bold;
 		font-size: 200%;
-		position: absolute;
+		xposition: absolute;
 		padding: 1em;
-		top: 60%;
-  		left: 0;
-  		right: 0;
+		xtop: 60%;
+  		xleft: 0;
+  		xright: 0;
   		text-align: center;
   		display: none;
 	}
+/*
+	#viewport {
+		height: 400px;
+	}
+	*/
 	</style>
 	<script type="text/javascript" src="/js/external/three.min.r55.js"></script>
 	<script type="text/javascript" src="/js/external/stats.js"></script>
@@ -60,27 +65,34 @@
 	<script type="text/javascript" src="/js/round.js"></script>
 	<script type="text/javascript" src="/js/diceroller.js"></script>
 	<script src="/socket.io/socket.io.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 	<script type="text/javascript">
 	Physijs.scripts.worker = '/js/external/physijs_worker.js';
 	window.onload = function() {
 		Roller.init();
-	  	gui = new dat.GUI();
-	  	gui.add(Roller, 'roll');
-	  	//Roller.roll();
+	  	//gui = new dat.GUI();
+	  	//gui.add(Roller, 'roll');
 
 	  	var socket = io.connect('http://localhost:3000');
-	  	socket.on('dice', function (data) {
-	    console.log(data);
-	    Roller.roll();
-	    //socket.emit('my other event', { my: 'data' });
+	  	socket.on('roll', function (data) {
+	    	console.log(data);
+	    	Roller.roll();
+	  	});
+
+	  	$('#rollButton').click(function() {
+	  		Roller.roll();
 	  	});
 	}
 	</script>
 </head>
 <body>
-	<div id="viewport"></div>
-	<div id="total"></div>
+	<div id="game" style="display: inline-block; background-color: red; width:20%;"><h1> Hello World</h1>
+		<button id="rollButton">Roll</button></div>
+	<div id="viewport" style="display: inline-block; width: 50%;"></div>
+	<div id="game" style="display: inline-block; background-color: red; width:20%;"><div id="total"></div>
 	<div id="rollVal"></div>
 	<div id="roundStatus"></div>
+	</div>
+	
 </body>
 </html>
