@@ -136,6 +136,7 @@ function betsEval(dice1, dice2)
 	document.getElementById('hard8BetStatus').textContent = 'active';
 	document.getElementById('hard10BetStatus').textContent = 'active';
 	// if we roll 4, 6, 8, or 10 see if it's "Hard Way"
+	// if a seven is rolled, all bets are lost
 	switch(diceValue) {
 		case 4:
 			if (dice1 == dice2) {
@@ -150,6 +151,12 @@ function betsEval(dice1, dice2)
 			} else {
 				document.getElementById('hard6BetStatus').textContent = 'Loser';
 			}
+			break;
+		case 7:
+			document.getElementById('hard4BetStatus').textContent = 'Loser';
+			document.getElementById('hard6BetStatus').textContent = 'Loser';
+			document.getElementById('hard8BetStatus').textContent = 'Loser';
+			document.getElementById('hard10BetStatus').textContent = 'Loser';
 			break;
 		case 8:
 			if (dice1 == dice2) {
