@@ -18,7 +18,8 @@
 	window.onload = function() {
 		Roller.init();
 
-	  	var socket = io.connect('http://localhost:3000');
+	  	//var socket = io.connect('http://localhost:3000');
+	  	var socket = io.connect('http://craps501.herokuapp.com/');
 	  	socket.on('roll', function (data) {
 	    	console.log(data);
 	    	Roller.roll();
