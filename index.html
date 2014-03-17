@@ -9,36 +9,39 @@
 		margin: 0;
 		padding: 0;
 		background: #000;
-		xoverflow: hidden;
-	}
-/*
-	body {
 		font-family: sans-serif;
-		xheight: 100%;
-		xwidth: 100%;
-		xposition: absolute;
 	}
-
-	canvas {
-		position: absolute;
-      top: 0;
-      left: 0;
-	}*/
-
+	h1 {
+		color:white;
+		font-size:16px;
+		margin-top:5px;
+		margin-bottom:5px;
+	}
 	#total {
-		background: rgba(0, 0, 0, 0.5);
-		color: rgb(220, 220, 220);
+		color:white;
 		font-weight: bold;
 		font-size: 200%;
-		xposition: absolute;
 		padding: 1em;
-		xtop: 40%;
-  		xleft: 0;
-  		xright: 0;
   		text-align: center;
   		display: none;
 	}
-	
+
+	#currGameState {
+		color:white;
+		font-size:13px;
+		float:left;
+		padding: 1em;
+		xtop: 20%;
+  		xleft: 0;
+  		xright: 0;
+		display: none;
+	}
+	.bettingCheckboxes {
+		color:white;
+		font-size:13px;
+		width:50%;
+		float:left;
+	}
 	#roundStatus {
 		background: rgba(0, 0, 0, 0.5);
 		color: rgb(220, 220, 220);
@@ -52,17 +55,12 @@
   		text-align: center;
   		display: none;
 	}
-/*
-	#viewport {
-		height: 400px;
-	}
-	*/
 	</style>
 	<script type="text/javascript" src="/js/external/three.min.r55.js"></script>
 	<script type="text/javascript" src="/js/external/stats.js"></script>
 	<script type="text/javascript" src="/js/external/physi.r55.js"></script>
 	<script type="text/javascript" src="/js/external/dat.gui.min.js"></script>
-	<script type="text/javascript" src="/js/round.js"></script>
+	<script type="text/javascript" src="/js/betseval.js"></script>
 	<script type="text/javascript" src="/js/diceroller.js"></script>
 	<script src="/socket.io/socket.io.js"></script>
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
@@ -82,17 +80,93 @@
 	  	$('#rollButton').click(function() {
 	  		Roller.roll();
 	  	});
+
+		$('#newUser').click(function()	{
+			document.getElementById("name0").innerHTML = "Karan";
+			document.getElementById("funds0").innerHTML = "Funds: 1550";
+			document.getElementById("picture0").src = "data:image/jpeg;base64,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";
+		});
 	}
+
 	</script>
 </head>
 <body>
-	<div id="game" style="display: inline-block; background-color: red; width:20%;"><h1> Hello World</h1>
-		<button id="rollButton">Roll</button></div>
-	<div id="viewport" style="display: inline-block; width: 50%;"></div>
-	<div id="game" style="display: inline-block; background-color: red; width:20%;"><div id="total"></div>
-	<div id="rollVal"></div>
-	<div id="roundStatus"></div>
+	<div id="game" style="display: inline-block; float:left; background-color: gray; height:400px; width:25%;">
+		<h1> Click Roll Below:</h1>
+		<button id="rollButton">Roll</button><br>
+		<h1>Place Your Bets!</h1>
+		<div class="bettingCheckboxes">
+			<input type="checkbox" id="passLineCb">Pass Line Bet<br>
+			<input type="checkbox" id="dontPassLineCb">Don't Pass Line Bet<br>
+			<input type="checkbox" id="passOddsCb" disabled>Pass Odds Bet<br>
+			<input type="checkbox" id="dontPassOddsCb" disabled>Don't Pass Odds Bet<br>
+			<input type="checkbox" id="snakeEyesCb">Snake Eyes [2] Bet<br>
+			<input type="checkbox" id="aceDeuceCb">Ace-Deuce [3] Bet<br>
+			<input type="checkbox" id="yoCb">Yo [11] Bet<br>
+			<input type="checkbox" id="boxcarsCb">Boxcars [12] Bet<br>
+			<input type="checkbox" id="anyCrapsCb">Any Craps [2,3, or 11] Bet<br>
+			<input type="checkbox" id="anySevenCb">Any Seven [7] Bet<br>
+			<input type="checkbox" id="fieldCb">Field [2,3,4,9,11, or 12] Bet<br>
+			<input type="checkbox" id="hard4Cb">Hard Way 4 Bet<br>
+			<input type="checkbox" id="hard6Cb">Hard Way 6 Bet<br>
+			<input type="checkbox" id="hard8Cb">Hard Way 8 Bet<br>
+			<input type="checkbox" id="hard10Cb">Hard Way 10 Bet<br>
+		</div>
 	</div>
-	
+	<div id="viewport" style="display: inline-block; float:left; width: 50%;"></div>
+	<div id="game" style="display: inline-block; background-color: gray; width:25%; height:400px; float:left;">
+		<div id="total"></div>
+		<div id="rollVal"></div>
+		<div id="currGameState">
+		</div>
+	</div>
+	<div id="players" style="display:block;width:100%;">
+		<div id="player0" style="float:left; width:15%; padding-left: 1%; padding-top: 1.6%">
+			<h2 id="name0" style="color: #FFFFFF; text-align: center"> User 0 </h2>
+			<h3 id="funds0" style="color: #FFFFFF; text-align: center"> Fund: 0 </h3>
+			<img id="picture0" align="middle" style="color:#FFFFFF; max-width: 100%;max-height:11.5%;padding-left: 1%;padding-top: 7%;" src="http://placehold.it/350x150" alt="name"></img>
+		</div>
+		<div id="player1" style="float:left; width:15%; padding-left: 1%; padding-top: 1.6%">
+			<h2 id="name1" style="color: #FFFFFF; text-align: center"> User 1 </h2>
+			<h3 id="funds1" style="color: #FFFFFF; text-align: center"> Fund: 0 </h3>
+			<img id="picture1" align="middle" style="color:#FFFFFF; width: 100%;padding-left: 1%;padding-top: 7%;" src="http://placehold.it/350x150" alt="name"></img>
+		</div>
+		<div id="player2" style="float:left; width:15%; padding-left: 1%; padding-top: 1.6%">
+			<h2 id="name2" style="color: #FFFFFF; text-align: center"> User 2 </h2>
+			<h3 id="funds2" style="color: #FFFFFF; text-align: center"> Fund: 0 </h3>
+			<img id="picture2" align="middle" style="color:#FFFFFF; width: 100%;padding-left: 1%;padding-top: 7%;" src="http://placehold.it/350x150" alt="name"></img>
+		</div>
+		<div id="player3" style="float:left; width:15%; padding-left: 1%; padding-top: 1.6%">
+			<h2 id="name3" style="color: #FFFFFF; text-align: center"> User 3 </h2>
+			<h3 id="funds3" style="color: #FFFFFF; text-align: center"> Fund: 0 </h3>
+			<img id="picture3" align="middle" style="color:#FFFFFF; width: 100%;padding-left: 1%;padding-top: 7%;" src="http://placehold.it/350x150" alt="name"></img>
+		</div>
+		<div id="player4" style="float:left; width:15%; padding-left: 1%; padding-top: 1.6%">
+			<h2 id="name4" style="color: #FFFFFF; text-align: center"> User 4 </h2>
+			<h3 id="funds4" style="color: #FFFFFF; text-align: center"> Fund: 0 </h3>
+			<img id="picture4" align="middle" style="color:#FFFFFF; width: 100%;padding-left: 1%;padding-top: 7%;" src="http://placehold.it/350x150" alt="name"></img>
+		</div>
+		<div id="player5" style="float:left; width:15%; padding-left: 1%; padding-top: 1.6%">
+			<h2 id="name5" style="color: #FFFFFF; text-align: center"> User 5 </h2>
+			<h3 id="funds5" style="color: #FFFFFF; text-align: center"> Fund: 0 </h3>
+			<img id="picture5" align="middle" style="color:#FFFFFF; width: 100%;padding-left: 1%;padding-top: 7%;" src="http://placehold.it/350x150" alt="name"></img>
+		</div>
+		<div id="player6" style="float:left; width:15%; padding-left: 1%; padding-top: 1.6%">
+			<h2 id="name6" style="color: #FFFFFF; text-align: center"> User 6 </h2>
+			<h3 id="funds6" style="color: #FFFFFF; text-align: center"> Fund: 0 </h3>
+			<img id="picture6" align="middle" style="color:#FFFFFF; width: 100%;padding-left: 1%;padding-top: 7%;" src="http://placehold.it/350x150" alt="name"></img>
+		</div>
+
+		<!-- Enter user -->
+
+		<div id="enter" style="float: left; padding-left:1%; padding-top:7%; width:15%;"><h1> New User Enters:</h1>
+		<button id="newUser">Enter User</button></div>
+
+		<div id="player7" style="float:right; width:15%; padding-right: 3.5%; padding-top: 1.6%">
+			<h2 id="name7" style="color: #FFFFFF; text-align: center"> User 7 </h2>
+			<h3 id="funds7" style="color: #FFFFFF; text-align: center"> Fund: 0 </h3>
+			<img id="picture7" align="middle" style="color:#FFFFFF; width: 100%;padding-left: 1%;padding-top: 7%;" src="http://placehold.it/350x150" alt="name"></img>
+		</div>
+	</div>
 </body>
 </html>

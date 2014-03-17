@@ -100,7 +100,7 @@ var Roller = (function() {
             });
             var results = values.join(', ');
             var total = 'Total: ' + values.reduce(function(a, b) {
-				doRound(a+b);
+				betsEval(a,b);
                 return a + b;
             });
             document.getElementById('rollVal').textContent = values.reduce(function(a,b) { return a + b} );
@@ -204,7 +204,7 @@ var Roller = (function() {
         scene.setGravity(new THREE.Vector3(0, -70, 0));
         scene.addEventListener('update', function() {
             if (!simulationStopped) {
-                // FIXME: tweaking parameters sent to scene.simulate might
+                // FIXME: tweaking parameters sent to .simulate might
                 // help us ensure the dice doesn't fall off the board, or
                 // affect performance, look into that.
                 scene.simulate(undefined, 2);
@@ -355,6 +355,11 @@ var Roller = (function() {
             //render_stats.update();
         }
     };
+	
+	var karan = function() {
+	
+	
+	};
 
     var reRoll = function() {
         // build from options
@@ -372,11 +377,11 @@ var Roller = (function() {
             }
         });
         document.getElementById('total').style.display = 'none';
-		document.getElementById('roundStatus').style.display = 'none';
+		document.getElementById('currGameState').style.display = 'none';
         done = false;
         console.log(options.requestedDice);
         if (options.requestedDice.length) {
-            console.log('LOL')
+            console.log('Reroll complete')
             play();
             spawnDice();
         }
