@@ -10,6 +10,7 @@
 		padding: 0;
 		background: #000;
 		xoverflow: hidden;
+		font-family: sans-serif;
 	}
 /*
 	body {
@@ -24,10 +25,16 @@
       top: 0;
       left: 0;
 	}*/
+	
+	h1 {
+		color:white;
+		font-size:16px;
+		margin-top:5px;
+		margin-bottom:5px;
+	}
 
 	#total {
-		background: rgba(0, 0, 0, 0.5);
-		color: rgb(220, 220, 220);
+		color:white;
 		font-weight: bold;
 		font-size: 200%;
 		xposition: absolute;
@@ -40,15 +47,21 @@
 	}
 	
 	#currGameState {
-		background: rgba(0, 0, 0, 0.5);
-		color: rgb(220, 220, 220);
+		color:white;
 		font-size:13px;
-		xposition: absolute;
+		float:left;
 		padding: 1em;
 		xtop: 20%;
   		xleft: 0;
   		xright: 0;
 		display: none;
+	}
+	
+	.bettingCheckboxes {
+		color:white;
+		font-size:13px;
+		width:50%;
+		float:left;
 	}
 /*
 	#viewport {
@@ -92,29 +105,34 @@
 	</script>
 </head>
 <body>
-	<div id="game" style="display: inline-block; background-color: gray; width:20%;"><h1> Click Roll Below:</h1>
-		<button id="rollButton">Roll</button></div>
-	<div id="viewport" style="display: inline-block; width: 50%;"></div>
-	<div id="game" style="display: inline-block; background-color: gray; width:20%;"><div id="total"></div>
-	<div id="rollVal"></div>
-	<div id="currGameState">
-		<strong>Current Game State:<strong><br><br>
-		Pass Line Bet: <span id="passLineBetStatus"></span><br>
-		Don't Pass Line Bet: <span id="dontPassLineBetStatus"></span><br>
-		Pass Odds Bet: <span id="passOddsBetStatus"></span><br>
-		Don't Pass Odds Bet: <span id="dontPassOddsBetStatus"></span><br>
-		Snake Eyes Bet [2]: <span id="snakeEyesBetStatus"></span><br>
-		Ace-Deuce Bet [3]: <span id="aceDeuceBetStatus"></span><br>
-		Yo Bet [11]: <span id="yoBetStatus"></span><br>
-		Boxcars Bet [12]: <span id="boxcarsBetStatus"></span><br>
-		Any Craps Bet: <span id="anyCrapsBetStatus"></span><br>
-		Any Seven: <span id="anySevenBetStatus"></span><br>
-		Field Bet: <span id="fieldBetStatus"></span><br>
-		Hard 4: <span id="hard4BetStatus"></span><br>
-		Hard 6: <span id="hard6BetStatus"></span><br>
-		Hard 8: <span id="hard8BetStatus"></span><br>
-		Hard 10: <span id="hard10BetStatus"></span><br>
+	<div id="game" style="display: inline-block; float:left; background-color: gray; height:400px; width:25%;">
+		<h1> Click Roll Below:</h1>
+		<button id="rollButton">Roll</button><br>
+		<h1>Place Your Bets!</h1>
+		<div class="bettingCheckboxes">
+			<input type="checkbox" id="passLineCb">Pass Line Bet<br>
+			<input type="checkbox" id="dontPassLineCb">Don't Pass Line Bet<br>
+			<input type="checkbox" id="passOddsCb" disabled>Pass Odds Bet<br>
+			<input type="checkbox" id="dontPassOddsCb" disabled>Don't Pass Odds Bet<br>
+			<input type="checkbox" id="snakeEyesCb">Snake Eyes [2] Bet<br>
+			<input type="checkbox" id="aceDeuceCb">Ace-Deuce [3] Bet<br>
+			<input type="checkbox" id="yoCb">Yo [11] Bet<br>
+			<input type="checkbox" id="boxcarsCb">Boxcars [12] Bet<br>
+			<input type="checkbox" id="anyCrapsCb">Any Craps [2,3, or 11] Bet<br>
+			<input type="checkbox" id="anySevenCb">Any Seven [7] Bet<br>
+			<input type="checkbox" id="fieldCb">Field [2,3,4,9,11, or 12] Bet<br>
+			<input type="checkbox" id="hard4Cb">Hard Way 4 Bet<br>
+			<input type="checkbox" id="hard6Cb">Hard Way 6 Bet<br>
+			<input type="checkbox" id="hard8Cb">Hard Way 8 Bet<br>
+			<input type="checkbox" id="hard10Cb">Hard Way 10 Bet<br>
+		</div>
 	</div>
+	<div id="viewport" style="display: inline-block; float:left; width: 50%;"></div>
+	<div id="game" style="display: inline-block; background-color: gray; width:25%; height:400px; float:left;">
+		<div id="total"></div>
+		<div id="rollVal"></div>
+		<div id="currGameState">
+		</div>
 	</div>
 	<div id="players" style="display:block;width:100%;">
 		<div id="player0" style="float:left; width:15%; padding-left: 1%; padding-top: 1.6%">
