@@ -4,58 +4,7 @@
 	<title>Web Die Roller - alpha</title>
 	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 	<meta charset="UTF-8" />
-	<style>
-	html, body {
-		margin: 0;
-		padding: 0;
-		background: #000;
-		font-family: sans-serif;
-	}
-	h1 {
-		color:white;
-		font-size:16px;
-		margin-top:5px;
-		margin-bottom:5px;
-	}
-	#total {
-		color:white;
-		font-weight: bold;
-		font-size: 200%;
-		padding: 1em;
-  		text-align: center;
-  		display: none;
-	}
-
-	#currGameState {
-		color:white;
-		font-size:13px;
-		float:left;
-		padding: 1em;
-		xtop: 20%;
-  		xleft: 0;
-  		xright: 0;
-		display: none;
-	}
-	.bettingCheckboxes {
-		color:white;
-		font-size:13px;
-		width:50%;
-		float:left;
-	}
-	#roundStatus {
-		background: rgba(0, 0, 0, 0.5);
-		color: rgb(220, 220, 220);
-		font-weight: bold;
-		font-size: 200%;
-		xposition: absolute;
-		padding: 1em;
-		xtop: 60%;
-  		xleft: 0;
-  		xright: 0;
-  		text-align: center;
-  		display: none;
-	}
-	</style>
+	<link rel="stylesheet" type="text/css" href="/css/styles.css"/>
 	<script type="text/javascript" src="/js/external/three.min.r55.js"></script>
 	<script type="text/javascript" src="/js/external/stats.js"></script>
 	<script type="text/javascript" src="/js/external/physi.r55.js"></script>
@@ -68,8 +17,6 @@
 	Physijs.scripts.worker = '/js/external/physijs_worker.js';
 	window.onload = function() {
 		Roller.init();
-	  	//gui = new dat.GUI();
-	  	//gui.add(Roller, 'roll');
 
 	  	var socket = io.connect('http://localhost:3000');
 	  	socket.on('roll', function (data) {
@@ -120,52 +67,54 @@
 		<div id="currGameState">
 		</div>
 	</div>
-	<div id="players" style="display:block;width:100%;">
-		<div id="player0" style="float:left; width:15%; padding-left: 1%; padding-top: 1.6%">
-			<h2 id="name0" style="color: #FFFFFF; text-align: center"> User 0 </h2>
-			<h3 id="funds0" style="color: #FFFFFF; text-align: center"> Fund: 0 </h3>
-			<img id="picture0" align="middle" style="color:#FFFFFF; max-width: 100%;max-height:11.5%;padding-left: 1%;padding-top: 7%;" src="http://placehold.it/350x150" alt="name"></img>
+	<div id="players">
+		<div class="player" id="player0">
+			<h2 id="name0">User 0</h2>
+			<h3 id="funds0">Fund: 0</h3>
+			<img id="picture0" src="http://placehold.it/350x150"></img>
 		</div>
-		<div id="player1" style="float:left; width:15%; padding-left: 1%; padding-top: 1.6%">
-			<h2 id="name1" style="color: #FFFFFF; text-align: center"> User 1 </h2>
-			<h3 id="funds1" style="color: #FFFFFF; text-align: center"> Fund: 0 </h3>
-			<img id="picture1" align="middle" style="color:#FFFFFF; width: 100%;padding-left: 1%;padding-top: 7%;" src="http://placehold.it/350x150" alt="name"></img>
+		<div class="player" id="player1">
+			<h2 id="name1">User 1</h2>
+			<h3 id="funds1">Fund: 0</h3>
+			<img id="picture1" src="http://placehold.it/350x150"></img>
 		</div>
-		<div id="player2" style="float:left; width:15%; padding-left: 1%; padding-top: 1.6%">
-			<h2 id="name2" style="color: #FFFFFF; text-align: center"> User 2 </h2>
-			<h3 id="funds2" style="color: #FFFFFF; text-align: center"> Fund: 0 </h3>
-			<img id="picture2" align="middle" style="color:#FFFFFF; width: 100%;padding-left: 1%;padding-top: 7%;" src="http://placehold.it/350x150" alt="name"></img>
+		<div class="player" id="player2">
+			<h2 id="name2">User 2</h2>
+			<h3 id="funds2">Fund: 0</h3>
+			<img id="picture2" src="http://placehold.it/350x150"></img>
 		</div>
-		<div id="player3" style="float:left; width:15%; padding-left: 1%; padding-top: 1.6%">
-			<h2 id="name3" style="color: #FFFFFF; text-align: center"> User 3 </h2>
-			<h3 id="funds3" style="color: #FFFFFF; text-align: center"> Fund: 0 </h3>
-			<img id="picture3" align="middle" style="color:#FFFFFF; width: 100%;padding-left: 1%;padding-top: 7%;" src="http://placehold.it/350x150" alt="name"></img>
+		<div class="player" id="player3">
+			<h2 id="name3">User 3</h2>
+			<h3 id="funds3">Fund: 0</h3>
+			<img id="picture3" src="http://placehold.it/350x150"></img>
 		</div>
-		<div id="player4" style="float:left; width:15%; padding-left: 1%; padding-top: 1.6%">
-			<h2 id="name4" style="color: #FFFFFF; text-align: center"> User 4 </h2>
-			<h3 id="funds4" style="color: #FFFFFF; text-align: center"> Fund: 0 </h3>
-			<img id="picture4" align="middle" style="color:#FFFFFF; width: 100%;padding-left: 1%;padding-top: 7%;" src="http://placehold.it/350x150" alt="name"></img>
+		<div class="player" id="player4">
+			<h2 id="name4">User 4</h2>
+			<h3 id="funds4">Fund: 0</h3>
+			<img id="picture4" src="http://placehold.it/350x150"></img>
 		</div>
-		<div id="player5" style="float:left; width:15%; padding-left: 1%; padding-top: 1.6%">
-			<h2 id="name5" style="color: #FFFFFF; text-align: center"> User 5 </h2>
-			<h3 id="funds5" style="color: #FFFFFF; text-align: center"> Fund: 0 </h3>
-			<img id="picture5" align="middle" style="color:#FFFFFF; width: 100%;padding-left: 1%;padding-top: 7%;" src="http://placehold.it/350x150" alt="name"></img>
+		<div class="player" id="player5">
+			<h2 id="name5">User 5</h2>
+			<h3 id="funds5">Fund: 0</h3>
+			<img id="picture5" src="http://placehold.it/350x150"></img>
 		</div>
-		<div id="player6" style="float:left; width:15%; padding-left: 1%; padding-top: 1.6%">
-			<h2 id="name6" style="color: #FFFFFF; text-align: center"> User 6 </h2>
-			<h3 id="funds6" style="color: #FFFFFF; text-align: center"> Fund: 0 </h3>
-			<img id="picture6" align="middle" style="color:#FFFFFF; width: 100%;padding-left: 1%;padding-top: 7%;" src="http://placehold.it/350x150" alt="name"></img>
+		<div class="player" id="player6">
+			<h2 id="name6">User 6</h2>
+			<h3 id="funds6">Fund: 0</h3>
+			<img id="picture6" src="http://placehold.it/350x150"></img>
 		</div>
 
 		<!-- Enter user -->
 
-		<div id="enter" style="float: left; padding-left:1%; padding-top:7%; width:15%;"><h1> New User Enters:</h1>
-		<button id="newUser">Enter User</button></div>
+		<div id="enter">
+			<h1>New User Enters:</h1>
+			<button id="newUser">Enter User</button>
+		</div>
 
-		<div id="player7" style="float:right; width:15%; padding-right: 3.5%; padding-top: 1.6%">
-			<h2 id="name7" style="color: #FFFFFF; text-align: center"> User 7 </h2>
-			<h3 id="funds7" style="color: #FFFFFF; text-align: center"> Fund: 0 </h3>
-			<img id="picture7" align="middle" style="color:#FFFFFF; width: 100%;padding-left: 1%;padding-top: 7%;" src="http://placehold.it/350x150" alt="name"></img>
+		<div class="player" id="player7">
+			<h2 id="name7">User 7</h2>
+			<h3 id="funds7">Fund: 0</h3>
+			<img id="picture7" src="http://placehold.it/350x150"></img>
 		</div>
 	</div>
 </body>

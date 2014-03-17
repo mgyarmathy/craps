@@ -20,6 +20,6 @@ app.get('/phone', function (req, res) {
 
 io.sockets.on('connection', function (socket) {
   socket.on('roll', function (data) {
-    io.sockets.emit('roll', {text: 'rolled dice'});
+    socket.broadcast.emit('dice', {number: '2'});
   });
 });
