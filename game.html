@@ -62,7 +62,7 @@
 
       $('#leaveGame').click(function() {
          socket.emit('leaveTable', {tableNumber: vars['t'], name: vars['name']});
-         window.location = "http://localhost:3000/splash";
+         window.location = "http://localhost:3000/lobby";
       });
 
       $('#newUser').click(function()   {
