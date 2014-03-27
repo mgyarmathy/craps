@@ -6,14 +6,15 @@
    <meta charset="UTF-8" />
    <link rel="stylesheet" type="text/css" href="/css/styles.css"/>
    <script type="text/javascript" src="/js/external/three.min.r55.js"></script>
-   <script type="text/javascript" src="/jlayers').empty();
-         $.each(data.players, functis/external/stats.js"></script>
+   <script type="text/javascript" src="/js/external/stats.js"></script>
    <script type="text/javascript" src="/js/external/physi.r55.js"></script>
    <script type="text/javascript" src="/js/external/dat.gui.min.js"></script>
+   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
    <script type="text/javascript" src="/js/betseval.js"></script>
+   <script type="text/javascript" src="/js/boardclick.js"></script>
+   <script type="text/javascript" src="/js/boardhover.js"></script>
    <script type="text/javascript" src="/js/diceroller.js"></script>
    <script src="/socket.io/socket.io.js"></script>
-   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
    <script type="text/javascript">
 
    Physijs.scripts.worker = '/js/external/physijs_worker.js';
@@ -96,24 +97,6 @@
    <div id="game" style="display: inline-block; float:left; background-color: gray; height:400px; width:25%;">
       <h1>Click Roll Below:</h1>
       <button id="rollButton">Roll</button><br>
-      <h1>Place Your Bets!</h1>
-      <div class="bettingCheckboxes">
-         <input type="checkbox" id="passLineCb">Pass Line Bet<br>
-         <input type="checkbox" id="dontPassLineCb">Don't Pass Line Bet<br>
-         <input type="checkbox" id="passOddsCb" disabled>Pass Odds Bet<br>
-         <input type="checkbox" id="dontPassOddsCb" disabled>Don't Pass Odds Bet<br>
-         <input type="checkbox" id="snakeEyesCb">Snake Eyes [2] Bet<br>
-         <input type="checkbox" id="aceDeuceCb">Ace-Deuce [3] Bet<br>
-         <input type="checkbox" id="yoCb">Yo [11] Bet<br>
-         <input type="checkbox" id="boxcarsCb">Boxcars [12] Bet<br>
-         <input type="checkbox" id="anyCrapsCb">Any Craps [2,3, or 11] Bet<br>
-         <input type="checkbox" id="anySevenCb">Any Seven [7] Bet<br>
-         <input type="checkbox" id="fieldCb">Field [2,3,4,9,11, or 12] Bet<br>
-         <input type="checkbox" id="hard4Cb">Hard Way 4 Bet<br>
-         <input type="checkbox" id="hard6Cb">Hard Way 6 Bet<br>
-         <input type="checkbox" id="hard8Cb">Hard Way 8 Bet<br>
-         <input type="checkbox" id="hard10Cb">Hard Way 10 Bet<br>
-      </div>
    </div>
    <div id="viewport" style="display: inline-block; float:left; width: 50%;"></div>
    <div id="game" style="display: inline-block; background-color: gray; width:25%; height:400px; float:left;">
@@ -122,46 +105,46 @@
       <div id="currGameState">
       </div>
    </div>
+   <div id="gameBoard">
+      <div id="passLineVert" onclick="passLineClick()"></div>
+      <div id="dontPassBarVert" onclick="dontPassBarClick()"></div>
+            <div id="dontComeBar"></div>
+               <div class="place" id="placeFour" onclick="placeFourClick()"></div>
+               <div class="place" id="placeFive" onclick="placeFiveClick()"></div>
+               <div class="place" id="placeSix" onclick="placeSixClick()"></div>
+               <div class="place" id="placeEight" onclick="placeEightClick()"></div>
+               <div class="place" id="placeNine" onclick="placeNineClick()"></div>
+               <div class="place" id="placeTen" onclick="placeTenClick()"></div>
+               <div class="point" id="pointFour"></div>
+               <div class="point" id="pointFive"></div>
+               <div class="point" id="pointSix"></div>
+               <div class="point" id="pointEight"></div>
+               <div class="point" id="pointNine"></div>
+               <div class="point" id="pointTen"></div>
+         <div id="come"></div>
+         <div id="field" onclick="fieldClick()"></div>
+         <div id="dontPassBarHori" onclick="dontPassBarClick()"></div>
+         <div id="passLineHori" onclick="passLineClick()"></div>
+      <div id="passOdds" onclick="passOddsClick()"></div>
+      <div id="anySeven" onclick="anySevenClick()"></div>
+      <div id="hardWaySix" onclick="hardWaySixClick()"></div>
+      <div id="hardWayTen" onclick="hardWayTenClick()"></div>
+      <div id="hardWayEight" onclick="hardWayEightClick()"></div>
+      <div id="hardWayFour" onclick="hardWayFourClick()"></div>
+      <div id="dontPassOdds" onclick="dontPassOddsClick()"></div>
+      <div id="aceDeuce" onclick="aceDeuceClick()"></div>
+      <div id="snakeEyes" onclick="snakeEyesClick()"></div>
+      <div id="boxcars" onclick="boxcarsClick()"></div>
+      <div id="yoLeft" onclick="yoLeftClick()"></div>
+      <div id="yoRight" onclick="yoRightClick()"></div>
+      <div id="anyCraps" onclick="anyCrapsClick()"></div>
+      <div id="message"></div>
+   </div>
    <div id="players">
       <div class="player" id="player0">
          <h2 id="name0">User 0</h2>
          <h3 id="funds0">Fund: 0</h3>
          <img id="picture0" src="http://placehold.it/350x150"></img>
-      </div>
-      <div class="player" id="player1">
-         <h2 id="name1">User 1</h2>
-         <h3 id="funds1">Fund: 0</h3>
-         <img id="picture1" src="http://placehold.it/350x150"></img>
-      </div>
-      <div class="player" id="player2">
-         <h2 id="name2">User 2</h2>
-         <h3 id="funds2">Fund: 0</h3>
-         <img id="picture2" src="http://placehold.it/350x150"></img>
-      </div>
-      <div class="player" id="player3">
-         <h2 id="name3">User 3</h2>
-         <h3 id="funds3">Fund: 0</h3>
-         <img id="picture3" src="http://placehold.it/350x150"></img>
-      </div>
-      <div class="player" id="player4">
-         <h2 id="name4">User 4</h2>
-         <h3 id="funds4">Fund: 0</h3>
-         <img id="picture4" src="http://placehold.it/350x150"></img>
-      </div>
-      <div class="player" id="player5">
-         <h2 id="name5">User 5</h2>
-         <h3 id="funds5">Fund: 0</h3>
-         <img id="picture5" src="http://placehold.it/350x150"></img>
-      </div>
-      <div class="player" id="player6">
-         <h2 id="name6">User 6</h2>
-         <h3 id="funds6">Fund: 0</h3>
-         <img id="picture6" src="http://placehold.it/350x150"></img>
-      </div>
-      <div class="player" id="player7">
-         <h2 id="name7">User 7</h2>
-         <h3 id="funds7">Fund: 0</h3>
-         <img id="picture7" src="http://placehold.it/350x150"></img>
       </div>
    </div>
 </body>

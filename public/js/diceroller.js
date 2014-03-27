@@ -1,6 +1,7 @@
 'use strict';
 
 var Roller = (function() {
+	
     var render_stats, renderer, physics_stats, scene, light, camera, 
         dices = [], done = false, 
         ids = 0, options,
@@ -362,6 +363,12 @@ var Roller = (function() {
 	};
 
     var reRoll = function() {
+		// cannot roll if there are no Line Bets made
+		if (isComeOutRoll && !passLineActive && !dontPassLineActive) {
+			alert('Must make a Line Bet before rolling!');
+			return;
+		}
+		
         // build from options
         var i, type, die;
 
