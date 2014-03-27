@@ -6,7 +6,8 @@
    <meta charset="UTF-8" />
    <link rel="stylesheet" type="text/css" href="/css/styles.css"/>
    <script type="text/javascript" src="/js/external/three.min.r55.js"></script>
-   <script type="text/javascript" src="/js/external/stats.js"></script>
+   <script type="text/javascript" src="/jlayers').empty();
+         $.each(data.players, functis/external/stats.js"></script>
    <script type="text/javascript" src="/js/external/physi.r55.js"></script>
    <script type="text/javascript" src="/js/external/dat.gui.min.js"></script>
    <script type="text/javascript" src="/js/betseval.js"></script>
@@ -32,14 +33,23 @@
       Roller.init();
 
       var socket = io.connect('http://localhost:3000');
+      //var socket = io.connect('http://craps.ngrok.com/');
       //var socket = io.connect('http://craps501.herokuapp.com/');
 
-/*
-      $.get('http://casino.curtiswendel.me:8080/everything?name=' + vars['id'], function(data) {
+      var screenName, funds;
+
+
+      $.get('http://casino.curtiswendel.me:3000/api/getUser/'+vars['id'], function(data) {
          console.log(data);
-      })
-*/
-      socket.emit('joinTable', {tableNumber: vars['t'], name: vars['name'], funds: vars['funds']});
+         screenName = data.screenName;
+         funds = data.balance;
+         socket.emit('joinTable', {tableNumber: vars['t'], name: data.screenName, funds: data.balance});
+      });
+
+      socket.on('joinFailure', function(data) {
+         alert('Table Full - redirecting back to lobby');
+         window.location='http://localhost:3000/lobby';
+      });
 
       /* socket.io events */
 
@@ -48,10 +58,17 @@
          Roller.roll();
       });
 
-      socket.on('newPlayer', function (player) {
-         $('#name0').text(player.name);
-         $('#funds0').text(player.funds);
-      })
+      socket.on('playerList', function (data) {
+         console.log(data.players);
+         $('#players').empty();
+         $.each(data.players, function(i, player) {
+            $('#players').append('<div class="player" id="player'+i+'">'
+                                +   '<h2>'+player.name+'</h2>'
+                                +   '<h3>'+player.funds+'</h3>'
+                                +   '<img id="picture2" src="http://placehold.it/350x150"></img>'
+                                +'</div>');
+         });
+      });
 
 
       /* jQuery events */
@@ -61,19 +78,13 @@
       });
 
       $('#leaveGame').click(function() {
-         socket.emit('leaveTable', {tableNumber: vars['t'], name: vars['name']});
+         socket.emit('leaveTable', {tableNumber: vars['t'], name: screenName});
          window.location = "http://localhost:3000/lobby";
-      });
-
-      $('#newUser').click(function()   {
-         document.getElementById("name0").innerHTML = "Karan";
-         document.getElementById("funds0").innerHTML = "Funds: 1550";
-         document.getElementById("picture0").src = "https://scontent-a-dfw.xx.fbcdn.net/hphotos-frc3/t1.0-9/1461730_10152375685113327_579832133_n.jpg";
       });
 
       $(window).bind('beforeunload', function() {
          $('#game, #viewport, #players').hide();
-         socket.emit('leaveTable', {tableNumber: vars['t'], name: vars['name']});
+         socket.emit('leaveTable', {tableNumber: vars['t'], name: screenName});
          return "Are you sure?";
       });
    }
@@ -147,14 +158,6 @@
          <h3 id="funds6">Fund: 0</h3>
          <img id="picture6" src="http://placehold.it/350x150"></img>
       </div>
-
-      <!-- Enter user -->
-
-      <div id="enter">
-         <h1>New User Enters:</h1>
-         <button id="newUser">Enter User</button>
-      </div>
-
       <div class="player" id="player7">
          <h2 id="name7">User 7</h2>
          <h3 id="funds7">Fund: 0</h3>

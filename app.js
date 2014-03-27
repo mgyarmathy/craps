@@ -18,8 +18,8 @@ app.get('/phone', function (req, res) {
   res.sendfile(__dirname + '/phone.html');
 });
 
-app.get('/splash', function (req, res) {
-  res.sendfile(__dirname + '/splash.html');
+app.get('/lobby', function (req, res) {
+  res.sendfile(__dirname + '/lobby.html');
 });
 
 app.get('/game', function (req, res) {
@@ -46,9 +46,20 @@ function Table(id) {
 }
 
 function Player(name, funds) {
+  this.sid = makeid();
   this.name = name;
   this.funds = funds;
   this.payout = function(amount) { this.funds += amount; };
+}
+
+function makeid() {
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for( var i=0; i < 5; i++ )
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
 }
 
 var tables = new Array();
@@ -59,7 +70,7 @@ for (var i = 0; i<8; i++) {
 
 io.sockets.on('connection', function (socket) {
   socket.on('roll', function (data) {
-    io.sockets.emit('roll', {text: 'rolled dice'});
+    io.sockets.in(data.tableNumber).emit('roll', {text: 'rolled dice'});
   });
 
   socket.on('getTableStatus', function (data) {
@@ -72,8 +83,9 @@ io.sockets.on('connection', function (socket) {
 
   socket.on('joinTable', function(data) {
     if (!tables[data.tableNumber].isFull()) {
+      socket.join(data.tableNumber);
       tables[data.tableNumber].addPlayer(new Player(data.name, data.funds));
-      socket.emit('newPlayer', {name: data.name, funds: data.funds });
+      io.sockets.in(data.tableNumber).emit('playerList', {players: tables[data.tableNumber].players});
     }
     else {
       socket.emit('joinFailure', {tableNumber: data.tableNumber});
@@ -81,7 +93,9 @@ io.sockets.on('connection', function (socket) {
   });
 
   socket.on('leaveTable', function(data) {
+    socket.leave(data.tableNumber);
     tables[data.tableNumber].removePlayer(data.name);
+    io.sockets.in(data.tableNumber).emit('playerList', {players: tables[data.tableNumber].players});
   });
 
 });
