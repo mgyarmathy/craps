@@ -29,27 +29,256 @@ h1 {
    display: none;
 }
 
-.bettingCheckboxes {
-   color: white;
-   font-size: 13px;
-   width: 50%;
-   float: left;
-}
-
 #roundStatus {
    background: rgba(0, 0, 0, 0.5);
    color: rgb(220, 220, 220);
    font-weight: bold;
    font-size: 200%;
-   xposition: absolute;
    padding: 1em;
-   xtop: 60%;
-   xleft: 0;
-   xright: 0;
    text-align: center;
    display: none;
 }
 
+/* board css */
+
+#gameBoard {
+   background-color:#548347;
+   background-image:url('crapsboard.png');
+   background-repeat:no-repeat;
+   float:left;
+   width:540px;
+   height:612px;
+}
+
+#passLineVert{
+   background-color:lawngreen;
+   opacity:0.0;
+   float:left;
+   width:36px;
+   height:274px;
+   margin-left:11px;
+   margin-top:11px;
+}
+
+#dontPassBarVert {
+   background-color:lawngreen;
+   opacity:0.0;
+   float:left;
+   width:34px;
+   height:233px;
+   margin-left:10px;
+   margin-top:11px;
+}
+
+#dontComeBar {
+   background-color:lawngreen;
+   opacity:0.0;
+   float:left;
+   width:54px;
+   height:98px;
+   margin-left:3px;
+   margin-top:11px;
+}
+
+.place {
+   background-color:lawngreen;
+   opacity:0.0;
+   float:left;
+   width:60px;
+   height:34px;
+   margin-left:3px;
+   margin-top:11px;
+}
+
+.point {
+   background-color:lawngreen;
+   opacity:0.0;
+   float:left;
+   width:60px;
+   height:60px;
+   margin-left:3px;
+   margin-top:4px;
+}
+
+#come {
+   background-color:lawngreen;
+   opacity:0.0;
+   float:left;
+   width:435px;
+   height:58px;
+   margin-left:3px;
+   margin-top:3px;
+}
+
+#field {
+   background-color:lawngreen;
+   opacity:0.0;
+   float:left;
+   width:435px;
+   height:47px;
+   margin-left:3px;
+   margin-top:4px;
+}
+
+#dontPassBarHori {
+   background-color:lawngreen;
+   opacity:0.0;
+   float:left;
+   width:438px;
+   height:19px;
+   margin-top:4px;
+}
+
+#passLineHori {
+   background-color:lawngreen;
+   opacity:0.0;
+   float:left;
+   width:482px;
+   height:30px;
+   margin-top:11px;
+}
+
+#passOdds {
+   background-color:blue;
+   opacity:0.0;
+   float:left;
+   width:54px;
+   height:98px;
+   margin-left:39px;
+   margin-top:19px;
+}
+
+#anySeven {
+   background-color:lawngreen;
+   opacity:0.0;
+   float:left;
+   width:260px;
+   height:24px;
+   margin-left:58px;
+   margin-top:19px;
+}
+
+#hardWaySix {
+   background-color:lawngreen;
+   opacity:0.0;
+   float:left;
+   width:143px;
+   height:50px;
+   margin-left:40px;
+   margin-top:5px;
+}
+
+#hardWayTen {
+   background-color:lawngreen;
+   opacity:0.0;
+   float:left;
+   width:143px;
+   height:50px;
+   margin-left:5px;
+   margin-top:5px;
+}
+
+#hardWayEight {
+   background-color:lawngreen;
+   opacity:0.0;
+   float:left;
+   width:142px;
+   height:52px;
+   margin-left:40px;
+   margin-top:5px;
+}
+
+#hardWayFour {
+   background-color:lawngreen;
+   opacity:0.0;
+   float:left;
+   width:143px;
+   height:52px;
+   margin-left:5px;
+   margin-top:5px;
+}
+
+#dontPassOdds {
+   background-color:blue;
+   opacity:0.0;
+   float:left;
+   width:54px;
+   height:98px;
+   margin-left:36px;
+   margin-top:-80px;
+}
+
+#aceDeuce {
+   background-color:lawngreen;
+   opacity:0.0;
+   float:left;
+   width:96px;
+   height:48px;
+   margin-left:133px;
+   margin-top:5px;
+}
+
+#snakeEyes {
+   background-color:lawngreen;
+   opacity:0.0;
+   float:left;
+   width:93px;
+   height:48px;
+   margin-left:4px;
+   margin-top:5px;
+}
+
+#boxcars {
+   background-color:lawngreen;
+   opacity:0.0;
+   float:left;
+   width:93px;
+   height:48px;
+   margin-left:5px;
+   margin-top:5px;
+}
+
+#yoLeft {
+   background-color:lawngreen;
+   opacity:0.0;
+   float:left;
+   width:141px;
+   height:53px;
+   margin-left:133px;
+   margin-top:5px;
+}
+
+#yoRight {
+   background-color:lawngreen;
+   opacity:0.0;
+   float:left;
+   width:145px;
+   height:53px;
+   margin-left:5px;
+   margin-top:5px;
+}
+
+#anyCraps {
+   background-color:lawngreen;
+   opacity:0.0;
+   float:left;
+   width:291px;
+   height:33px;
+   margin-left:133px;
+   margin-top:5px;
+}
+
+#message {
+   margin-top:5px;
+   float:left;
+   color:white;
+   text-align:center;
+   width:100%;
+   height:15px;
+   font-size:12px;
+   font-family:Arial;
+   font-weight:bold;
+}
 
 /* #players */
 
