@@ -14,11 +14,19 @@
    <script type="text/javascript" src="/js/boardclick.js"></script>
    <script type="text/javascript" src="/js/boardhover.js"></script>
    <script type="text/javascript" src="/js/diceroller.js"></script>
+
+   <!-- for modals -->
+   <script src="/js/external/vex.combined.min.js"></script>
+   <script>vex.defaultOptions.className = 'vex-theme-plain';</script>
+   <link rel="stylesheet" href="/css/external/vex.css" />
+   <link rel="stylesheet" href="/css/external/vex-theme-plain.css" />
+
+
    <script src="/socket.io/socket.io.js"></script>
    <script type="text/javascript">
 
    Physijs.scripts.worker = '/js/external/physijs_worker.js';
-   window.onload = function() {
+   $(document).ready(function() {
       //get query variables from url querystring
       var vars = [], hash;
       var q = document.URL.split('?')[1];
@@ -37,14 +45,37 @@
       //var socket = io.connect('http://craps.ngrok.com/');
       //var socket = io.connect('http://craps501.herokuapp.com/');
 
-      var screenName, funds;
+      var screenName, funds, sid;
+      var playerId = vars['id'];
+      var tableNumber = vars['t'];
 
 
-      $.get('http://casino.curtiswendel.me:3000/api/getUser/'+vars['id'], function(data) {
+      $.get('http://casino.curtiswendel.me:3000/api/getUser/'+playerId, function(data) {
          console.log(data);
          screenName = data.screenName;
-         funds = data.balance;
-         socket.emit('joinTable', {tableNumber: vars['t'], name: data.screenName, funds: data.balance});
+         //funds = data.balance;
+         vex.dialog.open({
+           message: 'Hello '+screenName+',<br/><br/>Please indicate your funds for this game:',
+           input: '<input type="number" name="funds" value="100" step="100" min="100" max="'+data.balance+'"/><label>(max: '+data.balance+')</label>',
+           buttons: [
+             $.extend({}, vex.dialog.buttons.YES, {
+               text: 'Confirm'
+             }), $.extend({}, vex.dialog.buttons.NO, {
+               text: 'Back'
+             })
+           ],
+           callback: function(data) {
+             if (data === false) {
+               return console.log('Cancelled');
+             }
+             $.post('http://casino.curtiswendel.me:3000/api/requestFunds?userID='+playerId+'&amount='+data.funds+'&gameID=5', function( response ) {
+                console.log(response);
+             });
+             socket.emit('joinTable', {tableNumber: tableNumber, name: screenName, funds: data.funds});
+             funds = data.funds;
+             sid = data.sid;
+           }
+         });
       });
 
       socket.on('joinFailure', function(data) {
@@ -59,47 +90,83 @@
          Roller.roll();
       });
 
+      socket.on('simulate', function (data) {
+         console.log(data);
+         Roller.simulate();
+      });
+
+      socket.on('tableInfo', function(data) {
+        $('#rollButton').attr('disabled', 'disabled');
+        updatePlayerList(data.info.players);
+        var turn = data.info.playerTurn;
+        $('#player'+turn).addClass('playerTurn');
+        if (screenName == data.info.players[turn].name) {
+          $('#rollButton').removeAttr('disabled');
+        }
+      });
+
       socket.on('playerList', function (data) {
          console.log(data.players);
-         $('#players').empty();
-         $.each(data.players, function(i, player) {
-            $('#players').append('<div class="player" id="player'+i+'">'
-                                +   '<h2>'+player.name+'</h2>'
-                                +   '<h3>'+player.funds+'</h3>'
-                                +   '<img id="picture2" src="http://placehold.it/350x150"></img>'
-                                +'</div>');
-         });
+         updatePlayerList(data.players);
       });
+
+      function updatePlayerList(players) {
+        $('#players').empty();
+        $.each(players, function(i, player) {
+          $('#players').append('<div class="player" id="player'+i+'">'
+                              +   '<h2>'+player.name+'</h2>'
+                              +   '<h3>'+player.funds+'</h3>'
+                              +   '<img id="picture2" src="http://placehold.it/350x150"></img>'
+                              +'</div>');
+        });
+      };
 
 
       /* jQuery events */
 
       $('#rollButton').click(function() {
-         Roller.roll();
+        if ( Roller.roll() != -1) {
+          socket.emit('roll', {tableNumber: tableNumber});
+        }
       });
 
-      $('#leaveGame').click(function() {
-         socket.emit('leaveTable', {tableNumber: vars['t'], name: screenName});
+      $('.leaveGame').click(function() {
          window.location = "http://localhost:3000/lobby";
       });
 
       $(window).bind('beforeunload', function() {
-         $('#game, #viewport, #players').hide();
-         socket.emit('leaveTable', {tableNumber: vars['t'], name: screenName});
+         $('#game, #viewport, #players, #gameStats, #gameBoard').hide();
+         $('#gameOver').show();
+
+         $.post('http://casino.curtiswendel.me:3000/api/addTransaction?userID='+playerId+'&amount='+funds+'&gameID=5', function( response ) {
+                console.log(response);
+         });
+         socket.emit('leaveTable', {tableNumber: tableNumber, name: screenName});
+
+         $(window).unbind('beforeunload');
+
          return "Are you sure?";
       });
-   }
+/*
+      window.onunload = function () {
+         $.post('http://casino.curtiswendel.me:3000/api/addTransaction?userID='+playerId+'&amount='+funds+'&gameID=5', function( response ) {
+                console.log(response);
+         });
+         socket.emit('leaveTable', {tableNumber: tableNumber, name: screenName});
+      }
+*/
+   });
 
    </script>
 </head>
 <body>
-   <button id="leaveGame">Leave Game</button>
    <div id="game" style="display: inline-block; float:left; background-color: gray; height:400px; width:25%;">
       <h1>Click Roll Below:</h1>
       <button id="rollButton">Roll</button><br>
+      <button class="leaveGame">Leave Game</button>
    </div>
    <div id="viewport" style="display: inline-block; float:left; width: 50%;"></div>
-   <div id="game" style="display: inline-block; background-color: gray; width:25%; height:400px; float:left;">
+   <div id="gameStats" style="display: inline-block; background-color: gray; width:25%; height:400px; float:left;">
       <div id="total"></div>
       <div id="rollVal"></div>
       <div id="currGameState">
@@ -109,22 +176,22 @@
       <div id="passLineVert" onclick="passLineClick()"></div>
       <div id="dontPassBarVert" onclick="dontPassBarClick()"></div>
             <div id="dontComeBar"></div>
-               <div class="place" id="placeFour" onclick="placeFourClick()"></div>
-               <div class="place" id="placeFive" onclick="placeFiveClick()"></div>
-               <div class="place" id="placeSix" onclick="placeSixClick()"></div>
-               <div class="place" id="placeEight" onclick="placeEightClick()"></div>
-               <div class="place" id="placeNine" onclick="placeNineClick()"></div>
-               <div class="place" id="placeTen" onclick="placeTenClick()"></div>
-               <div class="point" id="pointFour"></div>
-               <div class="point" id="pointFive"></div>
-               <div class="point" id="pointSix"></div>
-               <div class="point" id="pointEight"></div>
-               <div class="point" id="pointNine"></div>
-               <div class="point" id="pointTen"></div>
-         <div id="come"></div>
-         <div id="field" onclick="fieldClick()"></div>
-         <div id="dontPassBarHori" onclick="dontPassBarClick()"></div>
-         <div id="passLineHori" onclick="passLineClick()"></div>
+              <div class="place" id="placeFour" onclick="placeFourClick()"></div>
+              <div class="place" id="placeFive" onclick="placeFiveClick()"></div>
+              <div class="place" id="placeSix" onclick="placeSixClick()"></div>
+              <div class="place" id="placeEight" onclick="placeEightClick()"></div>
+              <div class="place" id="placeNine" onclick="placeNineClick()"></div>
+              <div class="place" id="placeTen" onclick="placeTenClick()"></div>
+              <div class="point" id="pointFour"></div>
+              <div class="point" id="pointFive"></div>
+              <div class="point" id="pointSix"></div>
+              <div class="point" id="pointEight"></div>
+              <div class="point" id="pointNine"></div>
+              <div class="point" id="pointTen"></div>
+        <div id="come"></div>
+        <div id="field" onclick="fieldClick()"></div>
+        <div id="dontPassBarHori" onclick="dontPassBarClick()"></div>
+        <div id="passLineHori" onclick="passLineClick()"></div>
       <div id="passOdds" onclick="passOddsClick()"></div>
       <div id="anySeven" onclick="anySevenClick()"></div>
       <div id="hardWaySix" onclick="hardWaySixClick()"></div>
@@ -139,13 +206,17 @@
       <div id="yoRight" onclick="yoRightClick()"></div>
       <div id="anyCraps" onclick="anyCrapsClick()"></div>
       <div id="message"></div>
-   </div>
-   <div id="players">
+    </div>
+    <div id="players">
       <div class="player" id="player0">
-         <h2 id="name0">User 0</h2>
-         <h3 id="funds0">Fund: 0</h3>
-         <img id="picture0" src="http://placehold.it/350x150"></img>
+        <h2 id="name0">User 0</h2>
+        <h3 id="funds0">Fund: 0</h3>
+        <img id="picture0" src="http://placehold.it/350x150"></img>
       </div>
-   </div>
+    </div>
+    <div id="gameOver" style="display:none;">
+      <h1>Thanks for playing!</h1>
+      <button class="leaveGame">Leave Game</button>
+    </div>
 </body>
 </html>

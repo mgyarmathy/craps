@@ -356,19 +356,68 @@ var Roller = (function() {
             //render_stats.update();
         }
     };
-	
-	var karan = function() {
-	
-	
+
+	var loop = function() {
+        setInterval( function() {
+            // build from options
+            var i, type, die;
+
+            stop();
+
+            while (die = dices.pop()) {
+                scene.remove(die);
+            }
+            options.requestedDice = [];
+            availableDice.forEach(function(type) {
+                for (i = 0; i < options[type]; i++) {
+                    options.requestedDice.push(type);
+                }
+            });
+            done = false;
+            console.log(options.requestedDice);
+            if (options.requestedDice.length) {
+                console.log('Reroll complete')
+                play();
+                spawnDice();
+            }
+
+        }, 8000);
+
 	};
+
+    var simulate = function() {
+        // build from options
+        var i, type, die;
+
+        stop();
+
+        while (die = dices.pop()) {
+            scene.remove(die);
+        }
+        options.requestedDice = [];
+        availableDice.forEach(function(type) {
+            for (i = 0; i < options[type]; i++) {
+                options.requestedDice.push(type);
+            }
+        });
+        document.getElementById('total').style.display = 'none';
+        document.getElementById('currGameState').style.display = 'none';
+        done = false;
+        console.log(options.requestedDice);
+        if (options.requestedDice.length) {
+            console.log('Reroll complete')
+            play();
+            spawnDice();
+        }
+    }
 
     var reRoll = function() {
 		// cannot roll if there are no Line Bets made
 		if (isComeOutRoll && !passLineActive && !dontPassLineActive) {
 			alert('Must make a Line Bet before rolling!');
-			return;
+			return -1;
 		}
-		
+
         // build from options
         var i, type, die;
 
@@ -396,6 +445,8 @@ var Roller = (function() {
 
     options['init'] = initScene;
     options['roll'] = reRoll;
+    options['loop'] = loop;
+    options['simulate'] = simulate;
 
     return options;
 })();
