@@ -41,6 +41,15 @@ var placeEightLocked = true;
 var placeNineLocked = true;
 var placeTenLocked = true;
 
+function payout(id, bet, fractional) {
+	var sid = id;
+	//If we take out money at each bet, we need to add it back to winnings
+	var winnings = bet * (1+fractional);
+	//var socket = io.connect('http://localhost:3000');
+	socket.emit('payouts',{sid: sid, amount: winnings, tableNumber: tableNumber});
+	
+}
+
 /* Check each bet with dice and see if winner or loser */
 function betsEval(dice1, dice2)
 {

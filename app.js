@@ -28,6 +28,7 @@ app.get('/game', function (req, res) {
 
 /* Craps Game Stuff */
 
+
 function Table(id) {
   this.id = id;
   this.players = [];
@@ -50,7 +51,7 @@ function Table(id) {
 function Player(name, funds) {
   this.sid = makeid();
   this.name = name;
-  this.funds = funds;
+  this.funds = parseInt(funds);
   this.payout = function(amount) { this.funds += amount; };
 }
 
@@ -108,5 +109,16 @@ io.sockets.on('connection', function (socket) {
     tables[data.tableNumber].removePlayer(data.name);
     io.sockets.in(data.tableNumber).emit('playerList', {players: tables[data.tableNumber].players});
   });
+  
+  socket.on('payouts', function(data) {
+  for(var i = 0; i < tables[data.tableNumber].players.length; i++)
+	if(tables[data.tableNumber].players[i].sid == data.sid)
+	{
+		tables[data.tableNumber].players[i].payout(data.amount);
+		io.sockets.in(data.tableNumber).emit('tableInfo',{info: tables[data.tableNumber]});
+	}
+  });
+  
+  
 
 });

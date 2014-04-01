@@ -11,6 +11,7 @@
    <script type="text/javascript" src="/js/external/dat.gui.min.js"></script>
    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
    <script type="text/javascript" src="/js/betseval.js"></script>
+   <script type="text/javascript" src="/js/app.js"></script>
    <script type="text/javascript" src="/js/boardclick.js"></script>
    <script type="text/javascript" src="/js/boardhover.js"></script>
    <script type="text/javascript" src="/js/diceroller.js"></script>
@@ -24,9 +25,10 @@
 
    <script src="/socket.io/socket.io.js"></script>
    <script type="text/javascript">
-
+   var socket = io.connect('http://localhost:3000');
+   var tableNumber = null;
    Physijs.scripts.worker = '/js/external/physijs_worker.js';
-   $(document).ready(function() {
+    $(document).ready(function() {
       //get query variables from url querystring
       var vars = [], hash;
       var q = document.URL.split('?')[1];
@@ -41,15 +43,15 @@
 
       Roller.init();
 
-      var socket = io.connect('http://localhost:3000');
+     
       //var socket = io.connect('http://craps.ngrok.com/');
       //var socket = io.connect('http://craps501.herokuapp.com/');
 
       var screenName, funds, sid;
       var playerId = vars['id'];
-      var tableNumber = vars['t'];
-
-
+	  tableNumber = vars['t'];
+	
+		
       $.get('http://casino.curtiswendel.me:3000/api/getUser/'+playerId, function(data) {
          console.log(data);
          screenName = data.screenName;
@@ -99,7 +101,7 @@
         $('#rollButton').attr('disabled', 'disabled');
         updatePlayerList(data.info.players);
         var turn = data.info.playerTurn;
-        $('#player'+turn).addClass('playerTurn');
+        $('.player:eq('+turn+')').addClass('playerTurn');
         if (screenName == data.info.players[turn].name) {
           $('#rollButton').removeAttr('disabled');
         }
@@ -113,16 +115,17 @@
       function updatePlayerList(players) {
         $('#players').empty();
         $.each(players, function(i, player) {
-          $('#players').append('<div class="player" id="player'+i+'">'
-                              +   '<h2>'+player.name+'</h2>'
-                              +   '<h3>'+player.funds+'</h3>'
+          $('#players').append('<div class="player" id="'+player.sid+'">'
+                              +   '<h2 id=name>'+player.name+'</h2>'
+                              +   '<h3 id=funds>'+player.funds+'</h3>'
                               +   '<img id="picture2" src="http://placehold.it/350x150"></img>'
                               +'</div>');
         });
       };
 
 
-      /* jQuery events */
+      /* jQuery events */	
+
 
       $('#rollButton').click(function() {
         if ( Roller.roll() != -1) {
@@ -147,6 +150,7 @@
 
          return "Are you sure?";
       });
+	  
 /*
       window.onunload = function () {
          $.post('http://casino.curtiswendel.me:3000/api/addTransaction?userID='+playerId+'&amount='+funds+'&gameID=5', function( response ) {
