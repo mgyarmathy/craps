@@ -8,9 +8,9 @@
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
   <script src="/socket.io/socket.io.js"></script>
   <script type="text/javascript">
-    var socket = io.connect('http://localhost:3000');
+    //var socket = io.connect('http://localhost:3000');
     //var socket = io.connect('http://craps.ngrok.com/');
-    //var socket = io.connect('http://craps501.herokuapp.com/');
+    var socket = io.connect('http://craps501.herokuapp.com/');
   </script>
   <script type="text/javascript" src="/js/external/three.min.r55.js"></script>
   <script type="text/javascript" src="/js/external/stats.js"></script>
@@ -50,7 +50,8 @@
       });
 
       $('.joinTable').click(function() {
-        window.location = 'http://localhost:3000/game?t='+ $(this).parent().data('tableNumber')+'&id='+$('#userId').val();
+        //window.location = 'http://localhost:3000/game?t='+ $(this).parent().data('tableNumber')+'&id='+$('#userId').val();
+        window.location = 'http://craps501.herokuapp.com/game?t='+ $(this).parent().data('tableNumber')+'&id='+$('#userId').val()
       });
 
       $('.roll').click(function() {

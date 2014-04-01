@@ -18,9 +18,9 @@
         vars[hash[0]] = hash[1];
       }
     }
-    var socket = io.connect('http://localhost:3000');
+    //var socket = io.connect('http://localhost:3000');
     //var socket = io.connect('http://craps.ngrok.com/');
-    //var socket = io.connect('http://craps501.herokuapp.com/');
+    var socket = io.connect('http://craps501.herokuapp.com/');
 
     var screenName, funds, sid;
     var playerId = vars['id'];
@@ -54,7 +54,8 @@
 
       socket.on('joinFailure', function(data) {
         alert('Table Full - redirecting back to lobby');
-        window.location='http://localhost:3000/lobby';
+        //window.location='http://localhost:3000/lobby';
+        window.location="http://craps501.herokuapp.com/"
       });
 
       //TODO: remove this once roll/simulate are properly implemented
@@ -139,7 +140,8 @@
       });
 
       $('.leaveGame').click(function() {
-        window.location = "http://localhost:3000/lobby";
+        //window.location = "http://localhost:3000/lobby";
+        window.location="http://craps501.herokuapp.com/lobby";
       });
 
       $(window).bind('beforeunload', function() {
