@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<<<<<<< HEAD
    <title>501 Craps - alpha</title>
    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
    <meta charset="UTF-8" />
@@ -40,61 +41,57 @@
                vars[hash[0]] = hash[1];
             }
       }
+    }
+    var socket = io.connect('http://localhost:3000');
+    //var socket = io.connect('http://craps.ngrok.com/');
+    //var socket = io.connect('http://craps501.herokuapp.com/');
 
+    var screenName, funds, sid;
+    var playerId = vars['id'];
+    var tableNumber = vars['t'];
+  </script>
+  <script type="text/javascript" src="/js/external/three.min.r55.js"></script>
+  <script type="text/javascript" src="/js/external/stats.js"></script>
+  <script type="text/javascript" src="/js/external/physi.r55.js"></script>
+  <script type="text/javascript" src="/js/external/dat.gui.min.js"></script>
+
+  <script type="text/javascript" src="/js/betseval.js"></script>
+  <script type="text/javascript" src="/js/boardclick.js"></script>
+  <script type="text/javascript" src="/js/boardhover.js"></script>
+  <script type="text/javascript" src="/js/diceroller.js"></script>
+
+  <!-- for modals -->
+  <script src="/js/external/vex.combined.min.js"></script>
+  <script>vex.defaultOptions.className = 'vex-theme-plain';</script>
+  <link rel="stylesheet" href="/css/external/vex.css" />
+  <link rel="stylesheet" href="/css/external/vex-theme-plain.css" />
+  <script type="text/javascript">
+
+    Physijs.scripts.worker = '/js/external/physijs_worker.js';
+    $(document).ready(function() {
+      //get query variables from url querystring
       Roller.init();
 
-     
-      //var socket = io.connect('http://craps.ngrok.com/');
-      //var socket = io.connect('http://craps501.herokuapp.com/');
-
-      var screenName, funds, sid;
-      var playerId = vars['id'];
-	  tableNumber = vars['t'];
-	
-		
-      $.get('http://casino.curtiswendel.me:3000/api/getUser/'+playerId, function(data) {
-         console.log(data);
-         screenName = data.screenName;
-         //funds = data.balance;
-         vex.dialog.open({
-           message: 'Hello '+screenName+',<br/><br/>Please indicate your funds for this game:',
-           input: '<input type="number" name="funds" value="100" step="100" min="100" max="'+data.balance+'"/><label>(max: '+data.balance+')</label>',
-           buttons: [
-             $.extend({}, vex.dialog.buttons.YES, {
-               text: 'Confirm'
-             }), $.extend({}, vex.dialog.buttons.NO, {
-               text: 'Back'
-             })
-           ],
-           callback: function(data) {
-             if (data === false) {
-               return console.log('Cancelled');
-             }
-             $.post('http://casino.curtiswendel.me:3000/api/requestFunds?userID='+playerId+'&amount='+data.funds+'&gameID=5', function( response ) {
-                console.log(response);
-             });
-             socket.emit('joinTable', {tableNumber: tableNumber, name: screenName, funds: data.funds});
-             funds = data.funds;
-             sid = data.sid;
-           }
-         });
-      });
-
-      socket.on('joinFailure', function(data) {
-         alert('Table Full - redirecting back to lobby');
-         window.location='http://localhost:3000/lobby';
-      });
+      enterGame();
 
       /* socket.io events */
 
+      socket.on('joinFailure', function(data) {
+        alert('Table Full - redirecting back to lobby');
+        window.location='http://localhost:3000/lobby';
+      });
+
+      //TODO: remove this once roll/simulate are properly implemented
       socket.on('roll', function (data) {
-         console.log(data);
-         Roller.roll();
+        console.log(data);
+        Roller.roll();
       });
 
       socket.on('simulate', function (data) {
          console.log(data);
          Roller.simulate();
+         //TODO: simulate roll with value
+         //Roller.simulate(data.rollValue);
       });
 
       socket.on('tableInfo', function(data) {
@@ -107,17 +104,42 @@
         }
       });
 
-      socket.on('playerList', function (data) {
-         console.log(data.players);
-         updatePlayerList(data.players);
-      });
+      function enterGame() {
+        $.get('http://casino.curtiswendel.me:3000/api/getUser/'+playerId, function(data) {
+          console.log(data);
+          screenName = data.screenName;
+          vex.dialog.open({
+            message: 'Hello '+screenName+',<br/><br/>Please indicate your funds for this game:',
+            input: '<input type="number" name="funds" value="100" step="100" min="100" max="'+data.balance+'"/><label>(max: '+data.balance+')</label>',
+            buttons: [
+              $.extend({}, vex.dialog.buttons.YES, {
+                text: 'Confirm'
+              })
+            ],
+            callback: function(data) {
+              if (!data.funds) {
+                //don't take no for an answer
+                enterGame();
+                return console.log('Invalid funds');
+              } else {
+                $.post('http://casino.curtiswendel.me:3000/api/requestFunds?userID='+playerId+'&amount='+data.funds+'&gameID=5', function( response ) {
+                  console.log(response);
+                });
+                socket.emit('joinTable', {tableNumber: tableNumber, name: screenName, funds: data.funds});
+                funds = data.funds;
+                sid = data.sid;
+              }
+           }
+         });
+        });
+      }
 
       function updatePlayerList(players) {
         $('#players').empty();
         $.each(players, function(i, player) {
           $('#players').append('<div class="player" id="'+player.sid+'">'
-                              +   '<h2 id=name>'+player.name+'</h2>'
-                              +   '<h3 id=funds>'+player.funds+'</h3>'
+                              +   '<h2>'+player.name+'</h2>'
+                              +   '<h3>'+player.funds+'</h3>'
                               +   '<img id="picture2" src="http://placehold.it/350x150"></img>'
                               +'</div>');
         });
@@ -134,34 +156,25 @@
       });
 
       $('.leaveGame').click(function() {
-         window.location = "http://localhost:3000/lobby";
+        window.location = "http://localhost:3000/lobby";
       });
 
       $(window).bind('beforeunload', function() {
-         $('#game, #viewport, #players, #gameStats, #gameBoard').hide();
-         $('#gameOver').show();
+        $('#game, #viewport, #players, #gameStats, #gameBoard').hide();
+        $('#gameOver').show();
 
-         $.post('http://casino.curtiswendel.me:3000/api/addTransaction?userID='+playerId+'&amount='+funds+'&gameID=5', function( response ) {
-                console.log(response);
-         });
-         socket.emit('leaveTable', {tableNumber: tableNumber, name: screenName});
+        $.post('http://casino.curtiswendel.me:3000/api/addTransaction?userID='+playerId+'&amount='+funds+'&gameID=5', function( response ) {
+          console.log(response);
+        });
+        socket.emit('leaveTable', {tableNumber: tableNumber, name: screenName});
 
-         $(window).unbind('beforeunload');
+        $(window).unbind('beforeunload');
 
-         return "Are you sure?";
+        return "Are you sure?";
       });
-	  
-/*
-      window.onunload = function () {
-         $.post('http://casino.curtiswendel.me:3000/api/addTransaction?userID='+playerId+'&amount='+funds+'&gameID=5', function( response ) {
-                console.log(response);
-         });
-         socket.emit('leaveTable', {tableNumber: tableNumber, name: screenName});
-      }
-*/
-   });
+  });
 
-   </script>
+  </script>
 </head>
 <body>
    <div id="game" style="display: inline-block; float:left; background-color: gray; height:400px; width:25%;">
