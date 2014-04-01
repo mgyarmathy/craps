@@ -1,5 +1,10 @@
 'use strict';
 
+var rollIsSimulated = false,
+    simulatedDiceValue1 = 0,
+    simulatedDiceValue2 = 0;
+
+
 var Roller = (function() {
 	
     var render_stats, renderer, physics_stats, scene, light, camera, 
@@ -99,16 +104,26 @@ var Roller = (function() {
                 value = intersect.object.material.materials[index].name;
                 values.push(parseInt(value, 10));
             });
-            var results = values.join(', ');
-            var total = 'Total: ' + values.reduce(function(a, b) {
-				betsEval(a,b);
-                return a + b;
-            });
-            document.getElementById('rollVal').textContent = values.reduce(function(a,b) { return a + b} );
-            document.getElementById('rollVal').style.display = 'none';
-            if (values.length > 1) {
-                total += ' (' + results + ')';
+            //TODO : finish and test this
+            if (rollIsSimulated) {
+                betsEval(simulatedDiceValue1, simulatedDiceValue2);
+                rollIsSimulated = false;
+                document.getElementById('rollVal').textContent = simulatedDiceValue1+simulatedDiceValue2;
+                document.getElementById('rollVal').style.display = 'none';
+                var results = simulatedDiceValue1 + ', ' + simulatedDiceValue2;
+                var sum = simulatedDiceValue1+simulatedDiceValue2;
+                var total = 'Total: ' + sum;
+            } else {
+                var results = values.join(', ');
+                var total = 'Total: ' + values.reduce(function(a, b) {
+    				betsEval(a,b);
+                    socket.emit('roll', {tableNumber: tableNumber, sid: sid, dieValue1: parseInt(a), dieValue2: parseInt(b)})
+                    return a + b;
+                });
+                document.getElementById('rollVal').textContent = values.reduce(function(a,b) { return a + b} );
+                document.getElementById('rollVal').style.display = 'none';
             }
+            total += ' (' + results + ')';
             console.log('... And the results are: ' + results);
             var totalElm = document.getElementById('total');
             totalElm.style.display = 'block';
@@ -186,19 +201,7 @@ var Roller = (function() {
         renderer.domElement.style.height = '100%';
         viewport.appendChild(renderer.domElement);
 
-        /*render_stats = new Stats();
-        render_stats.domElement.style.position = 'absolute';
-        render_stats.domElement.style.top = '0px';
-        render_stats.domElement.style.zIndex = 100;
-        viewport.appendChild(render_stats.domElement);
-
-        physics_stats = new Stats();
-        physics_stats.domElement.style.position = 'absolute';
-        physics_stats.domElement.style.top = '50px';
-        physics_stats.domElement.style.zIndex = 100;
-        viewport.appendChild(physics_stats.domElement);
-        */
-        scene = new Physijs.Scene({ 
+        scene = new Physijs.Scene({
             reportsize: options.requestedDice.length + 6,
             fixedTimeStep: 1 / 60,
         });
@@ -357,7 +360,7 @@ var Roller = (function() {
         }
     };
 
-	var loop = function() {
+	var loopRoll = function() {
         setInterval( function() {
             // build from options
             var i, type, die;
@@ -376,7 +379,6 @@ var Roller = (function() {
             done = false;
             console.log(options.requestedDice);
             if (options.requestedDice.length) {
-                console.log('Reroll complete')
                 play();
                 spawnDice();
             }
@@ -385,8 +387,14 @@ var Roller = (function() {
 
 	};
 
-    var simulate = function() {
-        // build from options
+    var simulateRoll = function(dieValue1, dieValue2) {
+        // for when another player rolls
+        // simulate a roll, but inject fake values
+
+        rollIsSimulated = true;
+        simulatedDiceValue1 = dieValue1;
+        simulatedDiceValue2 = dieValue2;
+
         var i, type, die;
 
         stop();
@@ -403,9 +411,7 @@ var Roller = (function() {
         document.getElementById('total').style.display = 'none';
         document.getElementById('currGameState').style.display = 'none';
         done = false;
-        console.log(options.requestedDice);
         if (options.requestedDice.length) {
-            console.log('Reroll complete')
             play();
             spawnDice();
         }
@@ -414,7 +420,6 @@ var Roller = (function() {
     var reRoll = function() {
 		// cannot roll if there are no Line Bets made
 		if (isComeOutRoll && !passLineActive && !dontPassLineActive) {
-			alert('Must make a Line Bet before rolling!');
 			return -1;
 		}
 
@@ -435,9 +440,7 @@ var Roller = (function() {
         document.getElementById('total').style.display = 'none';
 		document.getElementById('currGameState').style.display = 'none';
         done = false;
-        console.log(options.requestedDice);
         if (options.requestedDice.length) {
-            console.log('Reroll complete')
             play();
             spawnDice();
         }
@@ -445,8 +448,8 @@ var Roller = (function() {
 
     options['init'] = initScene;
     options['roll'] = reRoll;
-    options['loop'] = loop;
-    options['simulate'] = simulate;
+    options['loop'] = loopRoll;
+    options['simulate'] = simulateRoll;
 
     return options;
 })();

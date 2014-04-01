@@ -90,13 +90,6 @@ $('#dontPassBarHori').hover(function() {
 	}
 });
 
-$('#dontComeBar').hover(function() {
-	$(this).css('background-color', 'red');
-	$(this).css('opacity', '0.5');
-}, function() {
-	$(this).css('opacity', '0.0');
-});
-
 $('#placeFour').hover(function() {
 	$('#message').html('Place Four');
 	if (placeFourLocked && !placeFourActive) {
@@ -199,53 +192,42 @@ $('#placeTen').hover(function() {
 	}
 });
 
-$('#pointFour').hover(function() {
-	$(this).css('background-color', 'red');
-	$(this).css('opacity', '0.5');
-}, function() {
-	$(this).css('opacity', '0.0');
-});
-
-$('#pointFive').hover(function() {
-	$(this).css('background-color', 'red');
-	$(this).css('opacity', '0.5');
-}, function() {
-	$(this).css('opacity', '0.0');
-});
-
-$('#pointSix').hover(function() {
-	$(this).css('background-color', 'red');
-	$(this).css('opacity', '0.5');
-}, function() {
-	$(this).css('opacity', '0.0');
-});
-
-$('#pointEight').hover(function() {
-	$(this).css('background-color', 'red');
-	$(this).css('opacity', '0.5');
-}, function() {
-	$(this).css('opacity', '0.0');
-});
-
-$('#pointNine').hover(function() {
-	$(this).css('background-color', 'red');
-	$(this).css('opacity', '0.5');
-}, function() {
-	$(this).css('opacity', '0.0');
-});
-
-$('#pointTen').hover(function() {
-	$(this).css('background-color', 'red');
-	$(this).css('opacity', '0.5');
-}, function() {
-	$(this).css('opacity', '0.0');
-});
-
 $('#come').hover(function() {
-	$(this).css('background-color', 'red');
-	$(this).css('opacity', '0.5');
+	$('#message').html('Come Bet');
+	if (!newComeBet) {
+		if (isComeOutRoll) {
+			$(this).css('background-color', 'red');
+			$(this).css('opacity', '0.5');
+		}
+		else {
+			$(this).css('background-color', 'lawngreen');
+			$(this).css('opacity', '0.5');
+		}
+	}
 }, function() {
-	$(this).css('opacity', '0.0');
+	$('#message').html('');
+	if (!newComeBet) {
+		$(this).css('opacity', '0.0');
+	}
+});
+
+$('#dontComeBar').hover(function() {
+	$('#message').html('Don\'t Come Bet');
+	if (!newDontComeBet) {
+		if (isComeOutRoll) {
+			$(this).css('background-color', 'red');
+			$(this).css('opacity', '0.5');
+		}
+		else {
+			$(this).css('background-color', 'lawngreen');
+			$(this).css('opacity', '0.5');
+		}
+	}
+}, function() {
+	$('#message').html('');
+	if (!newDontComeBet) {
+		$(this).css('opacity', '0.0');
+	}
 });
 
 $('#field').hover(function() {

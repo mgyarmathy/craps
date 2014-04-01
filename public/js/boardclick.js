@@ -57,6 +57,30 @@ function dontPassOddsClick() {
 	}
 }
 
+function comeClick() {
+	if (newComeBet) {
+		newComeBet = false;
+		$('#come').css('opacity', '0.0');
+	}
+	else if (!isComeOutRoll) {
+		newComeBet = true;
+		$('#come').css('background-color', 'blue');
+		$('#come').css('opacity', '0.5');
+	}
+}
+
+function dontComeClick() {
+	if (newDontComeBet) {
+		newDontComeBet = false;
+		$('#dontComeBar').css('opacity', '0.0');
+	}
+	else if (!isComeOutRoll) {
+		newDontComeBet = true;
+		$('#dontComeBar').css('background-color', 'blue');
+		$('#dontComeBar').css('opacity', '0.5');
+	}
+}
+
 function placeFourClick() {
 	if (!placeFourLocked) {
 		if (placeFourActive) {

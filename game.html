@@ -1,45 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-<<<<<<< HEAD
-   <title>501 Craps - alpha</title>
-   <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-   <meta charset="UTF-8" />
-   <link rel="stylesheet" type="text/css" href="/css/styles.css"/>
-   <script type="text/javascript" src="/js/external/three.min.r55.js"></script>
-   <script type="text/javascript" src="/js/external/stats.js"></script>
-   <script type="text/javascript" src="/js/external/physi.r55.js"></script>
-   <script type="text/javascript" src="/js/external/dat.gui.min.js"></script>
-   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-   <script type="text/javascript" src="/js/betseval.js"></script>
-   <script type="text/javascript" src="/js/app.js"></script>
-   <script type="text/javascript" src="/js/boardclick.js"></script>
-   <script type="text/javascript" src="/js/boardhover.js"></script>
-   <script type="text/javascript" src="/js/diceroller.js"></script>
-
-   <!-- for modals -->
-   <script src="/js/external/vex.combined.min.js"></script>
-   <script>vex.defaultOptions.className = 'vex-theme-plain';</script>
-   <link rel="stylesheet" href="/css/external/vex.css" />
-   <link rel="stylesheet" href="/css/external/vex-theme-plain.css" />
-
-
-   <script src="/socket.io/socket.io.js"></script>
-   <script type="text/javascript">
-   var socket = io.connect('http://localhost:3000');
-   var tableNumber = null;
-   Physijs.scripts.worker = '/js/external/physijs_worker.js';
-    $(document).ready(function() {
-      //get query variables from url querystring
-      var vars = [], hash;
-      var q = document.URL.split('?')[1];
-         if (q != undefined) {
-            q = q.split('&');
-            for (var i = 0; i < q.length; i++) {
-               hash = q[i].split('=');
-               vars.push(hash[1]);
-               vars[hash[0]] = hash[1];
-            }
+  <title>501 Craps - alpha</title>
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" type="text/css" href="/css/styles.css"/>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script type="text/javascript">
+    var vars = [], hash;
+    var q = document.URL.split('?')[1];
+    if (q != undefined) {
+      q = q.split('&');
+      for (var i = 0; i < q.length; i++) {
+        hash = q[i].split('=');
+        vars.push(hash[1]);
+        vars[hash[0]] = hash[1];
       }
     }
     var socket = io.connect('http://localhost:3000');
@@ -88,10 +64,7 @@
       });
 
       socket.on('simulate', function (data) {
-         console.log(data);
-         Roller.simulate();
-         //TODO: simulate roll with value
-         //Roller.simulate(data.rollValue);
+        Roller.simulate(data.dieValue1, data.dieValue2);
       });
 
       socket.on('tableInfo', function(data) {
@@ -150,8 +123,8 @@
 
 
       $('#rollButton').click(function() {
-        if ( Roller.roll() != -1) {
-          socket.emit('roll', {tableNumber: tableNumber});
+        if (Roller.roll() == -1) {
+          alert('Must make a Line Bet before rolling!');
         }
       });
 
@@ -192,23 +165,23 @@
    <div id="gameBoard">
       <div id="passLineVert" onclick="passLineClick()"></div>
       <div id="dontPassBarVert" onclick="dontPassBarClick()"></div>
-            <div id="dontComeBar"></div>
-              <div class="place" id="placeFour" onclick="placeFourClick()"></div>
-              <div class="place" id="placeFive" onclick="placeFiveClick()"></div>
-              <div class="place" id="placeSix" onclick="placeSixClick()"></div>
-              <div class="place" id="placeEight" onclick="placeEightClick()"></div>
-              <div class="place" id="placeNine" onclick="placeNineClick()"></div>
-              <div class="place" id="placeTen" onclick="placeTenClick()"></div>
-              <div class="point" id="pointFour"></div>
-              <div class="point" id="pointFive"></div>
-              <div class="point" id="pointSix"></div>
-              <div class="point" id="pointEight"></div>
-              <div class="point" id="pointNine"></div>
-              <div class="point" id="pointTen"></div>
-        <div id="come"></div>
-        <div id="field" onclick="fieldClick()"></div>
-        <div id="dontPassBarHori" onclick="dontPassBarClick()"></div>
-        <div id="passLineHori" onclick="passLineClick()"></div>
+            <div id="dontComeBar" onclick="dontComeClick()"></div>
+               <div class="place" id="placeFour" onclick="placeFourClick()"></div>
+               <div class="place" id="placeFive" onclick="placeFiveClick()"></div>
+               <div class="place" id="placeSix" onclick="placeSixClick()"></div>
+               <div class="place" id="placeEight" onclick="placeEightClick()"></div>
+               <div class="place" id="placeNine" onclick="placeNineClick()"></div>
+               <div class="place" id="placeTen" onclick="placeTenClick()"></div>
+               <div class="point" id="pointFour"></div>
+               <div class="point" id="pointFive"></div>
+               <div class="point" id="pointSix"></div>
+               <div class="point" id="pointEight"></div>
+               <div class="point" id="pointNine"></div>
+               <div class="point" id="pointTen"></div>
+         <div id="come" onclick="comeClick()"></div>
+         <div id="field" onclick="fieldClick()"></div>
+         <div id="dontPassBarHori" onclick="dontPassBarClick()"></div>
+         <div id="passLineHori" onclick="passLineClick()"></div>
       <div id="passOdds" onclick="passOddsClick()"></div>
       <div id="anySeven" onclick="anySevenClick()"></div>
       <div id="hardWaySix" onclick="hardWaySixClick()"></div>
