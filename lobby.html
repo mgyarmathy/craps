@@ -1,100 +1,122 @@
 <!DOCTYPE html>
 <html>
 <head>
-   <title>Web Die Roller - alpha</title>
-   <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-   <meta charset="UTF-8" />
-   <link rel="stylesheet" type="text/css" href="/css/splash.css"/>
-   <script src="/socket.io/socket.io.js"></script>
-   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-   <script type="text/javascript">
-   $(document).ready(function() {
-      var socket = io.connect('http://localhost:3000');
-      //var socket = io.connect('http://craps.ngrok.com/');
-      //var socket = io.connect('http://craps501.herokuapp.com/');
+  <title>Web Die Roller - alpha</title>
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" type="text/css" href="/css/splash.css"/>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script type="text/javascript">
+    var socket = io.connect('http://localhost:3000');
+    //var socket = io.connect('http://craps.ngrok.com/');
+    //var socket = io.connect('http://craps501.herokuapp.com/');
+  </script>
+  <script type="text/javascript" src="/js/external/three.min.r55.js"></script>
+  <script type="text/javascript" src="/js/external/stats.js"></script>
+  <script type="text/javascript" src="/js/external/physi.r55.js"></script>
+  <script type="text/javascript" src="/js/diceroller.js"></script>
+  <script type="text/javascript">
+    Physijs.scripts.worker = '/js/external/physijs_worker.js';
+
+    $(document).ready(function() {
+      //Roller.init();
+      //Roller.loop();
 
       socket.emit('getTableStatus', {});
 
+      // poll for table info every 3 seconds
+      setInterval(function() {
+         socket.emit('getTableStatus', {});
+      }, 3000);
+
       socket.on('tableStatus', function (data) {
-         $('.joinTable').removeAttr('disabled');
-         console.log(data.tables);
-         $.each(data.tables, function(i, table) {
-            $('#t'+i+' .numPlayers').text(table.players.length);
-            if (table.players.length >= 8) {
-               $('#t'+i+' .numPlayers').text('FULL');
-               $('#t'+i+' .joinTable').attr('disabled', 'disabled');
-            }
-         })
+        $('.joinTable').removeAttr('disabled');
+        console.log(data.tables);
+        $.each(data.tables, function(i, table) {
+          $('#t'+i+' .numPlayers').text(table.players.length);
+          if (table.players.length >= 8) {
+            $('#t'+i+' .numPlayers').text('FULL');
+            $('#t'+i+' .joinTable').attr('disabled', 'disabled');
+          }
+        });
       });
 
       $.get('http://casino.curtiswendel.me:3000/api/getUser/', function(data) {
-         console.log(data);
-         $.each(data, function(i, user) {
-            $('#userId').append('<option value="'+user.id+'">'+user.screenName+'</option');
-         });
+        console.log(data);
+        $.each(data, function(i, user) {
+          $('#userId').append('<option value="'+user.id+'">'+user.screenName+'</option');
+        });
       });
 
       $('.joinTable').click(function() {
-         window.location = 'http://localhost:3000/game?t='+ $(this).parent().data('tableNumber')+'&id='+$('#userId').val();
+        window.location = 'http://localhost:3000/game?t='+ $(this).parent().data('tableNumber')+'&id='+$('#userId').val();
       });
 
       $('.roll').click(function() {
-         socket.emit('roll', {tableNumber: $(this).parent().data('tableNumber')});
+        socket.emit('roll', {tableNumber: $(this).parent().data('tableNumber')});
       });
 
-      setInterval(function() {
-         console.log('requesting data');
-         socket.emit('getTableStatus', {});
-      }, 3000);
-   });
-
-   </script>
+      $('.passDice').click(function() {
+        socket.emit('passDice', {tableNumber: $(this).parent().data('tableNumber')});
+      });
+    });
+  </script>
 </head>
 <body>
-   <h1>501 Craps</h1>
-   <label>Username</label>
-   <select id="userId"></select>
-   <div id="tableInfo">
-      <div id="t0" class="table" data-table-number="0">
-         <h2>Table 0</h2>
-         <div class="numPlayers"></div>
-         <button class="joinTable">Join</button><button class="roll">Roll</button>
-      </div>
-      <div id="t1" class="table" data-table-number="1">
-         <h2>Table 1</h2>
-         <div class="numPlayers"></div>
-         <button class="joinTable">Join</button><button class="roll">Roll</button>
-      </div>
-      <div id="t2" class="table" data-table-number="2">
-         <h2>Table 2</h2>
-         <div class="numPlayers"></div>
-         <button class="joinTable">Join</button><button class="roll">Roll</button>
-      </div>
-      <div id="t3" class="table" data-table-number="3">
-         <h2>Table 3</h2>
-         <div class="numPlayers"></div>
-         <button class="joinTable">Join</button><button class="roll">Roll</button>
-      </div>
-      <div id="t4" class="table" data-table-number="4">
-         <h2>Table 4</h2>
-         <div class="numPlayers"></div>
-         <button class="joinTable">Join</button><button class="roll">Roll</button>
-      </div>
-      <div id="t5" class="table" data-table-number="5">
-         <h2>Table 5</h2>
-         <div class="numPlayers"></div>
-         <button class="joinTable">Join</button><button class="roll">Roll</button>
-      </div>
-      <div id="t6" class="table" data-table-number="6">
-         <h2>Table 6</h2>
-         <div class="numPlayers"></div>
-         <button class="joinTable">Join</button><button class="roll">Roll</button>
-      </div>
-      <div id="t7" class="table" data-table-number="7">
-         <h2>Table 7</h2>
-         <div class="numPlayers"></div>
-         <button class="joinTable">Join</button><button class="roll">Roll</button>
-      </div>
-   </div>
+  <h1>501 Craps</h1>
+  <div id="viewport" style="display: inline-block; width: 100%; background-color: black"></div>
+  <label>Username</label>
+  <select id="userId"></select>
+  <div id="tableInfo">
+    <div id="t0" class="table" data-table-number="0">
+      <h2>Table 0</h2>
+      <div class="numPlayers"></div>
+      <button class="joinTable">Join</button><button class="roll">Roll</button>
+      <button class="passDice">Pass Dice</button>
+    </div>
+    <div id="t1" class="table" data-table-number="1">
+      <h2>Table 1</h2>
+      <div class="numPlayers"></div>
+      <button class="joinTable">Join</button><button class="roll">Roll</button>
+      <button class="passDice">Pass Dice</button>
+    </div>
+    <div id="t2" class="table" data-table-number="2">
+      <h2>Table 2</h2>
+      <div class="numPlayers"></div>
+      <button class="joinTable">Join</button><button class="roll">Roll</button>
+      <button class="passDice">Pass Dice</button>
+    </div>
+    <div id="t3" class="table" data-table-number="3">
+      <h2>Table 3</h2>
+      <div class="numPlayers"></div>
+      <button class="joinTable">Join</button><button class="roll">Roll</button>
+      <button class="passDice">Pass Dice</button>
+    </div>
+    <div id="t4" class="table" data-table-number="4">
+      <h2>Table 4</h2>
+      <div class="numPlayers"></div>
+      <button class="joinTable">Join</button><button class="roll">Roll</button>
+      <button class="passDice">Pass Dice</button>
+    </div>
+    <div id="t5" class="table" data-table-number="5">
+      <h2>Table 5</h2>
+      <div class="numPlayers"></div>
+      <button class="joinTable">Join</button><button class="roll">Roll</button>
+      <button class="passDice">Pass Dice</button>
+    </div>
+    <div id="t6" class="table" data-table-number="6">
+      <h2>Table 6</h2>
+      <div class="numPlayers"></div>
+      <button class="joinTable">Join</button><button class="roll">Roll</button>
+      <button class="passDice">Pass Dice</button>
+    </div>
+    <div id="t7" class="table" data-table-number="7">
+      <h2>Table 7</h2>
+      <div class="numPlayers"></div>
+      <button class="joinTable">Join</button><button class="roll">Roll</button>
+      <button class="passDice">Pass Dice</button>
+    </div>
+  </div>
 </body>
 </html>

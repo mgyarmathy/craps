@@ -1,105 +1,161 @@
 <!DOCTYPE html>
 <html>
 <head>
-   <title>501 Craps - alpha</title>
-   <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-   <meta charset="UTF-8" />
-   <link rel="stylesheet" type="text/css" href="/css/styles.css"/>
-   <script type="text/javascript" src="/js/external/three.min.r55.js"></script>
-   <script type="text/javascript" src="/js/external/stats.js"></script>
-   <script type="text/javascript" src="/js/external/physi.r55.js"></script>
-   <script type="text/javascript" src="/js/external/dat.gui.min.js"></script>
-   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-   <script type="text/javascript" src="/js/betseval.js"></script>
-   <script type="text/javascript" src="/js/boardclick.js"></script>
-   <script type="text/javascript" src="/js/boardhover.js"></script>
-   <script type="text/javascript" src="/js/diceroller.js"></script>
-   <script src="/socket.io/socket.io.js"></script>
-   <script type="text/javascript">
-
-   Physijs.scripts.worker = '/js/external/physijs_worker.js';
-   window.onload = function() {
-      //get query variables from url querystring
-      var vars = [], hash;
-      var q = document.URL.split('?')[1];
-         if (q != undefined) {
-            q = q.split('&');
-            for (var i = 0; i < q.length; i++) {
-               hash = q[i].split('=');
-               vars.push(hash[1]);
-               vars[hash[0]] = hash[1];
-            }
+  <title>501 Craps - alpha</title>
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" type="text/css" href="/css/styles.css"/>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script type="text/javascript">
+    var vars = [], hash;
+    var q = document.URL.split('?')[1];
+    if (q != undefined) {
+      q = q.split('&');
+      for (var i = 0; i < q.length; i++) {
+        hash = q[i].split('=');
+        vars.push(hash[1]);
+        vars[hash[0]] = hash[1];
       }
+    }
+    var socket = io.connect('http://localhost:3000');
+    //var socket = io.connect('http://craps.ngrok.com/');
+    //var socket = io.connect('http://craps501.herokuapp.com/');
 
+    var screenName, funds, sid;
+    var playerId = vars['id'];
+    var tableNumber = vars['t'];
+  </script>
+  <script type="text/javascript" src="/js/external/three.min.r55.js"></script>
+  <script type="text/javascript" src="/js/external/stats.js"></script>
+  <script type="text/javascript" src="/js/external/physi.r55.js"></script>
+  <script type="text/javascript" src="/js/external/dat.gui.min.js"></script>
+
+  <script type="text/javascript" src="/js/betseval.js"></script>
+  <script type="text/javascript" src="/js/boardclick.js"></script>
+  <script type="text/javascript" src="/js/boardhover.js"></script>
+  <script type="text/javascript" src="/js/diceroller.js"></script>
+
+  <!-- for modals -->
+  <script src="/js/external/vex.combined.min.js"></script>
+  <script>vex.defaultOptions.className = 'vex-theme-plain';</script>
+  <link rel="stylesheet" href="/css/external/vex.css" />
+  <link rel="stylesheet" href="/css/external/vex-theme-plain.css" />
+  <script type="text/javascript">
+
+    Physijs.scripts.worker = '/js/external/physijs_worker.js';
+    $(document).ready(function() {
+      //get query variables from url querystring
       Roller.init();
 
-      var socket = io.connect('http://localhost:3000');
-      //var socket = io.connect('http://craps.ngrok.com/');
-      //var socket = io.connect('http://craps501.herokuapp.com/');
-
-      var screenName, funds;
-
-
-      $.get('http://casino.curtiswendel.me:3000/api/getUser/'+vars['id'], function(data) {
-         console.log(data);
-         screenName = data.screenName;
-         funds = data.balance;
-         socket.emit('joinTable', {tableNumber: vars['t'], name: data.screenName, funds: data.balance});
-      });
-
-      socket.on('joinFailure', function(data) {
-         alert('Table Full - redirecting back to lobby');
-         window.location='http://localhost:3000/lobby';
-      });
+      enterGame();
 
       /* socket.io events */
 
-      socket.on('roll', function (data) {
-         console.log(data);
-         Roller.roll();
+      socket.on('joinFailure', function(data) {
+        alert('Table Full - redirecting back to lobby');
+        window.location='http://localhost:3000/lobby';
       });
 
-      socket.on('playerList', function (data) {
-         console.log(data.players);
-         $('#players').empty();
-         $.each(data.players, function(i, player) {
-            $('#players').append('<div class="player" id="player'+i+'">'
-                                +   '<h2>'+player.name+'</h2>'
-                                +   '<h3>'+player.funds+'</h3>'
-                                +   '<img id="picture2" src="http://placehold.it/350x150"></img>'
-                                +'</div>');
-         });
+      //TODO: remove this once roll/simulate are properly implemented
+      socket.on('roll', function (data) {
+        console.log(data);
+        Roller.roll();
       });
+
+      socket.on('simulate', function (data) {
+        Roller.simulate(data.dieValue1, data.dieValue2);
+      });
+
+      socket.on('tableInfo', function(data) {
+        $('#rollButton').attr('disabled', 'disabled');
+        updatePlayerList(data.info.players);
+        var turn = data.info.playerTurn;
+        $('.player:eq('+turn+')').addClass('playerTurn');
+        if (screenName == data.info.players[turn].name) {
+          $('#rollButton').removeAttr('disabled');
+        }
+      });
+
+      function enterGame() {
+        $.get('http://casino.curtiswendel.me:3000/api/getUser/'+playerId, function(data) {
+          console.log(data);
+          screenName = data.screenName;
+          vex.dialog.open({
+            message: 'Hello '+screenName+',<br/><br/>Please indicate your funds for this game:',
+            input: '<input type="number" name="funds" value="100" step="100" min="100" max="'+data.balance+'"/><label>(max: '+data.balance+')</label>',
+            buttons: [
+              $.extend({}, vex.dialog.buttons.YES, {
+                text: 'Confirm'
+              })
+            ],
+            callback: function(data) {
+              if (!data.funds) {
+                //don't take no for an answer
+                enterGame();
+                return console.log('Invalid funds');
+              } else {
+                $.post('http://casino.curtiswendel.me:3000/api/requestFunds?userID='+playerId+'&amount='+data.funds+'&gameID=5', function( response ) {
+                  console.log(response);
+                });
+                socket.emit('joinTable', {tableNumber: tableNumber, name: screenName, funds: data.funds});
+                funds = data.funds;
+                sid = data.sid;
+              }
+           }
+         });
+        });
+      }
+
+      function updatePlayerList(players) {
+        $('#players').empty();
+        $.each(players, function(i, player) {
+          $('#players').append('<div class="player" id="'+player.sid+'">'
+                              +   '<h2>'+player.name+'</h2>'
+                              +   '<h3>'+player.funds+'</h3>'
+                              +   '<img id="picture2" src="http://placehold.it/350x150"></img>'
+                              +'</div>');
+        });
+      };
 
 
       /* jQuery events */
 
       $('#rollButton').click(function() {
-         Roller.roll();
+        if (Roller.roll() == -1) {
+          alert('Must make a Line Bet before rolling!');
+        }
       });
 
-      $('#leaveGame').click(function() {
-         socket.emit('leaveTable', {tableNumber: vars['t'], name: screenName});
-         window.location = "http://localhost:3000/lobby";
+      $('.leaveGame').click(function() {
+        window.location = "http://localhost:3000/lobby";
       });
 
       $(window).bind('beforeunload', function() {
-         $('#game, #viewport, #players').hide();
-         socket.emit('leaveTable', {tableNumber: vars['t'], name: screenName});
-         return "Are you sure?";
-      });
-   }
+        $('#game, #viewport, #players, #gameStats, #gameBoard').hide();
+        $('#gameOver').show();
 
-   </script>
+        $.post('http://casino.curtiswendel.me:3000/api/addTransaction?userID='+playerId+'&amount='+funds+'&gameID=5', function( response ) {
+          console.log(response);
+        });
+        socket.emit('leaveTable', {tableNumber: tableNumber, name: screenName});
+
+        $(window).unbind('beforeunload');
+
+        return "Are you sure?";
+      });
+  });
+
+  </script>
 </head>
 <body>
-   <button id="leaveGame">Leave Game</button>
    <div id="game" style="display: inline-block; float:left; background-color: gray; height:400px; width:25%;">
       <h1>Click Roll Below:</h1>
       <button id="rollButton">Roll</button><br>
+      <button class="leaveGame">Leave Game</button>
    </div>
    <div id="viewport" style="display: inline-block; float:left; width: 50%;"></div>
-   <div id="game" style="display: inline-block; background-color: gray; width:25%; height:400px; float:left;">
+   <div id="gameStats" style="display: inline-block; background-color: gray; width:25%; height:400px; float:left;">
       <div id="total"></div>
       <div id="rollVal"></div>
       <div id="currGameState">
@@ -139,13 +195,17 @@
       <div id="yoRight" onclick="yoRightClick()"></div>
       <div id="anyCraps" onclick="anyCrapsClick()"></div>
       <div id="message"></div>
-   </div>
-   <div id="players">
+    </div>
+    <div id="players">
       <div class="player" id="player0">
-         <h2 id="name0">User 0</h2>
-         <h3 id="funds0">Fund: 0</h3>
-         <img id="picture0" src="http://placehold.it/350x150"></img>
+        <h2 id="name0">User 0</h2>
+        <h3 id="funds0">Fund: 0</h3>
+        <img id="picture0" src="http://placehold.it/350x150"></img>
       </div>
-   </div>
+    </div>
+    <div id="gameOver" style="display:none;">
+      <h1>Thanks for playing!</h1>
+      <button class="leaveGame">Leave Game</button>
+    </div>
 </body>
 </html>

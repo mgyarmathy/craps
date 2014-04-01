@@ -70,6 +70,9 @@ function betsEval(dice1, dice2)
 				betResultsString += 'Dont Pass Line Bet: Winner, Odds Paid 1:1<br>';
 			}
 			isComeOutRoll = true;
+			if (!rollIsSimulated) {
+				socket.emit('passDice', {tableNumber: tableNumber});
+			}
 			passLineActive = false;
 			$('#passLineVert').css('opacity', '0.0');
 			$('#passLineHori').css('opacity', '0.0');
@@ -86,6 +89,9 @@ function betsEval(dice1, dice2)
 				betResultsString += 'Dont Pass Line Bet: Loser (Rolled 7 or 11)<br>';
 			}
 			isComeOutRoll = true;
+			if (!rollIsSimulated) {
+				socket.emit('passDice', {tableNumber: tableNumber});
+			}
 			passLineActive = false;
 			$('#passLineVert').css('opacity', '0.0');
 			$('#passLineHori').css('opacity', '0.0');
@@ -145,6 +151,9 @@ function betsEval(dice1, dice2)
 				}
 			}
 			isComeOutRoll = true;
+			if (!rollIsSimulated) {
+				socket.emit('passDice', {tableNumber: tableNumber});
+			}
 			// can no longer bet on Pass/Don't Pass Odds
 			passOddsLocked = true;
 			dontPassOddsLocked = true;
@@ -191,6 +200,9 @@ function betsEval(dice1, dice2)
 				}
 			}
 			isComeOutRoll = true;
+			if (!rollIsSimulated) {
+				socket.emit('passDice', {tableNumber: tableNumber});
+			}
 			// can no longer bet on Pass/Don't Pass Odds
 			passOddsLocked = true;
 			dontPassOddsLocked = true;

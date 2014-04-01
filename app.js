@@ -31,8 +31,9 @@ app.get('/game', function (req, res) {
 function Table(id) {
   this.id = id;
   this.players = [];
+  this.playerTurn = 0;
   this.addPlayer = function(p) {
-    this.players.push(p)
+    this.players.push(p);
   };
   this.removePlayer = function(name) {
     for(var i = this.players.length - 1; i >= 0; i--) {
@@ -42,7 +43,8 @@ function Table(id) {
     }
   };
   this.numPlayers = function() { return this.players.length; };
-  this.isFull = function() { return (this.numPlayers() >= 8) };
+  this.isFull = function() { return (this.numPlayers() >= 8); };
+  this.nextTurn = function() { this.playerTurn = (this.playerTurn + 1) % this.numPlayers(); };
 }
 
 function Player(name, funds) {
@@ -69,8 +71,16 @@ for (var i = 0; i<8; i++) {
 }
 
 io.sockets.on('connection', function (socket) {
+
   socket.on('roll', function (data) {
-    io.sockets.in(data.tableNumber).emit('roll', {text: 'rolled dice'});
+    socket.broadcast.to(data.tableNumber).emit('simulate', {sid: data.sid, dieValue1: data.dieValue1, dieValue2: data.dieValue2});
+    //tables[data.tableNumber].nextTurn();
+    io.sockets.in(data.tableNumber).emit('tableInfo', {info: tables[data.tableNumber]});
+  });
+
+  socket.on('passDice', function(data) {
+    tables[data.tableNumber].nextTurn();
+    io.sockets.in(data.tableNumber).emit('tableInfo', {info: tables[data.tableNumber]});
   });
 
   socket.on('getTableStatus', function (data) {
@@ -85,7 +95,7 @@ io.sockets.on('connection', function (socket) {
     if (!tables[data.tableNumber].isFull()) {
       socket.join(data.tableNumber);
       tables[data.tableNumber].addPlayer(new Player(data.name, data.funds));
-      io.sockets.in(data.tableNumber).emit('playerList', {players: tables[data.tableNumber].players});
+      io.sockets.in(data.tableNumber).emit('tableInfo', {info: tables[data.tableNumber]});
     }
     else {
       socket.emit('joinFailure', {tableNumber: data.tableNumber});
@@ -95,7 +105,7 @@ io.sockets.on('connection', function (socket) {
   socket.on('leaveTable', function(data) {
     socket.leave(data.tableNumber);
     tables[data.tableNumber].removePlayer(data.name);
-    io.sockets.in(data.tableNumber).emit('playerList', {players: tables[data.tableNumber].players});
+    io.sockets.in(data.tableNumber).emit('tableInfo', {info: tables[data.tableNumber]});
   });
 
 });

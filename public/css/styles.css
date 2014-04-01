@@ -311,3 +311,7 @@ h1 {
    padding-top: 7%;
    width: 15%;
 }
+
+.playerTurn {
+   border: 2px solid red;
+}
