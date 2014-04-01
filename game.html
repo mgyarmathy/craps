@@ -81,6 +81,7 @@
         $.get('http://casino.curtiswendel.me:3000/api/getUser/'+playerId, function(data) {
           console.log(data);
           screenName = data.screenName;
+          //sid = data.sid;
           vex.dialog.open({
             message: 'Hello '+screenName+',<br/><br/>Please indicate your funds for this game:',
             input: '<input type="number" name="funds" value="100" step="100" min="100" max="'+data.balance+'"/><label>(max: '+data.balance+')</label>',
@@ -98,9 +99,9 @@
                 $.post('http://casino.curtiswendel.me:3000/api/requestFunds?userID='+playerId+'&amount='+data.funds+'&gameID=5', function( response ) {
                   console.log(response);
                 });
-                socket.emit('joinTable', {tableNumber: tableNumber, name: screenName, funds: data.funds});
+                sid = makeid();
                 funds = data.funds;
-                sid = data.sid;
+                socket.emit('joinTable', {tableNumber: tableNumber, name: screenName, funds: funds, sid: sid});
               }
            }
          });
@@ -118,6 +119,15 @@
         });
       };
 
+      function makeid() {
+        var text = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+        for( var i=0; i < 5; i++ )
+          text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+        return text;
+      }
 
       /* jQuery events */	
 

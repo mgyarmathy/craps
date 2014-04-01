@@ -48,21 +48,11 @@ function Table(id) {
   this.nextTurn = function() { this.playerTurn = (this.playerTurn + 1) % this.numPlayers(); };
 }
 
-function Player(name, funds) {
-  this.sid = makeid();
+function Player(sid, name, funds) {
+  this.sid = sid;
   this.name = name;
   this.funds = parseInt(funds);
   this.payout = function(amount) { this.funds += amount; };
-}
-
-function makeid() {
-    var text = "";
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-    for( var i=0; i < 5; i++ )
-        text += possible.charAt(Math.floor(Math.random() * possible.length));
-
-    return text;
 }
 
 var tables = new Array();
@@ -95,7 +85,7 @@ io.sockets.on('connection', function (socket) {
   socket.on('joinTable', function(data) {
     if (!tables[data.tableNumber].isFull()) {
       socket.join(data.tableNumber);
-      tables[data.tableNumber].addPlayer(new Player(data.name, data.funds));
+      tables[data.tableNumber].addPlayer(new Player(data.sid, data.name, data.funds));
       io.sockets.in(data.tableNumber).emit('tableInfo', {info: tables[data.tableNumber]});
     }
     else {

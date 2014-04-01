@@ -52,8 +52,9 @@ var placeEightLocked = true;
 var placeNineLocked = true;
 var placeTenLocked = true;
 
-function payout(id, bet, fractional) {
-	var sid = id;
+function payout(bet, fractional) {
+	console.log(sid);
+	console.log(tableNumber);
 	//If we take out money at each bet, we need to add it back to winnings
 	var winnings = bet * (1+fractional);
 	//var socket = io.connect('http://localhost:3000');
