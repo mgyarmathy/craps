@@ -96,7 +96,6 @@ io.sockets.on('connection', function (socket) {
       socket.join(data.tableNumber);
       tables[data.tableNumber].addPlayer(new Player(data.name, data.funds));
       io.sockets.in(data.tableNumber).emit('tableInfo', {info: tables[data.tableNumber]});
-      //io.sockets.in(data.tableNumber).emit('playerList', {players: tables[data.tableNumber].players});
     }
     else {
       socket.emit('joinFailure', {tableNumber: data.tableNumber});
@@ -106,7 +105,7 @@ io.sockets.on('connection', function (socket) {
   socket.on('leaveTable', function(data) {
     socket.leave(data.tableNumber);
     tables[data.tableNumber].removePlayer(data.name);
-    io.sockets.in(data.tableNumber).emit('playerList', {players: tables[data.tableNumber].players});
+    io.sockets.in(data.tableNumber).emit('tableInfo', {info: tables[data.tableNumber]});
   });
 
 });
