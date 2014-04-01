@@ -64,17 +64,14 @@
       });
 
       socket.on('simulate', function (data) {
-         console.log(data);
-         Roller.simulate();
-         //TODO: simulate roll with value
-         //Roller.simulate(data.rollValue);
+        Roller.simulate(data.dieValue1, data.dieValue2);
       });
 
       socket.on('tableInfo', function(data) {
         $('#rollButton').attr('disabled', 'disabled');
         updatePlayerList(data.info.players);
         var turn = data.info.playerTurn;
-        $('#player'+turn).addClass('playerTurn');
+        $('.player:eq('+turn+')').addClass('playerTurn');
         if (screenName == data.info.players[turn].name) {
           $('#rollButton').removeAttr('disabled');
         }
@@ -125,8 +122,8 @@
       /* jQuery events */
 
       $('#rollButton').click(function() {
-        if ( Roller.roll() != -1) {
-          socket.emit('roll', {tableNumber: tableNumber});
+        if (Roller.roll() == -1) {
+          alert('Must make a Line Bet before rolling!');
         }
       });
 
