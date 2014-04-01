@@ -73,8 +73,8 @@ for (var i = 0; i<8; i++) {
 io.sockets.on('connection', function (socket) {
 
   socket.on('roll', function (data) {
-    io.sockets.in(data.tableNumber).emit('simulate', {text: 'rolled dice'});
-    tables[data.tableNumber].nextTurn();
+    socket.broadcast.to(data.tableNumber).emit('simulate', {sid: data.sid, dieValue1: data.dieValue1, dieValue2: data.dieValue2});
+    //tables[data.tableNumber].nextTurn();
     io.sockets.in(data.tableNumber).emit('tableInfo', {info: tables[data.tableNumber]});
   });
 
