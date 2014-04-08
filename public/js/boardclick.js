@@ -173,9 +173,13 @@ function fieldClick() {
 function anySevenClick() {
 	if (anySevenActive) {
 		anySevenActive = false;
+		userRefund(anySevenBetAmt);
+		anySevenBetAmt = 0;
 		$('#anySeven').css('opacity', '0.0');
 	} else {
 		anySevenActive = true;
+		anySevenBetAmt = prompt("Enter Bet Amount:");
+		userBet(anySevenBetAmt);
 		$('#anySeven').css('background-color', 'blue');
 		$('#anySeven').css('opacity', '0.5');
 	}

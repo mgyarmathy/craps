@@ -1,3 +1,15 @@
+/* constant chip amount variables */
+var redChipAmt = 100;
+var blueChipAmt = 200;
+var greenChipAmt = 500;
+var blackChipAmt = 1000;
+
+/* See which chip is currently selected */
+var redChipActive = false;
+var blueChipActive = false;
+var greenChipActive = false;
+var blackChipActive = false;
+
 var pointValue = 0;
 
 /* All Betting Active Variables */
@@ -35,6 +47,8 @@ for (var i=0; i<=12; i++) {
 	dontComeActiveArray[i] = false;
 }
 
+/* Variables to keep track of the bet amounts on each space */
+var anySevenBetAmt = 0;
 
 /* Some multi roll bets need to be locked in across multiple rolls */
 var passLineLocked = false;
@@ -59,7 +73,23 @@ function payout(bet, fractional) {
 	var winnings = bet * (1+fractional);
 	//var socket = io.connect('http://localhost:3000');
 	socket.emit('payouts',{sid: sid, amount: winnings, tableNumber: tableNumber});
-	
+}
+
+function userBet(bet) {
+	console.log(sid);
+	console.log(tableNumber);
+	// take out money
+	bet = -bet;
+	//var socket = io.connect('http://localhost:3000');
+	socket.emit('payouts',{sid: sid, amount: bet, tableNumber: tableNumber});
+}
+
+function userRefund(bet) {
+	console.log(sid);
+	console.log(tableNumber);
+	bet = parseInt(bet);
+	//var socket = io.connect('http://localhost:3000');
+	socket.emit('payouts',{sid: sid, amount: bet, tableNumber: tableNumber});
 }
 
 /* Check each bet with dice and see if winner or loser */
@@ -517,10 +547,12 @@ function betsEval(dice1, dice2)
 	if (anySevenActive) {
 		if (diceValue == 7) {
 			betResultsString += 'Any Seven Bet: Winner, Odds Paid 4:1<br>';
+			payout(anySevenBetAmt, (4/1));
 		} else {
-			betResultsString += 'Ace Deuce Bet: Loser<br>';
+			betResultsString += 'Any Seven Bet: Loser<br>';
 		}
 		anySevenActive = false;
+		anySevenBetAmt = 0;
 		$('#anySeven').css('opacity', '0.0');
 	}
 	if (fieldActive) {
