@@ -19,6 +19,17 @@
   <script type="text/javascript">
     Physijs.scripts.worker = '/js/external/physijs_worker.js';
 
+    var vars = [], hash;
+    var q = document.URL.split('?')[1];
+    if (q != undefined) {
+      q = q.split('&');
+      for (var i = 0; i < q.length; i++) {
+        hash = q[i].split('=');
+        vars.push(hash[1]);
+        vars[hash[0]] = hash[1];
+      }
+    }
+
     $(document).ready(function() {
       //Roller.init();
       //Roller.loop();
@@ -50,7 +61,8 @@
       });
 
       $('.joinTable').click(function() {
-        window.location = 'http://localhost:3000/game?t='+ $(this).parent().data('tableNumber')+'&id='+$('#userId').val();
+        //window.location = '/game?t='+ $(this).parent().data('tableNumber')+'&id='+$('#userId').val();
+        window.location = '/game?t='+ $(this).parent().data('tableNumber')+'&id='+vars['userID'];
       });
 
       $('.roll').click(function() {
