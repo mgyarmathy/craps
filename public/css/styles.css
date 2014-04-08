@@ -314,12 +314,12 @@ h1 {
    width: 15%;
 }
 
-.player .turn {
+/*.player .turn {
     display:none;
 }
 .player.playerturn .turn {
     display:block; 
-}
+}*/
 .playerTurn {
    border: 2px solid red;
 }
