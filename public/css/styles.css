@@ -48,6 +48,8 @@ h1 {
    float:left;
    width:540px;
    height:612px;
+    margin: 0 auto;
+
 }
 
 #passLineVert{
@@ -284,7 +286,7 @@ h1 {
 
 .player {
    float: left;
-   width: 15%;
+   width: 10%;
    padding-left: 1%;
    padding-top: 1.6%;
    text-align: center;
@@ -312,6 +314,12 @@ h1 {
    width: 15%;
 }
 
+.player .turn {
+    display:none;
+}
+.player.playerturn .turn {
+    display:block; 
+}
 .playerTurn {
    border: 2px solid red;
 }
