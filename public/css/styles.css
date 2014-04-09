@@ -48,6 +48,8 @@ h1 {
    float:left;
    width:540px;
    height:612px;
+    margin: 0 auto;
+
 }
 
 #passLineVert{
@@ -120,6 +122,11 @@ h1 {
    margin-top:4px;
 }
 
+#field img {
+   margin-left:105px;
+   margin-top:-2px;
+}
+
 #dontPassBarHori {
    background-color:lawngreen;
    opacity:0.0;
@@ -156,6 +163,11 @@ h1 {
    height:24px;
    margin-left:58px;
    margin-top:19px;
+}
+
+#anySeven img {
+   margin-left:103px;
+   margin-top:-12px;
 }
 
 #hardWaySix {
@@ -218,6 +230,11 @@ h1 {
    margin-top:5px;
 }
 
+#aceDeuce img {
+	margin-left:30px;
+	margin-top:-1px;
+}
+
 #snakeEyes {
    background-color:lawngreen;
    opacity:0.0;
@@ -226,6 +243,11 @@ h1 {
    height:48px;
    margin-left:4px;
    margin-top:5px;
+}
+
+#snakeEyes img {
+	margin-left:19px;
+	margin-top:-1px;
 }
 
 #boxcars {
@@ -238,6 +260,11 @@ h1 {
    margin-top:5px;
 }
 
+#boxcars img {
+	margin-left:22px;
+	margin-top:-1px;
+}
+
 #yoLeft {
    background-color:lawngreen;
    opacity:0.0;
@@ -246,6 +273,11 @@ h1 {
    height:53px;
    margin-left:133px;
    margin-top:5px;
+}
+
+#yoLeft img {
+	margin-left:47px;
+	margin-top:2px;
 }
 
 #yoRight {
@@ -258,6 +290,11 @@ h1 {
    margin-top:5px;
 }
 
+#yoRight img {
+	margin-left:47px;
+	margin-top:2px;
+}
+
 #anyCraps {
    background-color:lawngreen;
    opacity:0.0;
@@ -266,6 +303,11 @@ h1 {
    height:33px;
    margin-left:133px;
    margin-top:5px;
+}
+
+#anyCraps img {
+	margin-left:118px;
+	margin-top:-9px;
 }
 
 #message {
@@ -280,11 +322,34 @@ h1 {
    font-weight:bold;
 }
 
+#chips {
+	float:left;
+	width:60px;
+	height:612px;
+	margin-left:10px;
+	margin-right:10px;
+}
+
+.chip {
+	float:left;
+	width:100%;
+	height:60px;
+	margin-bottom:10px;
+}
+
+.chip img {
+	width:100%;
+}
+
+#redChip {
+	border:1px solid white;
+}
+
 /* #players */
 
 .player {
    float: left;
-   width: 15%;
+   width: 10%;
    padding-left: 1%;
    padding-top: 1.6%;
    text-align: center;
@@ -312,6 +377,12 @@ h1 {
    width: 15%;
 }
 
+/*.player .turn {
+    display:none;
+}
+.player.playerturn .turn {
+    display:block; 
+}*/
 .playerTurn {
    border: 2px solid red;
 }
