@@ -112,15 +112,13 @@
       function updatePlayerList(players) {
         $('#players').empty();
         $.each(players, function(i, player) {
-
-var url = "'http://gadgetministry.com/wp-content/uploads/2010/11/tag.jpg'";
-if(isNaN(player.name.charAt(0))){       
-var letter = player.name.charAt(0).toLocaleLowerCase();
-    url = "'http://www.havefunteaching.com/wp-content/uploads/2013/06/letter-" + letter + ".png'";
-}
-
-            $('#players').append('<div class="player" id="'+player.sid+'">'
-                              +   '<img class="turn" src="/public/images/NewDice.jpg"></img>'
+          var url = "'http://gadgetministry.com/wp-content/uploads/2010/11/tag.jpg'";
+          if ( isNaN(player.name.charAt(0)) ) {
+            var letter = player.name.charAt(0).toLocaleLowerCase();
+            url = "'http://www.havefunteaching.com/wp-content/uploads/2013/06/letter-" + letter + ".png'";
+          }
+          $('#players').append('<div class="player" id="'+player.sid+'">'
+                              +   '<img class="turn" src="/images/Dice.png"></img>'
                               +   '<h2>'+player.name+'</h2>'
                               +   '<h3>'+player.funds+'</h3>'
                               +   '<img id="picture2" src=' + url + '></img>'
@@ -233,7 +231,7 @@ var letter = player.name.charAt(0).toLocaleLowerCase();
 	</div>
     <div id="players">
       <div class="player" id="player0">
-        <img class="turn" src="/images/NewDice.jpg"></img>
+        <img class="turn" src="/images/Dice.png"></img>
         <h2 id="name0">User 0</h2>
         <h3 id="funds0">Fund: 0</h3>
         <img id="picture0" src="http://placehold.it/350x150"></img>

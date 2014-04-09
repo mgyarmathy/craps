@@ -37,7 +37,9 @@ function Table(id) {
     this.players.push(p);
   };
   this.removePlayer = function(name) {
-    this.nextTurn();
+    if (this.playerTurn == this.players.length-1) {
+      this.playerTurn = 0;
+    }
     for(var i = this.players.length - 1; i >= 0; i--) {
       if (this.players[i].name === name) {
          this.players.splice(i, 1);
