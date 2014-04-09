@@ -18,6 +18,7 @@ body {
    width: 20%;
    padding: 2% 2%;
    cursor: pointer;
+   text-align: center;
 }
 
 .table h2 span {
