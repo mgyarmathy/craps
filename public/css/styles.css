@@ -1,14 +1,19 @@
 html, body {
    margin: 0;
    padding: 0;
-   background: #000;
+   background: rgba(0,0,0,0.85);
    font-family: sans-serif;
 }
 
+html {
+   background-image: url('http://2.bp.blogspot.com/-m6FxviM0M84/UqQ2bmiQSnI/AAAAAAAAA_o/9bxv1bZJgbQ/s1600/casino1+copy.jpg');
+   background-size: cover;
+}
+
 body {
-   xpadding: 15px;
+   padding: 40px;
    width: 1100px;
-   margin: 0 auto;
+   margin: 20px auto;
 }
 
 h1 {
@@ -278,10 +283,10 @@ h1 {
    background-color:lawngreen;
    opacity:0.0;
    float:left;
-   width:141px;
-   height:53px;
-   margin-left:133px;
-   margin-top:5px;
+   width:106px;
+   height:39px;
+   margin-left:100px;
+   margin-top:4px;
 }
 
 #yoLeft img {
@@ -293,10 +298,10 @@ h1 {
    background-color:lawngreen;
    opacity:0.0;
    float:left;
-   width:145px;
-   height:53px;
-   margin-left:5px;
-   margin-top:5px;
+   width:109px;
+   height:39px;
+   margin-left:3px;
+   margin-top:4px;
 }
 
 #yoRight img {
@@ -308,10 +313,10 @@ h1 {
    background-color:lawngreen;
    opacity:0.0;
    float:left;
-   width:291px;
-   height:33px;
-   margin-left:133px;
-   margin-top:5px;
+   width:219px;
+   height:25px;
+   margin-left:100px;
+   margin-top:4px;
 }
 
 #anyCraps img {
@@ -320,7 +325,7 @@ h1 {
 }
 
 #message {
-   margin-top:5px;
+   margin-top:20px;
    float:left;
    color:white;
    text-align:center;

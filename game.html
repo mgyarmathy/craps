@@ -168,7 +168,7 @@
 </head>
 <body>
   <div style="display:inline-block; width:45%;">
-    <div id="viewport" style="height:180px; margin: 0 -10%; vertical-align: top;"></div>
+    <div id="viewport" style="height:180px; margin: 0 -10% 20px; vertical-align: top;"></div>
   <div id="gameBoard">
     <div id="passLineVert" onclick="passLineClick()"></div>
     <div id="dontPassBarVert" onclick="dontPassBarClick()"></div>
@@ -211,14 +211,14 @@
     <div class="chip" id="blackChip" onclick="blackChipClick()"></div>
   </div>
 </div>
-  <div style="display:inline-block; width: 50%; vertical-align: top">
+  <div style="display:inline-block; width: 50%; vertical-align: top; padding-left: 3%;">
     <div id="players"></div>
-    <div id="gameStats" style="display: inline-block; background-color: black; width:50%; vertical-align: top; min-height:250px;">
+    <div id="gameStats" style="display: inline-block; width:50%; vertical-align: top; min-height:250px;">
       <div id="total"></div>
       <div id="rollVal"></div>
       <div id="currGameState"></div>
     </div>
-    <div id="gameButtons" style="display: inline-block; background-color: black;  width:25%; vertical-align: top;">
+    <div id="gameButtons" style="display: inline-block; width:25%; vertical-align: top;">
       <h1>Click Roll Below:</h1>
       <button  id="rollButton"></button><br>
     </div>
