@@ -118,10 +118,10 @@
             url = "'http://www.havefunteaching.com/wp-content/uploads/2013/06/letter-" + letter + ".png'";
           }
           $('#players').append('<div class="player" id="'+player.sid+'">'
-                              +   '<img class="turn" src="/images/Dice.png"></img>'
+                              + '<img class="avatar" src=' + url + '></img>'
                               +   '<h2>'+player.name+'</h2>'
                               +   '<h3>'+player.funds+'</h3>'
-                              +   '<img id="picture2" src=' + url + '></img>'
+                              +   '<img class="turn" src="/images/Dice.png"></img>'
                               +'</div>');
         });
       };
@@ -150,7 +150,7 @@
       });
 
       $(window).bind('beforeunload', function() {
-        $('#game, #viewport, #players, #gameStats, #gameBoard').hide();
+        $('#gameButtons, #viewport, #players, #gameStats, #gameBoard').hide();
         $('#gameOver').show();
 
         $.post('http://casino.curtiswendel.me:3000/api/addTransaction?userID='+playerId+'&amount='+funds+'&gameID=5', function( response ) {
@@ -167,79 +167,67 @@
   </script>
 </head>
 <body>
-   <div id="game" style="display: inline-block; float:left; background-color: black; height:400px; width:25%;">
-      <h1>Click Roll Below:</h1>
-      <button  id="rollButton"> <img src="/images/RollButton.gif" height="100" width="300"/></button><br>
-      <iframe src= "cards.mileshick.kd.io/chat" style="height:50%; width:100%;"></iframe>
-      <button class="leaveGame">Leave Game</button>
-   </div>
-   <div id="viewport" style="display: inline-block; float:left; width: 50%;"></div>
-   <div id="gameStats" style="display: inline-block; background-color: black; width:25%; height:400px; float:left;">
+  <div style="display:inline-block; width:45%;">
+    <div id="viewport" style="height:180px; margin: 0 -10%; vertical-align: top;"></div>
+  <div id="gameBoard">
+    <div id="passLineVert" onclick="passLineClick()"></div>
+    <div id="dontPassBarVert" onclick="dontPassBarClick()"></div>
+      <div id="dontComeBar" onclick="dontComeClick()"></div>
+        <div class="place" id="placeFour" onclick="placeFourClick()"></div>
+        <div class="place" id="placeFive" onclick="placeFiveClick()"></div>
+        <div class="place" id="placeSix" onclick="placeSixClick()"></div>
+        <div class="place" id="placeEight" onclick="placeEightClick()"></div>
+        <div class="place" id="placeNine" onclick="placeNineClick()"></div>
+        <div class="place" id="placeTen" onclick="placeTenClick()"></div>
+        <div class="point" id="pointFour"></div>
+        <div class="point" id="pointFive"></div>
+        <div class="point" id="pointSix"></div>
+        <div class="point" id="pointEight"></div>
+        <div class="point" id="pointNine"></div>
+        <div class="point" id="pointTen"></div>
+    <div id="come" onclick="comeClick()"></div>
+    <div id="field" onclick="fieldClick()"></div>
+    <div id="dontPassBarHori" onclick="dontPassBarClick()"></div>
+    <div id="passLineHori" onclick="passLineClick()"></div>
+    <div id="passOdds" onclick="passOddsClick()"></div>
+    <div id="anySeven" onclick="anySevenClick()"></div>
+    <div id="hardWaySix" onclick="hardWaySixClick()"></div>
+    <div id="hardWayTen" onclick="hardWayTenClick()"></div>
+    <div id="hardWayEight" onclick="hardWayEightClick()"></div>
+    <div id="hardWayFour" onclick="hardWayFourClick()"></div>
+    <div id="dontPassOdds" onclick="dontPassOddsClick()"></div>
+    <div id="aceDeuce" onclick="aceDeuceClick()"></div>
+    <div id="snakeEyes" onclick="snakeEyesClick()"></div>
+    <div id="boxcars" onclick="boxcarsClick()"></div>
+    <div id="yoLeft" onclick="yoLeftClick()"></div>
+    <div id="yoRight" onclick="yoRightClick()"></div>
+    <div id="anyCraps" onclick="anyCrapsClick()"></div>
+    <div id="message"></div>
+  </div>
+  <div id="chips">
+    <div class="chip" id="redChip" onclick="redChipClick()"></div>
+    <div class="chip" id="blueChip" onclick="blueChipClick()"></div>
+    <div class="chip" id="greenChip" onclick="greenChipClick()"></div>
+    <div class="chip" id="blackChip" onclick="blackChipClick()"></div>
+  </div>
+</div>
+  <div style="display:inline-block; width: 50%; vertical-align: top">
+    <div id="players"></div>
+    <div id="gameStats" style="display: inline-block; background-color: black; width:50%; vertical-align: top; min-height:250px;">
       <div id="total"></div>
       <div id="rollVal"></div>
-      <div id="currGameState">
-      </div>
-   </div>
-   <div id="gameBoard">
-      <div id="passLineVert" onclick="passLineClick()"></div>
-      <div id="dontPassBarVert" onclick="dontPassBarClick()"></div>
-            <div id="dontComeBar" onclick="dontComeClick()"></div>
-               <div class="place" id="placeFour" onclick="placeFourClick()"></div>
-               <div class="place" id="placeFive" onclick="placeFiveClick()"></div>
-               <div class="place" id="placeSix" onclick="placeSixClick()"></div>
-               <div class="place" id="placeEight" onclick="placeEightClick()"></div>
-               <div class="place" id="placeNine" onclick="placeNineClick()"></div>
-               <div class="place" id="placeTen" onclick="placeTenClick()"></div>
-               <div class="point" id="pointFour"></div>
-               <div class="point" id="pointFive"></div>
-               <div class="point" id="pointSix"></div>
-               <div class="point" id="pointEight"></div>
-               <div class="point" id="pointNine"></div>
-               <div class="point" id="pointTen"></div>
-         <div id="come" onclick="comeClick()"></div>
-         <div id="field" onclick="fieldClick()"></div>
-         <div id="dontPassBarHori" onclick="dontPassBarClick()"></div>
-         <div id="passLineHori" onclick="passLineClick()"></div>
-      <div id="passOdds" onclick="passOddsClick()"></div>
-      <div id="anySeven" onclick="anySevenClick()"></div>
-      <div id="hardWaySix" onclick="hardWaySixClick()"></div>
-      <div id="hardWayTen" onclick="hardWayTenClick()"></div>
-      <div id="hardWayEight" onclick="hardWayEightClick()"></div>
-      <div id="hardWayFour" onclick="hardWayFourClick()"></div>
-      <div id="dontPassOdds" onclick="dontPassOddsClick()"></div>
-      <div id="aceDeuce" onclick="aceDeuceClick()"></div>
-      <div id="snakeEyes" onclick="snakeEyesClick()"></div>
-      <div id="boxcars" onclick="boxcarsClick()"></div>
-      <div id="yoLeft" onclick="yoLeftClick()"></div>
-      <div id="yoRight" onclick="yoRightClick()"></div>
-      <div id="anyCraps" onclick="anyCrapsClick()"></div>
-      <div id="message"></div>
+      <div id="currGameState"></div>
     </div>
-	<div id="chips">
-		<div class="chip" id="redChip">
-			<img src="/images/red_chip.png" onclick="redChipClick()"/>
-		</div>
-		<div class="chip" id="blueChip" onclick="blueChipClick()">
-			<img src="/images/blue_chip.png"/>
-		</div>
-		<div class="chip" id="greenChip" onclick="greenChipClick()">
-			<img src="/images/green_chip.png"/>
-		</div>
-		<div class="chip" id="blackChip" onclick="blackChipClick()">
-			<img src="/images/black_chip.png"/>
-		</div>
-	</div>
-    <div id="players">
-      <div class="player" id="player0">
-        <img class="turn" src="/images/Dice.png"></img>
-        <h2 id="name0">User 0</h2>
-        <h3 id="funds0">Fund: 0</h3>
-        <img id="picture0" src="http://placehold.it/350x150"></img>
-      </div>
+    <div id="gameButtons" style="display: inline-block; background-color: black;  width:25%; vertical-align: top;">
+      <h1>Click Roll Below:</h1>
+      <button  id="rollButton"></button><br>
     </div>
-    <div id="gameOver" style="display:none;">
-      <h1>Thanks for playing!</h1>
-      <button class="leaveGame">Leave Game</button>
-    </div>
+    <iframe src= "cards.mileshick.kd.io/chat" style="height:50%; width:100%;"></iframe>
+    <button class="leaveGame">Leave Game</button>
+  </div>
+  <div id="gameOver" style="display:none;">
+    <h1>Thanks for playing!</h1>
+    <button class="leaveGame">Leave Game</button>
+  </div>
 </body>
 </html>
