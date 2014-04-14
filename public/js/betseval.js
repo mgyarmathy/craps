@@ -70,6 +70,16 @@ var placeSixBetAmt = 0;
 var placeEightBetAmt = 0;
 var placeNineBetAmt = 0;
 var placeTenBetAmt = 0;
+var newComeBetAmt = 0;
+var comeBetAmtArray = new Array();
+for (var i=0; i<=12; i++) {
+	comeBetAmtArray[i] = 0;
+}
+var newDontComeBetAmt = 0;
+var dontComeBetAmtArray = new Array();
+for (var i=0; i<=12; i++) {
+	dontComeBetAmtArray[i] = 0;
+}
 
 /* Some multi roll bets need to be locked in across multiple rolls */
 var passLineLocked = false;
@@ -172,6 +182,27 @@ function betsEval(dice1, dice2)
 			break;
 		default:
 			pointValue = diceValue;
+			$('#pointChipImg').attr('src', '/images/chipon.png');
+			switch(diceValue) {
+			case 4:
+				$('#pointChipImg').css('margin-left', '119px');
+				break;
+			case 5:
+				$('#pointChipImg').css('margin-left', '167px');
+				break;
+			case 6:
+				$('#pointChipImg').css('margin-left', '215px');
+				break;
+			case 8:
+				$('#pointChipImg').css('margin-left', '262px');
+				break;
+			case 9:
+				$('#pointChipImg').css('margin-left', '309px');
+				break;
+			case 10:
+				$('#pointChipImg').css('margin-left', '357px');
+				break;
+			}
 			if (passLineActive) {
 				betResultsString += 'Pass Line Bet: The Point is ' + pointValue + '<br>';
 			}
@@ -235,6 +266,8 @@ function betsEval(dice1, dice2)
 			if (!rollIsSimulated) {
 				socket.emit('passDice', {tableNumber: tableNumber});
 			}
+			$('#pointChipImg').attr('src', '/images/chipoff.png');
+			$('#pointChipImg').css('margin-left', '10px');
 			// can no longer bet on Pass/Don't Pass Odds
 			passOddsLocked = true;
 			dontPassOddsLocked = true;
@@ -298,6 +331,8 @@ function betsEval(dice1, dice2)
 			if (!rollIsSimulated) {
 				socket.emit('passDice', {tableNumber: tableNumber});
 			}
+			$('#pointChipImg').attr('src', '/images/chipoff.png');
+			$('#pointChipImg').css('margin-left', '10px');
 			// can no longer bet on Pass/Don't Pass Odds
 			passOddsLocked = true;
 			dontPassOddsLocked = true;
@@ -344,91 +379,201 @@ function betsEval(dice1, dice2)
 		case 12:
 			if (newComeBet) {
 				betResultsString += "New Come Bet Loses<br>";
+				newComeBetAmt = 0;
 				newComeBet = false;
 				$('#come').css('opacity', '0.0');
+				$('#come').html('');
 			}
 			if (newDontComeBet) {
 				betResultsString += "New Don't Come Bet Wins Odds 1:1<br>";
+				payout(newDontComeBetAmt, (1/1));
+				newDontComeBetAmt = 0;
 				newDontComeBet = false;
 				$('#dontComeBar').css('opacity', '0.0');
+				$('#dontComeBar').html('');
 			}
 			break;
 		case 4:
 			if (comeActiveArray[diceValue]) {
 				betResultsString += "Come Bet on " + diceValue + " wins with odds 1:1<br>";
+				payout(comeBetAmtArray[diceValue], (1/1));
+				comeBetAmtArray[diceValue] = 0;
 				comeActiveArray[diceValue] = false;
 				$('#pointFour').css('opacity', '0.0');
+				$('#pointFour').html('');
 			}
 			if (dontComeActiveArray[diceValue]) {
 				betResultsString += "Don't Come Bet on " + diceValue + " loses<br>";
+				dontComeBetAmtArray[diceValue] = 0;
 				dontComeActiveArray[diceValue] = false;
 				$('#pointFour').css('opacity', '0.0');
+				$('#pointFour').html('');
 			}
 			if (newComeBet) {
 				comeActiveArray[diceValue] = true;
+				comeBetAmtArray[diceValue] += newComeBetAmt;
+				newComeBetAmt = 0;
 				newComeBet = false;
 				$('#come').css('opacity', '0.0');
-				$('#pointFour').css('background-color', 'blue');
-				$('#pointFour').css('opacity', '0.5');
+				$('#come').html('');
+				if (comeBetAmtArray[diceValue] >= blackChipAmt) {
+					$('#pointFour').html('<img src="/images/black_chip_small.png"/>');
+				}
+				else if (comeBetAmtArray[diceValue] >= greenChipAmt) {
+					$('#pointFour').html('<img src="/images/green_chip_small.png"/>');
+				}
+				else if (comeBetAmtArray[diceValue] >= blueChipAmt) {
+					$('#pointFour').html('<img src="/images/blue_chip_small.png"/>');
+				}
+				else if (comeBetAmtArray[diceValue] >= redChipAmt) {
+					$('#pointFour').html('<img src="/images/red_chip_small.png"/>');
+				}
+				$('#pointFour').css('opacity', '0.95');
+				$('#pointFour').css('background-color', 'transparent');
 			}
 			if (newDontComeBet) {
 				dontComeActiveArray[diceValue] = true;
+				dontComeBetAmtArray[diceValue] += newDontComeBetAmt;
+				newDontComeBetAmt = 0;
 				newDontComeBet = false;
 				$('#dontComeBar').css('opacity', '0.0');
-				$('#pointFour').css('background-color', 'blue');
-				$('#pointFour').css('opacity', '0.5');
+				$('#dontComeBar').html('');
+				if (dontComeBetAmtArray[diceValue] >= blackChipAmt) {
+					$('#pointFour').html('<img src="/images/black_chip_small.png"/>');
+				}
+				else if (dontComeBetAmtArray[diceValue] >= greenChipAmt) {
+					$('#pointFour').html('<img src="/images/green_chip_small.png"/>');
+				}
+				else if (dontComeBetAmtArray[diceValue] >= blueChipAmt) {
+					$('#pointFour').html('<img src="/images/blue_chip_small.png"/>');
+				}
+				else if (dontComeBetAmtArray[diceValue] >= redChipAmt) {
+					$('#pointFour').html('<img src="/images/red_chip_small.png"/>');
+				}
+				$('#pointFour').css('opacity', '0.95');
+				$('#pointFour').css('background-color', 'transparent');
 			}
 			break;
 		case 5:
 			if (comeActiveArray[diceValue]) {
 				betResultsString += "Come Bet on " + diceValue + " wins with odds 1:1<br>";
+				payout(comeBetAmtArray[diceValue], (1/1));
+				comeBetAmtArray[diceValue] = 0;
 				comeActiveArray[diceValue] = false;
 				$('#pointFive').css('opacity', '0.0');
+				$('#pointFive').html('');
 			}
 			if (dontComeActiveArray[diceValue]) {
 				betResultsString += "Don't Come Bet on " + diceValue + " loses<br>";
+				dontComeBetAmtArray[diceValue] = 0;
 				dontComeActiveArray[diceValue] = false;
 				$('#pointFive').css('opacity', '0.0');
+				$('#pointFive').html('');
 			}
 			if (newComeBet) {
 				comeActiveArray[diceValue] = true;
+				comeBetAmtArray[diceValue] += newComeBetAmt;
+				newComeBetAmt = 0;
 				newComeBet = false;
 				$('#come').css('opacity', '0.0');
-				$('#pointFive').css('background-color', 'blue');
-				$('#pointFive').css('opacity', '0.5');
+				$('#come').html('');
+				if (comeBetAmtArray[diceValue] >= blackChipAmt) {
+					$('#pointFive').html('<img src="/images/black_chip_small.png"/>');
+				}
+				else if (comeBetAmtArray[diceValue] >= greenChipAmt) {
+					$('#pointFive').html('<img src="/images/green_chip_small.png"/>');
+				}
+				else if (comeBetAmtArray[diceValue] >= blueChipAmt) {
+					$('#pointFive').html('<img src="/images/blue_chip_small.png"/>');
+				}
+				else if (comeBetAmtArray[diceValue] >= redChipAmt) {
+					$('#pointFive').html('<img src="/images/red_chip_small.png"/>');
+				}
+				$('#pointFive').css('opacity', '0.95');
+				$('#pointFive').css('background-color', 'transparent');
 			}
 			if (newDontComeBet) {
 				dontComeActiveArray[diceValue] = true;
+				dontComeBetAmtArray[diceValue] += newDontComeBetAmt;
+				newDontComeBetAmt = 0;
 				newDontComeBet = false;
 				$('#dontComeBar').css('opacity', '0.0');
-				$('#pointFive').css('background-color', 'blue');
-				$('#pointFive').css('opacity', '0.5');
+				$('#dontComeBar').html('');
+				if (dontComeBetAmtArray[diceValue] >= blackChipAmt) {
+					$('#pointFive').html('<img src="/images/black_chip_small.png"/>');
+				}
+				else if (dontComeBetAmtArray[diceValue] >= greenChipAmt) {
+					$('#pointFive').html('<img src="/images/green_chip_small.png"/>');
+				}
+				else if (dontComeBetAmtArray[diceValue] >= blueChipAmt) {
+					$('#pointFive').html('<img src="/images/blue_chip_small.png"/>');
+				}
+				else if (dontComeBetAmtArray[diceValue] >= redChipAmt) {
+					$('#pointFive').html('<img src="/images/red_chip_small.png"/>');
+				}
+				$('#pointFive').css('opacity', '0.95');
+				$('#pointFive').css('background-color', 'transparent');
 			}
 			break;
 		case 6:
 			if (comeActiveArray[diceValue]) {
 				betResultsString += "Come Bet on " + diceValue + " wins with odds 1:1<br>";
+				payout(comeBetAmtArray[diceValue], (1/1));
+				comeBetAmtArray[diceValue] = 0;
 				comeActiveArray[diceValue] = false;
 				$('#pointSix').css('opacity', '0.0');
+				$('#pointSix').html('');
 			}
 			if (dontComeActiveArray[diceValue]) {
 				betResultsString += "Don't Come Bet on " + diceValue + " loses<br>";
+				dontComeBetAmtArray[diceValue] = 0;
 				dontComeActiveArray[diceValue] = false;
 				$('#pointSix').css('opacity', '0.0');
+				$('#pointSix').html('');
 			}
 			if (newComeBet) {
 				comeActiveArray[diceValue] = true;
+				comeBetAmtArray[diceValue] += newComeBetAmt;
+				newComeBetAmt = 0;
 				newComeBet = false;
 				$('#come').css('opacity', '0.0');
-				$('#pointSix').css('background-color', 'blue');
-				$('#pointSix').css('opacity', '0.5');
+				$('#come').html('');
+				if (comeBetAmtArray[diceValue] >= blackChipAmt) {
+					$('#pointSix').html('<img src="/images/black_chip_small.png"/>');
+				}
+				else if (comeBetAmtArray[diceValue] >= greenChipAmt) {
+					$('#pointSix').html('<img src="/images/green_chip_small.png"/>');
+				}
+				else if (comeBetAmtArray[diceValue] >= blueChipAmt) {
+					$('#pointSix').html('<img src="/images/blue_chip_small.png"/>');
+				}
+				else if (comeBetAmtArray[diceValue] >= redChipAmt) {
+					$('#pointSix').html('<img src="/images/red_chip_small.png"/>');
+				}
+				$('#pointSix').css('opacity', '0.95');
+				$('#pointSix').css('background-color', 'transparent');
 			}
 			if (newDontComeBet) {
 				dontComeActiveArray[diceValue] = true;
+				dontComeBetAmtArray[diceValue] += newDontComeBetAmt;
+				newDontComeBetAmt = 0;
 				newDontComeBet = false;
 				$('#dontComeBar').css('opacity', '0.0');
-				$('#pointSix').css('background-color', 'blue');
-				$('#pointSix').css('opacity', '0.5');
+				$('#dontComeBar').html('');
+				if (dontComeBetAmtArray[diceValue] >= blackChipAmt) {
+					$('#pointSix').html('<img src="/images/black_chip_small.png"/>');
+				}
+				else if (dontComeBetAmtArray[diceValue] >= greenChipAmt) {
+					$('#pointSix').html('<img src="/images/green_chip_small.png"/>');
+				}
+				else if (dontComeBetAmtArray[diceValue] >= blueChipAmt) {
+					$('#pointSix').html('<img src="/images/blue_chip_small.png"/>');
+				}
+				else if (dontComeBetAmtArray[diceValue] >= redChipAmt) {
+					$('#pointSix').html('<img src="/images/red_chip_small.png"/>');
+				}
+				$('#pointSix').css('opacity', '0.95');
+				$('#pointSix').css('background-color', 'transparent');
 			}
 			break;
 		case 7:
@@ -436,113 +581,232 @@ function betsEval(dice1, dice2)
 			for (var i=0; i<=12; i++) {
 				if (comeActiveArray[i]) {
 					betResultsString += "Come Bet on " + i + " loses<br>";
+					comeBetAmtArray[i] = 0;
 					comeActiveArray[i] = false;
 				}
 				if (dontComeActiveArray[i]) {
 					betResultsString += "Don't Come Bet on " + i + " wins odds 1:1<br>";
+					payout(dontComeBetAmtArray[i], (1/1));
+					dontComeBetAmtArray[i] = 0;
 					dontComeActiveArray[i] = false;
 				}
 			}
 			$('.point').css('opacity', '0.0');
+			$('.point').html('');
 			if (newComeBet) {
-				betResultsString += "New Come Bet Wins with odds paid 1:1<br>";
+				betResultsString += "New Come Bet Wins Odds 1:1<br>";
+				payout(newComeBetAmt, (1/1));
+				newComeBetAmt = 0;
 				newComeBet = false;
 				$('#come').css('opacity', '0.0');
+				$('#come').html('');
 			}
 			if (newDontComeBet) {
-				betResultsString += "New Don't Come Bet loses<br>";
+				betResultsString += "New Don't Come Bet Loses<br>";
+				newDontComeBetAmt = 0;
 				newDontComeBet = false;
 				$('#dontComeBar').css('opacity', '0.0');
+				$('#dontComeBar').html('');
 			}
 			break;
 		case 8:
 			if (comeActiveArray[diceValue]) {
 				betResultsString += "Come Bet on " + diceValue + " wins with odds 1:1<br>";
+				payout(comeBetAmtArray[diceValue], (1/1));
+				comeBetAmtArray[diceValue] = 0;
 				comeActiveArray[diceValue] = false;
 				$('#pointEight').css('opacity', '0.0');
+				$('#pointEight').html('');
 			}
 			if (dontComeActiveArray[diceValue]) {
 				betResultsString += "Don't Come Bet on " + diceValue + " loses<br>";
+				dontComeBetAmtArray[diceValue] = 0;
 				dontComeActiveArray[diceValue] = false;
 				$('#pointEight').css('opacity', '0.0');
+				$('#pointEight').html('');
 			}
 			if (newComeBet) {
 				comeActiveArray[diceValue] = true;
+				comeBetAmtArray[diceValue] += newComeBetAmt;
+				newComeBetAmt = 0;
 				newComeBet = false;
 				$('#come').css('opacity', '0.0');
-				$('#pointEight').css('background-color', 'blue');
-				$('#pointEight').css('opacity', '0.5');
+				$('#come').html('');
+				if (comeBetAmtArray[diceValue] >= blackChipAmt) {
+					$('#pointEight').html('<img src="/images/black_chip_small.png"/>');
+				}
+				else if (comeBetAmtArray[diceValue] >= greenChipAmt) {
+					$('#pointEight').html('<img src="/images/green_chip_small.png"/>');
+				}
+				else if (comeBetAmtArray[diceValue] >= blueChipAmt) {
+					$('#pointEight').html('<img src="/images/blue_chip_small.png"/>');
+				}
+				else if (comeBetAmtArray[diceValue] >= redChipAmt) {
+					$('#pointEight').html('<img src="/images/red_chip_small.png"/>');
+				}
+				$('#pointEight').css('opacity', '0.95');
+				$('#pointEight').css('background-color', 'transparent');
 			}
 			if (newDontComeBet) {
 				dontComeActiveArray[diceValue] = true;
+				dontComeBetAmtArray[diceValue] += newDontComeBetAmt;
+				newDontComeBetAmt = 0;
 				newDontComeBet = false;
 				$('#dontComeBar').css('opacity', '0.0');
-				$('#pointEight').css('background-color', 'blue');
-				$('#pointEight').css('opacity', '0.5');
+				$('#dontComeBar').html('');
+				if (dontComeBetAmtArray[diceValue] >= blackChipAmt) {
+					$('#pointEight').html('<img src="/images/black_chip_small.png"/>');
+				}
+				else if (dontComeBetAmtArray[diceValue] >= greenChipAmt) {
+					$('#pointEight').html('<img src="/images/green_chip_small.png"/>');
+				}
+				else if (dontComeBetAmtArray[diceValue] >= blueChipAmt) {
+					$('#pointEight').html('<img src="/images/blue_chip_small.png"/>');
+				}
+				else if (dontComeBetAmtArray[diceValue] >= redChipAmt) {
+					$('#pointEight').html('<img src="/images/red_chip_small.png"/>');
+				}
+				$('#pointEight').css('opacity', '0.95');
+				$('#pointEight').css('background-color', 'transparent');
 			}
 			break;
 		case 9:
 			if (comeActiveArray[diceValue]) {
 				betResultsString += "Come Bet on " + diceValue + " wins with odds 1:1<br>";
+				payout(comeBetAmtArray[diceValue], (1/1));
+				comeBetAmtArray[diceValue] = 0;
 				comeActiveArray[diceValue] = false;
 				$('#pointNine').css('opacity', '0.0');
+				$('#pointNine').html('');
 			}
 			if (dontComeActiveArray[diceValue]) {
 				betResultsString += "Don't Come Bet on " + diceValue + " loses<br>";
+				dontComeBetAmtArray[diceValue] = 0;
 				dontComeActiveArray[diceValue] = false;
 				$('#pointNine').css('opacity', '0.0');
+				$('#pointNine').html('');
 			}
 			if (newComeBet) {
 				comeActiveArray[diceValue] = true;
+				comeBetAmtArray[diceValue] += newComeBetAmt;
+				newComeBetAmt = 0;
 				newComeBet = false;
 				$('#come').css('opacity', '0.0');
-				$('#pointNine').css('background-color', 'blue');
-				$('#pointNine').css('opacity', '0.5');
+				$('#come').html('');
+				if (comeBetAmtArray[diceValue] >= blackChipAmt) {
+					$('#pointNine').html('<img src="/images/black_chip_small.png"/>');
+				}
+				else if (comeBetAmtArray[diceValue] >= greenChipAmt) {
+					$('#pointNine').html('<img src="/images/green_chip_small.png"/>');
+				}
+				else if (comeBetAmtArray[diceValue] >= blueChipAmt) {
+					$('#pointNine').html('<img src="/images/blue_chip_small.png"/>');
+				}
+				else if (comeBetAmtArray[diceValue] >= redChipAmt) {
+					$('#pointNine').html('<img src="/images/red_chip_small.png"/>');
+				}
+				$('#pointNine').css('opacity', '0.95');
+				$('#pointNine').css('background-color', 'transparent');
 			}
 			if (newDontComeBet) {
 				dontComeActiveArray[diceValue] = true;
+				dontComeBetAmtArray[diceValue] += newDontComeBetAmt;
+				newDontComeBetAmt = 0;
 				newDontComeBet = false;
 				$('#dontComeBar').css('opacity', '0.0');
-				$('#pointNine').css('background-color', 'blue');
-				$('#pointNine').css('opacity', '0.5');
+				$('#dontComeBar').html('');
+				if (dontComeBetAmtArray[diceValue] >= blackChipAmt) {
+					$('#pointNine').html('<img src="/images/black_chip_small.png"/>');
+				}
+				else if (dontComeBetAmtArray[diceValue] >= greenChipAmt) {
+					$('#pointNine').html('<img src="/images/green_chip_small.png"/>');
+				}
+				else if (dontComeBetAmtArray[diceValue] >= blueChipAmt) {
+					$('#pointNine').html('<img src="/images/blue_chip_small.png"/>');
+				}
+				else if (dontComeBetAmtArray[diceValue] >= redChipAmt) {
+					$('#pointNine').html('<img src="/images/red_chip_small.png"/>');
+				}
+				$('#pointNine').css('opacity', '0.95');
+				$('#pointNine').css('background-color', 'transparent');
 			}
 			break;
 		case 10:
 			if (comeActiveArray[diceValue]) {
 				betResultsString += "Come Bet on " + diceValue + " wins with odds 1:1<br>";
+				payout(comeBetAmtArray[diceValue], (1/1));
+				comeBetAmtArray[diceValue] = 0;
 				comeActiveArray[diceValue] = false;
 				$('#pointTen').css('opacity', '0.0');
+				$('#pointTen').html('');
 			}
 			if (dontComeActiveArray[diceValue]) {
 				betResultsString += "Don't Come Bet on " + diceValue + " loses<br>";
+				dontComeBetAmtArray[diceValue] = 0;
 				dontComeActiveArray[diceValue] = false;
 				$('#pointTen').css('opacity', '0.0');
+				$('#pointTen').html('');
 			}
 			if (newComeBet) {
 				comeActiveArray[diceValue] = true;
+				comeBetAmtArray[diceValue] += newComeBetAmt;
+				newComeBetAmt = 0;
 				newComeBet = false;
 				$('#come').css('opacity', '0.0');
-				$('#pointTen').css('background-color', 'blue');
-				$('#pointTen').css('opacity', '0.5');
+				$('#come').html('');
+				if (comeBetAmtArray[diceValue] >= blackChipAmt) {
+					$('#pointTen').html('<img src="/images/black_chip_small.png"/>');
+				}
+				else if (comeBetAmtArray[diceValue] >= greenChipAmt) {
+					$('#pointTen').html('<img src="/images/green_chip_small.png"/>');
+				}
+				else if (comeBetAmtArray[diceValue] >= blueChipAmt) {
+					$('#pointTen').html('<img src="/images/blue_chip_small.png"/>');
+				}
+				else if (comeBetAmtArray[diceValue] >= redChipAmt) {
+					$('#pointTen').html('<img src="/images/red_chip_small.png"/>');
+				}
+				$('#pointTen').css('opacity', '0.95');
+				$('#pointTen').css('background-color', 'transparent');
 			}
 			if (newDontComeBet) {
 				dontComeActiveArray[diceValue] = true;
+				dontComeBetAmtArray[diceValue] += newDontComeBetAmt;
+				newDontComeBetAmt = 0;
 				newDontComeBet = false;
 				$('#dontComeBar').css('opacity', '0.0');
-				$('#pointTen').css('background-color', 'blue');
-				$('#pointTen').css('opacity', '0.5');
+				$('#dontComeBar').html('');
+				if (dontComeBetAmtArray[diceValue] >= blackChipAmt) {
+					$('#pointTen').html('<img src="/images/black_chip_small.png"/>');
+				}
+				else if (dontComeBetAmtArray[diceValue] >= greenChipAmt) {
+					$('#pointTen').html('<img src="/images/green_chip_small.png"/>');
+				}
+				else if (dontComeBetAmtArray[diceValue] >= blueChipAmt) {
+					$('#pointTen').html('<img src="/images/blue_chip_small.png"/>');
+				}
+				else if (dontComeBetAmtArray[diceValue] >= redChipAmt) {
+					$('#pointTen').html('<img src="/images/red_chip_small.png"/>');
+				}
+				$('#pointTen').css('opacity', '0.95');
+				$('#pointTen').css('background-color', 'transparent');
 			}
 			break;
 		case 11:
 			if (newComeBet) {
-				betResultsString += "New Come Bet Wins with odds paid 1:1<br>";
+				betResultsString += "New Come Bet Wins Odds 1:1<br>";
+				payout(newComeBetAmt, (1/1));
+				newComeBetAmt = 0;
 				newComeBet = false;
 				$('#come').css('opacity', '0.0');
+				$('#come').html('');
 			}
 			if (newDontComeBet) {
-				betResultsString += "New Don't Come Bet loses<br>";
+				betResultsString += "New Don't Come Bet Loses<br>";
+				newDontComeBetAmt = 0;
 				newDontComeBet = false;
 				$('#dontComeBar').css('opacity', '0.0');
+				$('#dontComeBar').html('');
 			}
 			break;
 	}

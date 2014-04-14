@@ -164,27 +164,79 @@ function dontPassOddsClick() {
 }
 
 function comeClick() {
-	if (newComeBet) {
-		newComeBet = false;
-		$('#come').css('opacity', '0.0');
+	newComeBet = true;
+	if (redChipActive) {
+		newComeBetAmt += redChipAmt;
+		userBet(redChipAmt);
 	}
-	else if (!isComeOutRoll) {
-		newComeBet = true;
-		$('#come').css('background-color', 'blue');
-		$('#come').css('opacity', '0.5');
+	else if (blueChipActive) {
+		newComeBetAmt += blueChipAmt;
+		userBet(blueChipAmt);
 	}
+	else if (greenChipActive) {
+		newComeBetAmt += greenChipAmt;
+		userBet(greenChipAmt);
+	}
+	else if (blackChipActive) {
+		newComeBetAmt += blackChipAmt;
+		userBet(blackChipAmt);
+	}
+	if (newComeBetAmt >= blackChipAmt) {
+		$('#come').html('');
+		$('#come').html('<img src="/images/black_chip_small.png"/>');
+	}
+	else if (newComeBetAmt >= greenChipAmt) {
+		$('#come').html('');
+		$('#come').html('<img src="/images/green_chip_small.png"/>');
+	}
+	else if (newComeBetAmt >= blueChipAmt) {
+		$('#come').html('');
+		$('#come').html('<img src="/images/blue_chip_small.png"/>');
+	}
+	else if (newComeBetAmt >= redChipAmt) {
+		$('#come').html('');
+		$('#come').html('<img src="/images/red_chip_small.png"/>');
+	}
+	$('#come').css('background-color', 'transparent');
+	$('#come').css('opacity', '.95');
 }
 
 function dontComeClick() {
-	if (newDontComeBet) {
-		newDontComeBet = false;
-		$('#dontComeBar').css('opacity', '0.0');
+	newDontComeBet = true;
+	if (redChipActive) {
+		newDontComeBetAmt += redChipAmt;
+		userBet(redChipAmt);
 	}
-	else if (!isComeOutRoll) {
-		newDontComeBet = true;
-		$('#dontComeBar').css('background-color', 'blue');
-		$('#dontComeBar').css('opacity', '0.5');
+	else if (blueChipActive) {
+		newDontComeBetAmt += blueChipAmt;
+		userBet(blueChipAmt);
 	}
+	else if (greenChipActive) {
+		newDontComeBetAmt += greenChipAmt;
+		userBet(greenChipAmt);
+	}
+	else if (blackChipActive) {
+		newDontComeBetAmt += blackChipAmt;
+		userBet(blackChipAmt);
+	}
+	if (newDontComeBetAmt >= blackChipAmt) {
+		$('#dontComeBar').html('');
+		$('#dontComeBar').html('<img src="/images/black_chip_small.png"/>');
+	}
+	else if (newDontComeBetAmt >= greenChipAmt) {
+		$('#dontComeBar').html('');
+		$('#dontComeBar').html('<img src="/images/green_chip_small.png"/>');
+	}
+	else if (newDontComeBetAmt >= blueChipAmt) {
+		$('#dontComeBar').html('');
+		$('#dontComeBar').html('<img src="/images/blue_chip_small.png"/>');
+	}
+	else if (newDontComeBetAmt >= redChipAmt) {
+		$('#dontComeBar').html('');
+		$('#dontComeBar').html('<img src="/images/red_chip_small.png"/>');
+	}
+	$('#dontComeBar').css('background-color', 'transparent');
+	$('#dontComeBar').css('opacity', '.95');
 }
 
 function placeFourClick() {
