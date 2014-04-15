@@ -136,12 +136,22 @@
         return text;
       }
 
-      /* jQuery events */	
+      /* jQuery events */
 
+      var rollThrottle = true;
 
       $('#rollButton').click(function() {
-        if (Roller.roll() == -1) {
-          alert('Must make a Line Bet before rolling!');
+        if (rollThrottle) {
+          if (Roller.roll() == -1) {
+            alert('Must make a Line Bet before rolling!');
+            return;
+          }
+          rollThrottle = false;
+          setTimeout(function() {
+            rollThrottle = true;
+          }, 6000);
+        } else {
+          alert('Please wait for other players to place their bets before rolling again');
         }
       });
 
