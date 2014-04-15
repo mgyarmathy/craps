@@ -1,161 +1,481 @@
 /* onClick functions for game board*/
 function passLineClick() {
 	if (isComeOutRoll && !passLineLocked) {
-		if (passLineActive) {
-			passLineActive = false;
-			$('#passLineVert').css('opacity', '0.0');
-			$('#passLineHori').css('opacity', '0.0');
-		} else {
-			passLineActive = true;
-			$('#passLineVert').css('background-color', 'blue');
-			$('#passLineHori').css('background-color', 'blue');
-			$('#passLineVert').css('opacity', '0.5');
-			$('#passLineHori').css('opacity', '0.5');
+		passLineActive = true;
+		if (redChipActive) {
+			passLineBetAmt += redChipAmt;
+			userBet(redChipAmt);
 		}
+		else if (blueChipActive) {
+			passLineBetAmt += blueChipAmt;
+			userBet(blueChipAmt);
+		}
+		else if (greenChipActive) {
+			passLineBetAmt += greenChipAmt;
+			userBet(greenChipAmt);
+		}
+		else if (blackChipActive) {
+			passLineBetAmt += blackChipAmt;
+			userBet(blackChipAmt);
+		}
+		if (passLineBetAmt >= blackChipAmt) {
+			$('#passLineHori').html('');
+			$('#passLineHori').html('<img src="/images/black_chip_small.png"/>');
+		}
+		else if (passLineBetAmt >= greenChipAmt) {
+			$('#passLineHori').html('');
+			$('#passLineHori').html('<img src="/images/green_chip_small.png"/>');
+		}
+		else if (passLineBetAmt >= blueChipAmt) {
+			$('#passLineHori').html('');
+			$('#passLineHori').html('<img src="/images/blue_chip_small.png"/>');
+		}
+		else if (passLineBetAmt >= redChipAmt) {
+			$('#passLineHori').html('');
+			$('#passLineHori').html('<img src="/images/red_chip_small.png"/>');
+		}
+		$('#passLineHori').css('background-color', 'transparent');
+		$('#passLineHori').css('opacity', '.95');
+		$('#passLineVert').css('background-color', 'transparent');
+		$('#passLineVert').css('opacity', '.95');
 	}
 }
 
 function dontPassBarClick() {
 	if (isComeOutRoll && !dontPassLineLocked) {
-		if (dontPassLineActive) {
-			dontPassLineActive = false;
-			$('#dontPassBarVert').css('opacity', '0.0');
-			$('#dontPassBarHori').css('opacity', '0.0');
-		} else {
-			dontPassLineActive = true;
-			$('#dontPassBarVert').css('background-color', 'blue');
-			$('#dontPassBarHori').css('background-color', 'blue');
-			$('#dontPassBarVert').css('opacity', '0.5');
-			$('#dontPassBarHori').css('opacity', '0.5');
+		dontPassLineActive = true;
+		if (redChipActive) {
+			dontPassLineBetAmt += redChipAmt;
+			userBet(redChipAmt);
 		}
+		else if (blueChipActive) {
+			dontPassLineBetAmt += blueChipAmt;
+			userBet(blueChipAmt);
+		}
+		else if (greenChipActive) {
+			dontPassLineBetAmt += greenChipAmt;
+			userBet(greenChipAmt);
+		}
+		else if (blackChipActive) {
+			dontPassLineBetAmt += blackChipAmt;
+			userBet(blackChipAmt);
+		}
+		if (dontPassLineBetAmt >= blackChipAmt) {
+			$('#dontPassBarHori').html('');
+			$('#dontPassBarHori').html('<img src="/images/black_chip_small.png"/>');
+		}
+		else if (dontPassLineBetAmt >= greenChipAmt) {
+			$('#dontPassBarHori').html('');
+			$('#dontPassBarHori').html('<img src="/images/green_chip_small.png"/>');
+		}
+		else if (dontPassLineBetAmt >= blueChipAmt) {
+			$('#dontPassBarHori').html('');
+			$('#dontPassBarHori').html('<img src="/images/blue_chip_small.png"/>');
+		}
+		else if (dontPassLineBetAmt >= redChipAmt) {
+			$('#dontPassBarHori').html('');
+			$('#dontPassBarHori').html('<img src="/images/red_chip_small.png"/>');
+		}
+		$('#dontPassBarHori').css('background-color', 'transparent');
+		$('#dontPassBarHori').css('opacity', '.95');
+		$('#dontPassBarVert').css('background-color', 'transparent');
+		$('#dontPassBarVert').css('opacity', '.95');
 	}
 }
 
 function passOddsClick() {
 	if (!isComeOutRoll && !passOddsLocked && passLineActive) {
-		if (passOddsActive) {
-			passOddsActive = false;
-			$('#passOdds').css('opacity', '0.0');
-		} else {
-			passOddsActive = true;
-			$('#passOdds').css('background-color', 'blue');
-			$('#passOdds').css('opacity', '0.5');
+		passOddsActive = true;
+		if (redChipActive) {
+			passOddsBetAmt += redChipAmt;
+			userBet(redChipAmt);
 		}
+		else if (blueChipActive) {
+			passOddsBetAmt += blueChipAmt;
+			userBet(blueChipAmt);
+		}
+		else if (greenChipActive) {
+			passOddsBetAmt += greenChipAmt;
+			userBet(greenChipAmt);
+		}
+		else if (blackChipActive) {
+			passOddsBetAmt += blackChipAmt;
+			userBet(blackChipAmt);
+		}
+		if (passOddsBetAmt >= blackChipAmt) {
+			$('#passOdds').html('');
+			$('#passOdds').html('<img src="/images/black_chip_small.png"/>');
+		}
+		else if (passOddsBetAmt >= greenChipAmt) {
+			$('#passOdds').html('');
+			$('#passOdds').html('<img src="/images/green_chip_small.png"/>');
+		}
+		else if (passOddsBetAmt >= blueChipAmt) {
+			$('#passOdds').html('');
+			$('#passOdds').html('<img src="/images/blue_chip_small.png"/>');
+		}
+		else if (passOddsBetAmt >= redChipAmt) {
+			$('#passOdds').html('');
+			$('#passOdds').html('<img src="/images/red_chip_small.png"/>');
+		}
+		$('#passOdds').css('background-color', 'transparent');
+		$('#passOdds').css('opacity', '.95');
 	}
 }
 
 function dontPassOddsClick() {
 	if (!isComeOutRoll && !dontPassOddsLocked && dontPassLineActive) {
-		if (dontPassOddsActive) {
-			dontPassOddsActive = false;
-			$('#dontPassOdds').css('opacity', '0.0');
-		} else {
-			dontPassOddsActive = true;
-			$('#dontPassOdds').css('background-color', 'blue');
-			$('#dontPassOdds').css('opacity', '0.5');
+		dontPassOddsActive = true;
+		if (redChipActive) {
+			dontPassOddsBetAmt += redChipAmt;
+			userBet(redChipAmt);
 		}
+		else if (blueChipActive) {
+			dontPassOddsBetAmt += blueChipAmt;
+			userBet(blueChipAmt);
+		}
+		else if (greenChipActive) {
+			dontPassOddsBetAmt += greenChipAmt;
+			userBet(greenChipAmt);
+		}
+		else if (blackChipActive) {
+			dontPassOddsBetAmt += blackChipAmt;
+			userBet(blackChipAmt);
+		}
+		if (dontPassOddsBetAmt >= blackChipAmt) {
+			$('#dontPassOdds').html('');
+			$('#dontPassOdds').html('<img src="/images/black_chip_small.png"/>');
+		}
+		else if (dontPassOddsBetAmt >= greenChipAmt) {
+			$('#dontPassOdds').html('');
+			$('#dontPassOdds').html('<img src="/images/green_chip_small.png"/>');
+		}
+		else if (dontPassOddsBetAmt >= blueChipAmt) {
+			$('#dontPassOdds').html('');
+			$('#dontPassOdds').html('<img src="/images/blue_chip_small.png"/>');
+		}
+		else if (dontPassOddsBetAmt >= redChipAmt) {
+			$('#dontPassOdds').html('');
+			$('#dontPassOdds').html('<img src="/images/red_chip_small.png"/>');
+		}
+		$('#dontPassOdds').css('background-color', 'transparent');
+		$('#dontPassOdds').css('opacity', '.95');
 	}
 }
 
 function comeClick() {
-	if (newComeBet) {
-		newComeBet = false;
-		$('#come').css('opacity', '0.0');
+	newComeBet = true;
+	if (redChipActive) {
+		newComeBetAmt += redChipAmt;
+		userBet(redChipAmt);
 	}
-	else if (!isComeOutRoll) {
-		newComeBet = true;
-		$('#come').css('background-color', 'blue');
-		$('#come').css('opacity', '0.5');
+	else if (blueChipActive) {
+		newComeBetAmt += blueChipAmt;
+		userBet(blueChipAmt);
 	}
+	else if (greenChipActive) {
+		newComeBetAmt += greenChipAmt;
+		userBet(greenChipAmt);
+	}
+	else if (blackChipActive) {
+		newComeBetAmt += blackChipAmt;
+		userBet(blackChipAmt);
+	}
+	if (newComeBetAmt >= blackChipAmt) {
+		$('#come').html('');
+		$('#come').html('<img src="/images/black_chip_small.png"/>');
+	}
+	else if (newComeBetAmt >= greenChipAmt) {
+		$('#come').html('');
+		$('#come').html('<img src="/images/green_chip_small.png"/>');
+	}
+	else if (newComeBetAmt >= blueChipAmt) {
+		$('#come').html('');
+		$('#come').html('<img src="/images/blue_chip_small.png"/>');
+	}
+	else if (newComeBetAmt >= redChipAmt) {
+		$('#come').html('');
+		$('#come').html('<img src="/images/red_chip_small.png"/>');
+	}
+	$('#come').css('background-color', 'transparent');
+	$('#come').css('opacity', '.95');
 }
 
 function dontComeClick() {
-	if (newDontComeBet) {
-		newDontComeBet = false;
-		$('#dontComeBar').css('opacity', '0.0');
+	newDontComeBet = true;
+	if (redChipActive) {
+		newDontComeBetAmt += redChipAmt;
+		userBet(redChipAmt);
 	}
-	else if (!isComeOutRoll) {
-		newDontComeBet = true;
-		$('#dontComeBar').css('background-color', 'blue');
-		$('#dontComeBar').css('opacity', '0.5');
+	else if (blueChipActive) {
+		newDontComeBetAmt += blueChipAmt;
+		userBet(blueChipAmt);
 	}
+	else if (greenChipActive) {
+		newDontComeBetAmt += greenChipAmt;
+		userBet(greenChipAmt);
+	}
+	else if (blackChipActive) {
+		newDontComeBetAmt += blackChipAmt;
+		userBet(blackChipAmt);
+	}
+	if (newDontComeBetAmt >= blackChipAmt) {
+		$('#dontComeBar').html('');
+		$('#dontComeBar').html('<img src="/images/black_chip_small.png"/>');
+	}
+	else if (newDontComeBetAmt >= greenChipAmt) {
+		$('#dontComeBar').html('');
+		$('#dontComeBar').html('<img src="/images/green_chip_small.png"/>');
+	}
+	else if (newDontComeBetAmt >= blueChipAmt) {
+		$('#dontComeBar').html('');
+		$('#dontComeBar').html('<img src="/images/blue_chip_small.png"/>');
+	}
+	else if (newDontComeBetAmt >= redChipAmt) {
+		$('#dontComeBar').html('');
+		$('#dontComeBar').html('<img src="/images/red_chip_small.png"/>');
+	}
+	$('#dontComeBar').css('background-color', 'transparent');
+	$('#dontComeBar').css('opacity', '.95');
 }
 
 function placeFourClick() {
 	if (!placeFourLocked) {
-		if (placeFourActive) {
-			placeFourActive = false;
-			$('#placeFour').css('opacity', '0.0');
-		} else {
-			placeFourActive = true;
-			$('#placeFour').css('background-color', 'blue');
-			$('#placeFour').css('opacity', '0.5');
+		placeFourActive = true;
+		if (redChipActive) {
+			placeFourBetAmt += redChipAmt;
+			userBet(redChipAmt);
 		}
+		else if (blueChipActive) {
+			placeFourBetAmt += blueChipAmt;
+			userBet(blueChipAmt);
+		}
+		else if (greenChipActive) {
+			placeFourBetAmt += greenChipAmt;
+			userBet(greenChipAmt);
+		}
+		else if (blackChipActive) {
+			placeFourBetAmt += blackChipAmt;
+			userBet(blackChipAmt);
+		}
+		if (placeFourBetAmt >= blackChipAmt) {
+			$('#placeFour').html('');
+			$('#placeFour').html('<img src="/images/black_chip_small.png"/>');
+		}
+		else if (placeFourBetAmt >= greenChipAmt) {
+			$('#placeFour').html('');
+			$('#placeFour').html('<img src="/images/green_chip_small.png"/>');
+		}
+		else if (placeFourBetAmt >= blueChipAmt) {
+			$('#placeFour').html('');
+			$('#placeFour').html('<img src="/images/blue_chip_small.png"/>');
+		}
+		else if (placeFourBetAmt >= redChipAmt) {
+			$('#placeFour').html('');
+			$('#placeFour').html('<img src="/images/red_chip_small.png"/>');
+		}
+		$('#placeFour').css('background-color', 'transparent');
+		$('#placeFour').css('opacity', '.95');
 	}
 }
 
 function placeFiveClick() {
 	if (!placeFiveLocked) {
-		if (placeFiveActive) {
-			placeFiveActive = false;
-			$('#placeFive').css('opacity', '0.0');
-		} else {
-			placeFiveActive = true;
-			$('#placeFive').css('background-color', 'blue');
-			$('#placeFive').css('opacity', '0.5');
+		placeFiveActive = true;
+		if (redChipActive) {
+			placeFiveBetAmt += redChipAmt;
+			userBet(redChipAmt);
 		}
+		else if (blueChipActive) {
+			placeFiveBetAmt += blueChipAmt;
+			userBet(blueChipAmt);
+		}
+		else if (greenChipActive) {
+			placeFiveBetAmt += greenChipAmt;
+			userBet(greenChipAmt);
+		}
+		else if (blackChipActive) {
+			placeFiveBetAmt += blackChipAmt;
+			userBet(blackChipAmt);
+		}
+		if (placeFiveBetAmt >= blackChipAmt) {
+			$('#placeFive').html('');
+			$('#placeFive').html('<img src="/images/black_chip_small.png"/>');
+		}
+		else if (placeFiveBetAmt >= greenChipAmt) {
+			$('#placeFive').html('');
+			$('#placeFive').html('<img src="/images/green_chip_small.png"/>');
+		}
+		else if (placeFiveBetAmt >= blueChipAmt) {
+			$('#placeFive').html('');
+			$('#placeFive').html('<img src="/images/blue_chip_small.png"/>');
+		}
+		else if (placeFiveBetAmt >= redChipAmt) {
+			$('#placeFive').html('');
+			$('#placeFive').html('<img src="/images/red_chip_small.png"/>');
+		}
+		$('#placeFive').css('background-color', 'transparent');
+		$('#placeFive').css('opacity', '.95');
 	}
 }
 
 function placeSixClick() {
 	if (!placeSixLocked) {
-		if (placeSixActive) {
-			placeSixActive = false;
-			$('#placeSix').css('opacity', '0.0');
-		} else {
-			placeSixActive = true;
-			$('#placeSix').css('background-color', 'blue');
-			$('#placeSix').css('opacity', '0.5');
+		placeSixActive = true;
+		if (redChipActive) {
+			placeSixBetAmt += redChipAmt;
+			userBet(redChipAmt);
 		}
+		else if (blueChipActive) {
+			placeSixBetAmt += blueChipAmt;
+			userBet(blueChipAmt);
+		}
+		else if (greenChipActive) {
+			placeSixBetAmt += greenChipAmt;
+			userBet(greenChipAmt);
+		}
+		else if (blackChipActive) {
+			placeSixBetAmt += blackChipAmt;
+			userBet(blackChipAmt);
+		}
+		if (placeSixBetAmt >= blackChipAmt) {
+			$('#placeSix').html('');
+			$('#placeSix').html('<img src="/images/black_chip_small.png"/>');
+		}
+		else if (placeSixBetAmt >= greenChipAmt) {
+			$('#placeSix').html('');
+			$('#placeSix').html('<img src="/images/green_chip_small.png"/>');
+		}
+		else if (placeSixBetAmt >= blueChipAmt) {
+			$('#placeSix').html('');
+			$('#placeSix').html('<img src="/images/blue_chip_small.png"/>');
+		}
+		else if (placeSixBetAmt >= redChipAmt) {
+			$('#placeSix').html('');
+			$('#placeSix').html('<img src="/images/red_chip_small.png"/>');
+		}
+		$('#placeSix').css('background-color', 'transparent');
+		$('#placeSix').css('opacity', '.95');
 	}
 }
 
 function placeEightClick() {
 	if (!placeEightLocked) {
-		if (placeEightActive) {
-			placeEightActive = false;
-			$('#placeEight').css('opacity', '0.0');
-		} else {
-			placeEightActive = true;
-			$('#placeEight').css('background-color', 'blue');
-			$('#placeEight').css('opacity', '0.5');
+		placeEightActive = true;
+		if (redChipActive) {
+			placeEightBetAmt += redChipAmt;
+			userBet(redChipAmt);
 		}
+		else if (blueChipActive) {
+			placeEightBetAmt += blueChipAmt;
+			userBet(blueChipAmt);
+		}
+		else if (greenChipActive) {
+			placeEightBetAmt += greenChipAmt;
+			userBet(greenChipAmt);
+		}
+		else if (blackChipActive) {
+			placeEightBetAmt += blackChipAmt;
+			userBet(blackChipAmt);
+		}
+		if (placeEightBetAmt >= blackChipAmt) {
+			$('#placeEight').html('');
+			$('#placeEight').html('<img src="/images/black_chip_small.png"/>');
+		}
+		else if (placeEightBetAmt >= greenChipAmt) {
+			$('#placeEight').html('');
+			$('#placeEight').html('<img src="/images/green_chip_small.png"/>');
+		}
+		else if (placeEightBetAmt >= blueChipAmt) {
+			$('#placeEight').html('');
+			$('#placeEight').html('<img src="/images/blue_chip_small.png"/>');
+		}
+		else if (placeEightBetAmt >= redChipAmt) {
+			$('#placeEight').html('');
+			$('#placeEight').html('<img src="/images/red_chip_small.png"/>');
+		}
+		$('#placeEight').css('background-color', 'transparent');
+		$('#placeEight').css('opacity', '.95');
 	}
 }
 
 function placeNineClick() {
 	if (!placeNineLocked) {
-		if (placeNineActive) {
-			placeNineActive = false;
-			$('#placeNine').css('opacity', '0.0');
-		} else {
-			placeNineActive = true;
-			$('#placeNine').css('background-color', 'blue');
-			$('#placeNine').css('opacity', '0.5');
+		placeNineActive = true;
+		if (redChipActive) {
+			placeNineBetAmt += redChipAmt;
+			userBet(redChipAmt);
 		}
+		else if (blueChipActive) {
+			placeNineBetAmt += blueChipAmt;
+			userBet(blueChipAmt);
+		}
+		else if (greenChipActive) {
+			placeNineBetAmt += greenChipAmt;
+			userBet(greenChipAmt);
+		}
+		else if (blackChipActive) {
+			placeNineBetAmt += blackChipAmt;
+			userBet(blackChipAmt);
+		}
+		if (placeNineBetAmt >= blackChipAmt) {
+			$('#placeNine').html('');
+			$('#placeNine').html('<img src="/images/black_chip_small.png"/>');
+		}
+		else if (placeNineBetAmt >= greenChipAmt) {
+			$('#placeNine').html('');
+			$('#placeNine').html('<img src="/images/green_chip_small.png"/>');
+		}
+		else if (placeNineBetAmt >= blueChipAmt) {
+			$('#placeNine').html('');
+			$('#placeNine').html('<img src="/images/blue_chip_small.png"/>');
+		}
+		else if (placeNineBetAmt >= redChipAmt) {
+			$('#placeNine').html('');
+			$('#placeNine').html('<img src="/images/red_chip_small.png"/>');
+		}
+		$('#placeNine').css('background-color', 'transparent');
+		$('#placeNine').css('opacity', '.95');
 	}
 }
 
 function placeTenClick() {
 	if (!placeTenLocked) {
-		if (placeTenActive) {
-			placeTenActive = false;
-			$('#placeTen').css('opacity', '0.0');
-		} else {
-			placeTenActive = true;
-			$('#placeTen').css('background-color', 'blue');
-			$('#placeTen').css('opacity', '0.5');
+		placeTenActive = true;
+		if (redChipActive) {
+			placeTenBetAmt += redChipAmt;
+			userBet(redChipAmt);
 		}
+		else if (blueChipActive) {
+			placeTenBetAmt += blueChipAmt;
+			userBet(blueChipAmt);
+		}
+		else if (greenChipActive) {
+			placeTenBetAmt += greenChipAmt;
+			userBet(greenChipAmt);
+		}
+		else if (blackChipActive) {
+			placeTenBetAmt += blackChipAmt;
+			userBet(blackChipAmt);
+		}
+		if (placeTenBetAmt >= blackChipAmt) {
+			$('#placeTen').html('');
+			$('#placeTen').html('<img src="/images/black_chip_small.png"/>');
+		}
+		else if (placeTenBetAmt >= greenChipAmt) {
+			$('#placeTen').html('');
+			$('#placeTen').html('<img src="/images/green_chip_small.png"/>');
+		}
+		else if (placeTenBetAmt >= blueChipAmt) {
+			$('#placeTen').html('');
+			$('#placeTen').html('<img src="/images/blue_chip_small.png"/>');
+		}
+		else if (placeTenBetAmt >= redChipAmt) {
+			$('#placeTen').html('');
+			$('#placeTen').html('<img src="/images/red_chip_small.png"/>');
+		}
+		$('#placeTen').css('background-color', 'transparent');
+		$('#placeTen').css('opacity', '.95');
 	}
 }
 
@@ -463,53 +783,161 @@ function anyCrapsClick() {
 
 function hardWayFourClick() {
 	if (!hardWayFourLocked) {
-		if (hardWayFourActive) {
-			hardWayFourActive = false;
-			$('#hardWayFour').css('opacity', '0.0');
-		} else {
-			hardWayFourActive = true;
-			$('#hardWayFour').css('background-color', 'blue');
-			$('#hardWayFour').css('opacity', '0.5');
+		hardWayFourActive = true;
+		if (redChipActive) {
+			hardWayFourBetAmt += redChipAmt;
+			userBet(redChipAmt);
 		}
+		else if (blueChipActive) {
+			hardWayFourBetAmt += blueChipAmt;
+			userBet(blueChipAmt);
+		}
+		else if (greenChipActive) {
+			hardWayFourBetAmt += greenChipAmt;
+			userBet(greenChipAmt);
+		}
+		else if (blackChipActive) {
+			hardWayFourBetAmt += blackChipAmt;
+			userBet(blackChipAmt);
+		}
+		if (hardWayFourBetAmt >= blackChipAmt) {
+			$('#hardWayFour').html('');
+			$('#hardWayFour').html('<img src="/images/black_chip_small.png"/>');
+		}
+		else if (hardWayFourBetAmt >= greenChipAmt) {
+			$('#hardWayFour').html('');
+			$('#hardWayFour').html('<img src="/images/green_chip_small.png"/>');
+		}
+		else if (hardWayFourBetAmt >= blueChipAmt) {
+			$('#hardWayFour').html('');
+			$('#hardWayFour').html('<img src="/images/blue_chip_small.png"/>');
+		}
+		else if (hardWayFourBetAmt >= redChipAmt) {
+			$('#hardWayFour').html('');
+			$('#hardWayFour').html('<img src="/images/red_chip_small.png"/>');
+		}
+		$('#hardWayFour').css('background-color', 'transparent');
+		$('#hardWayFour').css('opacity', '.95');
 	}
 }
 
 function hardWaySixClick() {
 	if (!hardWaySixLocked) {
-		if (hardWaySixActive) {
-			hardWaySixActive = false;
-			$('#hardWaySix').css('opacity', '0.0');
-		} else {
-			hardWaySixActive = true;
-			$('#hardWaySix').css('background-color', 'blue');
-			$('#hardWaySix').css('opacity', '0.5');
+		hardWaySixActive = true;
+		if (redChipActive) {
+			hardWaySixBetAmt += redChipAmt;
+			userBet(redChipAmt);
 		}
+		else if (blueChipActive) {
+			hardWaySixBetAmt += blueChipAmt;
+			userBet(blueChipAmt);
+		}
+		else if (greenChipActive) {
+			hardWaySixBetAmt += greenChipAmt;
+			userBet(greenChipAmt);
+		}
+		else if (blackChipActive) {
+			hardWaySixBetAmt += blackChipAmt;
+			userBet(blackChipAmt);
+		}
+		if (hardWaySixBetAmt >= blackChipAmt) {
+			$('#hardWaySix').html('');
+			$('#hardWaySix').html('<img src="/images/black_chip_small.png"/>');
+		}
+		else if (hardWaySixBetAmt >= greenChipAmt) {
+			$('#hardWaySix').html('');
+			$('#hardWaySix').html('<img src="/images/green_chip_small.png"/>');
+		}
+		else if (hardWaySixBetAmt >= blueChipAmt) {
+			$('#hardWaySix').html('');
+			$('#hardWaySix').html('<img src="/images/blue_chip_small.png"/>');
+		}
+		else if (hardWaySixBetAmt >= redChipAmt) {
+			$('#hardWaySix').html('');
+			$('#hardWaySix').html('<img src="/images/red_chip_small.png"/>');
+		}
+		$('#hardWaySix').css('background-color', 'transparent');
+		$('#hardWaySix').css('opacity', '.95');
 	}
 }
 
 function hardWayEightClick() {
 	if (!hardWayEightLocked) {
-		if (hardWayEightActive) {
-			hardWayEightActive = false;
-			$('#hardWayEight').css('opacity', '0.0');
-		} else {
-			hardWayEightActive = true;
-			$('#hardWayEight').css('background-color', 'blue');
-			$('#hardWayEight').css('opacity', '0.5');
+		hardWayEightActive = true;
+		if (redChipActive) {
+			hardWayEightBetAmt += redChipAmt;
+			userBet(redChipAmt);
 		}
+		else if (blueChipActive) {
+			hardWayEightBetAmt += blueChipAmt;
+			userBet(blueChipAmt);
+		}
+		else if (greenChipActive) {
+			hardWayEightBetAmt += greenChipAmt;
+			userBet(greenChipAmt);
+		}
+		else if (blackChipActive) {
+			hardWayEightBetAmt += blackChipAmt;
+			userBet(blackChipAmt);
+		}
+		if (hardWayEightBetAmt >= blackChipAmt) {
+			$('#hardWayEight').html('');
+			$('#hardWayEight').html('<img src="/images/black_chip_small.png"/>');
+		}
+		else if (hardWayEightBetAmt >= greenChipAmt) {
+			$('#hardWayEight').html('');
+			$('#hardWayEight').html('<img src="/images/green_chip_small.png"/>');
+		}
+		else if (hardWayEightBetAmt >= blueChipAmt) {
+			$('#hardWayEight').html('');
+			$('#hardWayEight').html('<img src="/images/blue_chip_small.png"/>');
+		}
+		else if (hardWayEightBetAmt >= redChipAmt) {
+			$('#hardWayEight').html('');
+			$('#hardWayEight').html('<img src="/images/red_chip_small.png"/>');
+		}
+		$('#hardWayEight').css('background-color', 'transparent');
+		$('#hardWayEight').css('opacity', '.95');
 	}
 }
 
 function hardWayTenClick() {
 	if (!hardWayTenLocked) {
-		if (hardWayTenActive) {
-			hardWayTenActive = false;
-			$('#hardWayTen').css('opacity', '0.0');
-		} else {
-			hardWayTenActive = true;
-			$('#hardWayTen').css('background-color', 'blue');
-			$('#hardWayTen').css('opacity', '0.5');
+		hardWayTenActive = true;
+		if (redChipActive) {
+			hardWayTenBetAmt += redChipAmt;
+			userBet(redChipAmt);
 		}
+		else if (blueChipActive) {
+			hardWayTenBetAmt += blueChipAmt;
+			userBet(blueChipAmt);
+		}
+		else if (greenChipActive) {
+			hardWayTenBetAmt += greenChipAmt;
+			userBet(greenChipAmt);
+		}
+		else if (blackChipActive) {
+			hardWayTenBetAmt += blackChipAmt;
+			userBet(blackChipAmt);
+		}
+		if (hardWayTenBetAmt >= blackChipAmt) {
+			$('#hardWayTen').html('');
+			$('#hardWayTen').html('<img src="/images/black_chip_small.png"/>');
+		}
+		else if (hardWayTenBetAmt >= greenChipAmt) {
+			$('#hardWayTen').html('');
+			$('#hardWayTen').html('<img src="/images/green_chip_small.png"/>');
+		}
+		else if (hardWayTenBetAmt >= blueChipAmt) {
+			$('#hardWayTen').html('');
+			$('#hardWayTen').html('<img src="/images/blue_chip_small.png"/>');
+		}
+		else if (hardWayTenBetAmt >= redChipAmt) {
+			$('#hardWayTen').html('');
+			$('#hardWayTen').html('<img src="/images/red_chip_small.png"/>');
+		}
+		$('#hardWayTen').css('background-color', 'transparent');
+		$('#hardWayTen').css('opacity', '.95');
 	}
 }
 

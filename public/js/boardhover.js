@@ -4,6 +4,9 @@ $(document).ready(function() {
 
 $('#passLineVert').hover(function() {
 	$('#message').html('Pass Line');
+	if (passLineLocked) {
+		$('#message').append(' [Locked]');
+	}
 	if (passLineLocked && !passLineActive) {
 		$(this).css('background-color', 'red');
 		$('#passLineHori').css('background-color', 'red');
@@ -26,6 +29,9 @@ $('#passLineVert').hover(function() {
 
 $('#passLineHori').hover(function() {
 	$('#message').html('Pass Line');
+	if (passLineLocked) {
+		$('#message').append(' [Locked]');
+	}
 	if (passLineLocked && !passLineActive) {
 		$(this).css('background-color', 'red');
 		$('#passLineVert').css('background-color', 'red');
@@ -48,6 +54,9 @@ $('#passLineHori').hover(function() {
 
 $('#dontPassBarVert').hover(function() {
 	$('#message').html('Don\'t Pass Bar');
+	if (dontPassLineLocked) {
+		$('#message').append(' [Locked]');
+	}
 	if (dontPassLineLocked && !dontPassLineActive) {
 		$(this).css('background-color', 'red');
 		$('#dontPassBarHori').css('background-color', 'red');
@@ -70,6 +79,9 @@ $('#dontPassBarVert').hover(function() {
 
 $('#dontPassBarHori').hover(function() {
 	$('#message').html('Don\'t Pass Bar');
+	if (dontPassLineLocked) {
+		$('#message').append(' [Locked]');
+	}
 	if (dontPassLineLocked && !dontPassLineActive) {
 		$(this).css('background-color', 'red');
 		$('#dontPassBarVert').css('background-color', 'red');
@@ -92,6 +104,9 @@ $('#dontPassBarHori').hover(function() {
 
 $('#placeFour').hover(function() {
 	$('#message').html('Place Four');
+	if (placeFourLocked) {
+		$('#message').append(' [Locked]');
+	}
 	if (placeFourLocked && !placeFourActive) {
 		$(this).css('background-color', 'red');
 		$(this).css('opacity', '0.5');
@@ -109,6 +124,9 @@ $('#placeFour').hover(function() {
 
 $('#placeFive').hover(function() {
 	$('#message').html('Place Five');
+	if (placeFiveLocked) {
+		$('#message').append(' [Locked]');
+	}
 	if (placeFiveLocked && !placeFiveActive) {
 		$(this).css('background-color', 'red');
 		$(this).css('opacity', '0.5');
@@ -126,6 +144,9 @@ $('#placeFive').hover(function() {
 
 $('#placeSix').hover(function() {
 	$('#message').html('Place Six');
+	if (placeSixLocked) {
+		$('#message').append(' [Locked]');
+	}
 	if (placeSixLocked && !placeSixActive) {
 		$(this).css('background-color', 'red');
 		$(this).css('opacity', '0.5');
@@ -143,6 +164,9 @@ $('#placeSix').hover(function() {
 
 $('#placeEight').hover(function() {
 	$('#message').html('Place Eight');
+	if (placeEightLocked) {
+		$('#message').append(' [Locked]');
+	}
 	if (placeEightLocked && !placeEightActive) {
 		$(this).css('background-color', 'red');
 		$(this).css('opacity', '0.5');
@@ -160,6 +184,9 @@ $('#placeEight').hover(function() {
 
 $('#placeNine').hover(function() {
 	$('#message').html('Place Nine');
+	if (placeNineLocked) {
+		$('#message').append(' [Locked]');
+	}
 	if (placeNineLocked && !placeNineActive) {
 		$(this).css('background-color', 'red');
 		$(this).css('opacity', '0.5');
@@ -177,6 +204,9 @@ $('#placeNine').hover(function() {
 
 $('#placeTen').hover(function() {
 	$('#message').html('Place Ten');
+	if (placeTenLocked) {
+		$('#message').append(' [Locked]');
+	}
 	if (placeTenLocked && !placeTenActive) {
 		$(this).css('background-color', 'red');
 		$(this).css('opacity', '0.5');
@@ -245,6 +275,9 @@ $('#field').hover(function() {
 
 $('#passOdds').hover(function() {
 	$('#message').html('Pass Odds');
+	if (passOddsLocked) {
+		$('#message').append(' [Locked]');
+	}
 	if ((passOddsLocked && !passOddsActive) || !passLineActive) {
 		$(this).css('background-color', 'red');
 		$(this).css('opacity', '0.5');
@@ -275,6 +308,9 @@ $('#anySeven').hover(function() {
 
 $('#hardWaySix').hover(function() {
 	$('#message').html('Hard Way Six');
+	if (hardWaySixLocked) {
+		$('#message').append(' [Locked]');
+	}
 	if (hardWaySixLocked && !hardWaySixActive) {
 		$(this).css('background-color', 'red');
 		$(this).css('opacity', '0.5');
@@ -292,6 +328,9 @@ $('#hardWaySix').hover(function() {
 
 $('#hardWayTen').hover(function() {
 	$('#message').html('Hard Way Ten');
+	if (hardWayTenLocked) {
+		$('#message').append(' [Locked]');
+	}
 	if (hardWayTenLocked && !hardWayTenActive) {
 		$(this).css('background-color', 'red');
 		$(this).css('opacity', '0.5');
@@ -309,6 +348,9 @@ $('#hardWayTen').hover(function() {
 
 $('#hardWayEight').hover(function() {
 	$('#message').html('Hard Way Eight');
+	if (hardWayEightLocked) {
+		$('#message').append(' [Locked]');
+	}
 	if (hardWayEightLocked && !hardWayEightActive) {
 		$(this).css('background-color', 'red');
 		$(this).css('opacity', '0.5');
@@ -326,6 +368,9 @@ $('#hardWayEight').hover(function() {
 
 $('#hardWayFour').hover(function() {
 	$('#message').html('Hard Way Four');
+	if (hardWayFourLocked) {
+		$('#message').append(' [Locked]');
+	}
 	if (hardWayFourLocked && !hardWayFourActive) {
 		$(this).css('background-color', 'red');
 		$(this).css('opacity', '0.5');
@@ -343,6 +388,9 @@ $('#hardWayFour').hover(function() {
 
 $('#dontPassOdds').hover(function() {
 	$('#message').html('Don\'t Pass Odds');
+	if (dontPassOddsLocked) {
+		$('#message').append(' [Locked]');
+	}
 	if ((dontPassOddsLocked && !dontPassOddsActive) || !dontPassLineActive) {
 		$(this).css('background-color', 'red');
 		$(this).css('opacity', '0.5');
