@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>501 Craps - alpha</title>
+  <title>501 Craps</title>
   <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
   <meta charset="UTF-8" />
   <link rel="stylesheet" type="text/css" href="/css/styles.css"/>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
   <script src="/socket.io/socket.io.js"></script>
-  <script src= "cards.mileshick.kd.io/static/chat.js"></script>
+  <script src= "http://cards.mileshick.kd.io/static/chat.js"></script>
   <script type="text/javascript">
     var vars = [], hash;
     var q = document.URL.split('?')[1];
@@ -19,9 +19,7 @@
         vars[hash[0]] = hash[1];
       }
     }
-    var socket = io.connect('http://localhost:3000');
-    //var socket = io.connect('http://craps.ngrok.com/');
-    //var socket = io.connect('http://craps501.herokuapp.com/');
+    var socket = io.connect('http://'+window.location.hostname+'/');
 
     var screenName, funds, sid;
     var playerId = vars['id'];
@@ -58,10 +56,21 @@
         window.location='/lobby?userID='+vars['id'];
       });
 
-      //TODO: remove this once roll/simulate are properly implemented
-      socket.on('roll', function (data) {
-        console.log(data);
-        Roller.roll();
+      socket.on('mobileRoll', function (data) {
+        if (sid == data.sid && !$("#rollButton").is(':disabled')) {
+          if (rollThrottle) {
+            if (Roller.roll() == -1) {
+              alert('Must make a Line Bet before rolling!');
+              return;
+            }
+            rollThrottle = false;
+            setTimeout(function() {
+              rollThrottle = true;
+            }, 6000);
+          } else {
+            alert('Please wait for other players to place their bets before rolling again');
+          }
+        }
       });
 
       socket.on('simulate', function (data) {
@@ -136,17 +145,35 @@
         return text;
       }
 
-      /* jQuery events */	
+      /* jQuery events */
 
+      var rollThrottle = true;
 
       $('#rollButton').click(function() {
-        if (Roller.roll() == -1) {
-          alert('Must make a Line Bet before rolling!');
+        if (rollThrottle) {
+          if (Roller.roll() == -1) {
+            alert('Must make a Line Bet before rolling!');
+            return;
+          }
+          rollThrottle = false;
+          setTimeout(function() {
+            rollThrottle = true;
+          }, 6000);
+        } else {
+          alert('Please wait for other players to place their bets before rolling again');
         }
       });
 
       $('.leaveGame').click(function() {
         window.location='/lobby?userID='+vars['id'];
+      });
+
+      $('.enableMobile').click(function() {
+        vex.dialog.open({
+            message: '<p>Please visit <br/><span style="font-size:16px;color:green;">http://'+window.location.hostname+'/phone?t='+vars['t']+'&id='+sid
+                     +'</span><br/>on your phone to enable mobile dice rolling!</p>',
+            buttons: [ $.extend({}, vex.dialog.buttons.YES, { text: 'OK' }) ]
+        });
       });
 
       $(window).bind('beforeunload', function() {
@@ -167,6 +194,9 @@
   </script>
 </head>
 <body>
+  <div style="text-align:right; margin-top:-30px; margin-bottom:10px;">
+    <button class="enableMobile">Roll from your phone!</button>
+  </div>
   <div class="leftColumn">
     <div id="viewport" class="diceSimulator"></div>
 	<div id="pointChip">
@@ -224,7 +254,7 @@
     <div id="gameButtons">
       <button id="rollButton"></button>
     </div>
-    <iframe src= "cards.mileshick.kd.io/chat" style="height:50%; width:100%;"></iframe>
+    <iframe src="http://cards.mileshick.kd.io/chat" style="height:50%; width:100%;"></iframe>
     <button class="leaveGame">Leave Game</button>
   </div>
   <div id="gameOver" style="display:none;">
