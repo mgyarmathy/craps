@@ -95,6 +95,15 @@ io.sockets.on('connection', function (socket) {
     }
   });
 
+  socket.on('mobileJoinTable', function(data) {
+    socket.join(data.tableNumber);
+    socket.emit('tableInfo', {info: tables[data.tableNumber]});
+  });
+
+  socket.on('mobileRoll', function(data) {
+    io.sockets.in(data.tableNumber).emit('mobileRoll', {sid: data.sid})
+  });
+
   socket.on('leaveTable', function(data) {
     socket.leave(data.tableNumber);
     tables[data.tableNumber].removePlayer(data.name);
