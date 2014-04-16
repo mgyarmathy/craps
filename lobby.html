@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>501 Craps - alpha</title>
+  <title>501 Craps</title>
   <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
   <meta charset="UTF-8" />
   <link rel="stylesheet" type="text/css" href="/css/splash.css"/>
@@ -51,12 +51,16 @@
         });
       });
 
-      $.get('http://casino.curtiswendel.me:3000/api/getUser/', function(data) {
-        console.log(data);
-        $.each(data, function(i, user) {
-          $('#userId').append('<option value="'+user.id+'">'+user.screenName+'</option');
+      if (vars['devmode'] == 'enabled') {
+        $('#leftside').append('<label>Username</label>'
+                             +'<select id="userId" style="display:block;"></select>');
+        $.get('http://casino.curtiswendel.me:3000/api/getUser/', function(data) {
+          console.log(data);
+          $.each(data, function(i, user) {
+            $('#userId').append('<option value="'+user.id+'">'+user.screenName+'</option');
+          });
         });
-      });
+      }
 
       $('.table').click(function() {
         if ( $(this).hasClass('full') ) { return; }
@@ -87,11 +91,9 @@
   </script>
 </head>
 <body>
-  <div style="display: inline-block; width: 35%; vertical-align: top; padding: 2%;">
+  <div id="leftside" style="display: inline-block; width: 35%; vertical-align: top; padding: 2%;">
     <h1>501 Craps</h1>
     <img src="/images/dicerollloop.gif" style="width:100%; background: #fff"/>
-    <label>Username</label>
-    <select id="userId" style="display:block;"></select>
   </div>
   <div id="tableInfo">
     <div id="t0" class="table" data-table-number="0">
