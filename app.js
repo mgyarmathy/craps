@@ -109,7 +109,7 @@ io.sockets.on('connection', function (socket) {
     tables[data.tableNumber].removePlayer(data.name);
     io.sockets.in(data.tableNumber).emit('tableInfo', {info: tables[data.tableNumber]});
   });
-  
+
   socket.on('payouts', function(data) {
   for(var i = 0; i < tables[data.tableNumber].players.length; i++)
 	if(tables[data.tableNumber].players[i].sid == data.sid)
@@ -118,7 +118,5 @@ io.sockets.on('connection', function (socket) {
 		io.sockets.in(data.tableNumber).emit('tableInfo',{info: tables[data.tableNumber]});
 	}
   });
-  
-  
 
 });
