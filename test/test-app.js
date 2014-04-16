@@ -190,6 +190,19 @@ describe("the Craps game server",function() {
     });
   });
 
+  it('should support eight concurrent tables', function(done) {
+    var client = io.connect(socketURL, options);
+    client.on('connect', function(data) {
+        client.emit('getTableStatus', {});
+    });
+
+    client.on('tableStatus', function(data) {
+      data.tables.length.should.equal(8);
+      client.disconnect();
+      done();
+    });
+  });
+
   it('should allow the lobby to poll the server for tableStatus', function(done) {
     var lobby = io.connect(socketURL, options);
     var pollCount = 0;
