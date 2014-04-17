@@ -145,6 +145,8 @@
         return text;
       }
 
+      $('.rightColumn').append('<iframe id="quicktalk" src="http://students.cse.tamu.edu/ctrinh/QuickTalk/master/chat.html?userID='+playerId+'&room=CrapsTable'+tableNumber+'" style="width:420px; height:430px; border:0px; position:fixed; right:0px; allowtransparency:true; background:transparent;bottom:0px;"></iframe>');
+
       /* jQuery events */
 
       var rollThrottle = true;
@@ -196,6 +198,7 @@
 <body>
   <div style="text-align:right; margin-top:-30px; margin-bottom:10px;">
     <button class="enableMobile">Roll from your phone!</button>
+    <button class="leaveGame">Leave Game</button>
   </div>
   <div class="leftColumn">
     <div id="viewport" class="diceSimulator"></div>
@@ -254,8 +257,6 @@
     <div id="gameButtons">
       <button id="rollButton"></button>
     </div>
-    <iframe src="http://cards.mileshick.kd.io/chat" style="height:50%; width:100%;"></iframe>
-    <button class="leaveGame">Leave Game</button>
   </div>
   <div id="gameOver" style="display:none;">
     <h1>Thanks for playing!</h1>
