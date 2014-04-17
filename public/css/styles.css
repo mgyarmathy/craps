@@ -1,8 +1,50 @@
 html, body {
    margin: 0;
    padding: 0;
-   background: #000;
+   background: rgba(0,0,0,0.85);
    font-family: sans-serif;
+}
+
+html {
+   background-image: url('http://2.bp.blogspot.com/-m6FxviM0M84/UqQ2bmiQSnI/AAAAAAAAA_o/9bxv1bZJgbQ/s1600/casino1+copy.jpg');
+   background-size: cover;
+}
+
+body {
+   padding: 40px;
+   width: 1100px;
+   margin: 20px auto;
+}
+
+.leftColumn {
+   display: inline-block;
+   width: 45%;
+}
+
+.diceSimulator {
+   height: 180px;
+   margin: 0 -10% 20px;
+   vertical-align: top;
+}
+
+.rightColumn {
+   display: inline-block;
+   width: 50%;
+   vertical-align: top;
+   padding-left: 3%;"
+}
+
+#gameStats {
+   display: inline-block;
+   width: 50%;
+   vertical-align: top;
+   min-height: 250px;
+}
+
+#gameButtons {
+   display: inline-block;
+   width:25%;
+   vertical-align: top;
 }
 
 h1 {
@@ -15,7 +57,7 @@ h1 {
 #total {
    color:white;
    font-weight: bold;
-   font-size: 200%;
+   font-size: 150%;
    padding: 1em;
    text-align: center;
    display: none;
@@ -39,237 +81,353 @@ h1 {
    display: none;
 }
 
+#pointChip {
+	display:inline-block;
+	background-color:#548347;
+	width:405px;
+	height:34px;
+}
+
+#pointChipImg {
+	margin-left:10px;
+}
+
 /* board css */
 
 #gameBoard {
+   display: inline-block;
    background-color:#548347;
    background-image:url('crapsboard.png');
    background-repeat:no-repeat;
-   float:left;
-   width:540px;
-   height:612px;
+   background-size: contain;
+   vertical-align: top;
+   width:405px;
+   height:459px;
+    margin: 0 auto;
+
 }
 
 #passLineVert{
    background-color:lawngreen;
    opacity:0.0;
    float:left;
-   width:36px;
-   height:274px;
-   margin-left:11px;
-   margin-top:11px;
+   width:28px;
+   height:205px;
+   margin-left:8px;
+   margin-top:8px;
 }
 
 #dontPassBarVert {
    background-color:lawngreen;
    opacity:0.0;
    float:left;
-   width:34px;
-   height:233px;
-   margin-left:10px;
-   margin-top:11px;
+   width:25px;
+   height:160px;
+   margin-left:7px;
+   margin-top:8px;
 }
 
 #dontComeBar {
    background-color:lawngreen;
    opacity:0.0;
    float:left;
-   width:54px;
-   height:98px;
+   width:40px;
+   height:74px;
    margin-left:3px;
-   margin-top:11px;
+   margin-top:8px;
+}
+
+#dontComeBar img {
+	margin-left:-5px;
+	margin-top:15px;
 }
 
 .place {
    background-color:lawngreen;
    opacity:0.0;
    float:left;
-   width:60px;
-   height:34px;
+   width:44px;
+   height:26px;
    margin-left:3px;
-   margin-top:11px;
+   margin-top:8px;
+}
+
+.place img {
+	margin-top:-12px;
+	margin-left:-2px;
 }
 
 .point {
    background-color:lawngreen;
    opacity:0.0;
    float:left;
-   width:60px;
-   height:60px;
+   width:44px;
+   height:44px;
    margin-left:3px;
    margin-top:4px;
+}
+
+.point img {
+	margin-left:-2px;
 }
 
 #come {
    background-color:lawngreen;
    opacity:0.0;
    float:left;
-   width:435px;
-   height:58px;
+   width:325px;
+   height:43px;
    margin-left:3px;
    margin-top:3px;
+}
+
+#come img {
+	margin-left:-4px;
+	margin-top:-4px;
 }
 
 #field {
    background-color:lawngreen;
    opacity:0.0;
    float:left;
-   width:435px;
-   height:47px;
+   width:325px;
+   height:34px;
    margin-left:3px;
-   margin-top:4px;
+   margin-top:3px;
+}
+
+#field img {
+   margin-left:114px;
+   margin-top:-8px;
 }
 
 #dontPassBarHori {
    background-color:lawngreen;
    opacity:0.0;
    float:left;
-   width:438px;
-   height:19px;
-   margin-top:4px;
+   width:354px;
+   height:14px;
+   xmargin-top:4px;
+   margin-left:7px;
+}
+
+#dontPassBarHori img {
+	margin-left:83px;
+	margin-top:-17px;
 }
 
 #passLineHori {
    background-color:lawngreen;
    opacity:0.0;
    float:left;
-   width:482px;
-   height:30px;
-   margin-top:11px;
+   width:361px;
+   height:22px;
+   margin-top:9px;
+}
+
+#passLineHori img {
+	margin-left:30px;
+	margin-top:-13px;
 }
 
 #passOdds {
    background-color:blue;
    opacity:0.0;
    float:left;
-   width:54px;
-   height:98px;
-   margin-left:39px;
-   margin-top:19px;
+   width:41px;
+   height:75px;
+   margin-left:29px;
+   margin-top:14px;
+}
+
+#passOdds img {
+	margin-left:-5px;
+	margin-top:11px;
 }
 
 #anySeven {
    background-color:lawngreen;
    opacity:0.0;
    float:left;
-   width:260px;
-   height:24px;
-   margin-left:58px;
-   margin-top:19px;
+   width:195px;
+   height:18px;
+   margin-left:44px;
+   margin-top:15px;
+}
+
+#anySeven img {
+   margin-left:72px;
+   margin-top:-13px;
 }
 
 #hardWaySix {
    background-color:lawngreen;
    opacity:0.0;
    float:left;
-   width:143px;
-   height:50px;
-   margin-left:40px;
-   margin-top:5px;
+   width:107px;
+   height:38px;
+   margin-left:30px;
+   margin-top:4px;
 }
+
+#hardWaySix img {
+	margin-left:28px;
+	margin-top:-5px;
+}
+
 
 #hardWayTen {
    background-color:lawngreen;
    opacity:0.0;
    float:left;
-   width:143px;
-   height:50px;
-   margin-left:5px;
-   margin-top:5px;
+   width:107px;
+   height:38px;
+   margin-left:4px;
+   margin-top:4px;
+}
+
+#hardWayTen img {
+	margin-left:28px;
+	margin-top:-5px;
 }
 
 #hardWayEight {
    background-color:lawngreen;
    opacity:0.0;
    float:left;
-   width:142px;
-   height:52px;
-   margin-left:40px;
-   margin-top:5px;
+   width:107px;
+   height:39px;
+   margin-left:30px;
+   margin-top:3px;
+}
+
+#hardWayEight img {
+	margin-left:28px;
+	margin-top:-5px;
 }
 
 #hardWayFour {
    background-color:lawngreen;
    opacity:0.0;
    float:left;
-   width:143px;
-   height:52px;
-   margin-left:5px;
-   margin-top:5px;
+   width:108px;
+   height:39px;
+   margin-left:3px;
+   margin-top:3px;
+}
+
+#hardWayFour img {
+	margin-left:28px;
+	margin-top:-5px;
 }
 
 #dontPassOdds {
    background-color:blue;
    opacity:0.0;
    float:left;
-   width:54px;
-   height:98px;
-   margin-left:36px;
-   margin-top:-80px;
+   width:41px;
+   height:75px;
+   margin-left:345px;
+   margin-top:-103px;
+}
+
+#dontPassOdds img {
+	margin-left:-5px;
+	margin-top:11px;
 }
 
 #aceDeuce {
    background-color:lawngreen;
    opacity:0.0;
    float:left;
-   width:96px;
-   height:48px;
-   margin-left:133px;
-   margin-top:5px;
+   width:72px;
+   height:37px;
+   margin-left:100px;
+   margin-top:3px;
+}
+
+#aceDeuce img {
+	margin-left:12px;
+	margin-top:-6px;
 }
 
 #snakeEyes {
    background-color:lawngreen;
    opacity:0.0;
    float:left;
-   width:93px;
-   height:48px;
-   margin-left:4px;
-   margin-top:5px;
+   width:70px;
+   height:37px;
+   margin-left:3px;
+   margin-top:3px;
+}
+
+#snakeEyes img {
+	margin-left:9px;
+	margin-top:-6px;
 }
 
 #boxcars {
    background-color:lawngreen;
    opacity:0.0;
    float:left;
-   width:93px;
-   height:48px;
-   margin-left:5px;
-   margin-top:5px;
+   width:70px;
+   height:37px;
+   margin-left:3px;
+   margin-top:3px;
+}
+
+#boxcars img {
+	margin-left:10px;
+	margin-top:-6px;
 }
 
 #yoLeft {
    background-color:lawngreen;
    opacity:0.0;
    float:left;
-   width:141px;
-   height:53px;
-   margin-left:133px;
-   margin-top:5px;
+   width:106px;
+   height:39px;
+   margin-left:100px;
+   margin-top:4px;
+}
+
+#yoLeft img {
+	margin-left:30px;
+	margin-top:-4px;
 }
 
 #yoRight {
    background-color:lawngreen;
    opacity:0.0;
    float:left;
-   width:145px;
-   height:53px;
-   margin-left:5px;
-   margin-top:5px;
+   width:109px;
+   height:39px;
+   margin-left:3px;
+   margin-top:4px;
+}
+
+#yoRight img {
+	margin-left:29px;
+	margin-top:-5px;
 }
 
 #anyCraps {
    background-color:lawngreen;
    opacity:0.0;
    float:left;
-   width:291px;
-   height:33px;
-   margin-left:133px;
-   margin-top:5px;
+   width:219px;
+   height:25px;
+   margin-left:100px;
+   margin-top:4px;
+}
+
+#anyCraps img {
+	margin-left:84px;
+	margin-top:-11px;
 }
 
 #message {
-   margin-top:5px;
+   margin-top:20px;
    float:left;
    color:white;
    text-align:center;
@@ -280,26 +438,88 @@ h1 {
    font-weight:bold;
 }
 
+#chips {
+   display: inline-block;
+	width:60px;
+	height:612px;
+	margin-left:10px;
+	margin-right:10px;
+}
+
+.chip {
+	xfloat:left;
+	width:100%;
+	height:60px;
+	margin-bottom:10px;
+   background-size: contain;
+}
+
+#redChip {
+   background-image: url('/images/red_chip.png');
+}
+
+#blueChip {
+   background-image: url('/images/blue_chip.png');
+}
+
+#greenChip {
+   background-image: url('/images/green_chip.png');
+}
+
+#blackChip {
+   background-image: url('/images/black_chip.png');
+}
+
+#redChip {
+	border:1px solid white;
+}
+
+#rollButton {
+   cursor: pointer;
+   width: 172px;
+   height: 60px;
+   background-image: url('/images/RollButton.gif');
+   background-size: contain;
+   background-repeat: no-repeat;
+   filter: url("data:image/svg+xml;utf8,&lt;svg xmlns=\'http://www.w3.org/2000/svg\'&gt;&lt;filter id=\'grayscale\'&gt;&lt;feColorMatrix type=\'matrix\' values=\'1 0 0 0 0, 0 1 0 0 0, 0 0 1 0 0, 0 0 0 1 0\'/&gt;&lt;/filter&gt;&lt;/svg&gt;#grayscale");
+   -webkit-filter: grayscale(0%);
+}
+
+#rollButton:disabled {
+   cursor: default;
+   filter: url("data:image/svg+xml;utf8,&lt;svg xmlns=\'http://www.w3.org/2000/svg\'&gt;&lt;filter id=\'grayscale\'&gt;&lt;feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/&gt;&lt;/filter&gt;&lt;/svg&gt;#grayscale"); /* Firefox 10+, Firefox on Android */
+   filter: gray; /* IE6-9 */
+   -webkit-filter: grayscale(100%); /* Chrome 19+, Safari 6+, Safari 6+ iOS */
+}
+
 /* #players */
 
+#players {
+   display: inline-block;
+   width: 50%;
+   height: 425px;
+   vertical-align: top;
+   float: right;
+   text-align: right;
+}
+
 .player {
-   float: left;
-   width: 15%;
-   padding-left: 1%;
-   padding-top: 1.6%;
-   text-align: center;
 }
 
 .player h2,h3 {
+   display: inline-block;
    color: white;
+   margin-right: 15px;
+   font-size: 16px;
+}
+
+.player h3:before {
+   content: '$';
 }
 
 .player img {
-   color: white;
-   max-width: 100%;
-   max-height: 11.5%;
-   padding-left: 1%;
-   padding-top: 7%;
+   width: 12%;
+   padding: 0 10px 6px;
    vertical-align: middle;
 }
 
@@ -312,6 +532,14 @@ h1 {
    width: 15%;
 }
 
+.player .turn {
+    display:none;
+}
+.player.playerTurn .turn {
+    display: inline-block; 
+}
+/*
 .playerTurn {
    border: 2px solid red;
 }
+*/

@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>501 Craps - alpha</title>
+  <title>501 Craps</title>
   <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
   <meta charset="UTF-8" />
   <link rel="stylesheet" type="text/css" href="/css/styles.css"/>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
   <script src="/socket.io/socket.io.js"></script>
+  <script src= "http://cards.mileshick.kd.io/static/chat.js"></script>
   <script type="text/javascript">
     var vars = [], hash;
     var q = document.URL.split('?')[1];
@@ -18,9 +19,7 @@
         vars[hash[0]] = hash[1];
       }
     }
-    //var socket = io.connect('http://localhost:3000');
-    //var socket = io.connect('http://craps.ngrok.com/');
-    var socket = io.connect('http://craps501.herokuapp.com/');
+    var socket = io.connect('http://'+window.location.hostname+'/');
 
     var screenName, funds, sid;
     var playerId = vars['id'];
@@ -54,14 +53,24 @@
 
       socket.on('joinFailure', function(data) {
         alert('Table Full - redirecting back to lobby');
-        //window.location='http://localhost:3000/lobby';
-        window.location="http://craps501.herokuapp.com/"
+        window.location='/lobby?userID='+vars['id'];
       });
 
-      //TODO: remove this once roll/simulate are properly implemented
-      socket.on('roll', function (data) {
-        console.log(data);
-        Roller.roll();
+      socket.on('mobileRoll', function (data) {
+        if (sid == data.sid && !$("#rollButton").is(':disabled')) {
+          if (rollThrottle) {
+            if (Roller.roll() == -1) {
+              alert('Must make a Line Bet before rolling!');
+              return;
+            }
+            rollThrottle = false;
+            setTimeout(function() {
+              rollThrottle = true;
+            }, 6000);
+          } else {
+            alert('Please wait for other players to place their bets before rolling again');
+          }
+        }
       });
 
       socket.on('simulate', function (data) {
@@ -112,10 +121,16 @@
       function updatePlayerList(players) {
         $('#players').empty();
         $.each(players, function(i, player) {
+          var url = "'http://gadgetministry.com/wp-content/uploads/2010/11/tag.jpg'";
+          if ( isNaN(player.name.charAt(0)) ) {
+            var letter = player.name.charAt(0).toLocaleLowerCase();
+            url = "'http://www.havefunteaching.com/wp-content/uploads/2013/06/letter-" + letter + ".png'";
+          }
           $('#players').append('<div class="player" id="'+player.sid+'">'
+                              + '<img class="avatar" src=' + url + '></img>'
                               +   '<h2>'+player.name+'</h2>'
                               +   '<h3>'+player.funds+'</h3>'
-                              +   '<img id="picture2" src="http://placehold.it/350x150"></img>'
+                              +   '<img class="turn" src="/images/Dice.png"></img>'
                               +'</div>');
         });
       };
@@ -130,22 +145,39 @@
         return text;
       }
 
-      /* jQuery events */	
+      /* jQuery events */
 
+      var rollThrottle = true;
 
       $('#rollButton').click(function() {
-        if (Roller.roll() == -1) {
-          alert('Must make a Line Bet before rolling!');
+        if (rollThrottle) {
+          if (Roller.roll() == -1) {
+            alert('Must make a Line Bet before rolling!');
+            return;
+          }
+          rollThrottle = false;
+          setTimeout(function() {
+            rollThrottle = true;
+          }, 6000);
+        } else {
+          alert('Please wait for other players to place their bets before rolling again');
         }
       });
 
       $('.leaveGame').click(function() {
-        //window.location = "http://localhost:3000/lobby";
-        window.location="http://craps501.herokuapp.com/lobby";
+        window.location='/lobby?userID='+vars['id'];
+      });
+
+      $('.enableMobile').click(function() {
+        vex.dialog.open({
+            message: '<p>Please visit <br/><span style="font-size:16px;color:green;">http://'+window.location.hostname+'/phone?t='+vars['t']+'&id='+sid
+                     +'</span><br/>on your phone to enable mobile dice rolling!</p>',
+            buttons: [ $.extend({}, vex.dialog.buttons.YES, { text: 'OK' }) ]
+        });
       });
 
       $(window).bind('beforeunload', function() {
-        $('#game, #viewport, #players, #gameStats, #gameBoard').hide();
+        $('.leftColumn, .rightColumn').hide();
         $('#gameOver').show();
 
         $.post('http://casino.curtiswendel.me:3000/api/addTransaction?userID='+playerId+'&amount='+funds+'&gameID=5', function( response ) {
@@ -162,38 +194,34 @@
   </script>
 </head>
 <body>
-   <div id="game" style="display: inline-block; float:left; background-color: gray; height:400px; width:25%;">
-      <h1>Click Roll Below:</h1>
-      <button id="rollButton">Roll</button><br>
-      <button class="leaveGame">Leave Game</button>
-   </div>
-   <div id="viewport" style="display: inline-block; float:left; width: 50%;"></div>
-   <div id="gameStats" style="display: inline-block; background-color: gray; width:25%; height:400px; float:left;">
-      <div id="total"></div>
-      <div id="rollVal"></div>
-      <div id="currGameState">
-      </div>
-   </div>
-   <div id="gameBoard">
+  <div style="text-align:right; margin-top:-30px; margin-bottom:10px;">
+    <button class="enableMobile">Roll from your phone!</button>
+  </div>
+  <div class="leftColumn">
+    <div id="viewport" class="diceSimulator"></div>
+	<div id="pointChip">
+		<img id="pointChipImg" src="/images/chipoff.png">
+	</div>
+    <div id="gameBoard">
       <div id="passLineVert" onclick="passLineClick()"></div>
       <div id="dontPassBarVert" onclick="dontPassBarClick()"></div>
-            <div id="dontComeBar" onclick="dontComeClick()"></div>
-               <div class="place" id="placeFour" onclick="placeFourClick()"></div>
-               <div class="place" id="placeFive" onclick="placeFiveClick()"></div>
-               <div class="place" id="placeSix" onclick="placeSixClick()"></div>
-               <div class="place" id="placeEight" onclick="placeEightClick()"></div>
-               <div class="place" id="placeNine" onclick="placeNineClick()"></div>
-               <div class="place" id="placeTen" onclick="placeTenClick()"></div>
-               <div class="point" id="pointFour"></div>
-               <div class="point" id="pointFive"></div>
-               <div class="point" id="pointSix"></div>
-               <div class="point" id="pointEight"></div>
-               <div class="point" id="pointNine"></div>
-               <div class="point" id="pointTen"></div>
-         <div id="come" onclick="comeClick()"></div>
-         <div id="field" onclick="fieldClick()"></div>
-         <div id="dontPassBarHori" onclick="dontPassBarClick()"></div>
-         <div id="passLineHori" onclick="passLineClick()"></div>
+        <div id="dontComeBar" onclick="dontComeClick()"></div>
+          <div class="place" id="placeFour" onclick="placeFourClick()"></div>
+          <div class="place" id="placeFive" onclick="placeFiveClick()"></div>
+          <div class="place" id="placeSix" onclick="placeSixClick()"></div>
+          <div class="place" id="placeEight" onclick="placeEightClick()"></div>
+          <div class="place" id="placeNine" onclick="placeNineClick()"></div>
+          <div class="place" id="placeTen" onclick="placeTenClick()"></div>
+          <div class="point" id="pointFour"></div>
+          <div class="point" id="pointFive"></div>
+          <div class="point" id="pointSix"></div>
+          <div class="point" id="pointEight"></div>
+          <div class="point" id="pointNine"></div>
+          <div class="point" id="pointTen"></div>
+      <div id="come" onclick="comeClick()"></div>
+      <div id="field" onclick="fieldClick()"></div>
+      <div id="dontPassBarHori" onclick="dontPassBarClick()"></div>
+      <div id="passLineHori" onclick="passLineClick()"></div>
       <div id="passOdds" onclick="passOddsClick()"></div>
       <div id="anySeven" onclick="anySevenClick()"></div>
       <div id="hardWaySix" onclick="hardWaySixClick()"></div>
@@ -209,16 +237,29 @@
       <div id="anyCraps" onclick="anyCrapsClick()"></div>
       <div id="message"></div>
     </div>
-    <div id="players">
-      <div class="player" id="player0">
-        <h2 id="name0">User 0</h2>
-        <h3 id="funds0">Fund: 0</h3>
-        <img id="picture0" src="http://placehold.it/350x150"></img>
-      </div>
+    <div id="chips">
+      <div class="chip" id="redChip" onclick="redChipClick()"></div>
+      <div class="chip" id="blueChip" onclick="blueChipClick()"></div>
+      <div class="chip" id="greenChip" onclick="greenChipClick()"></div>
+      <div class="chip" id="blackChip" onclick="blackChipClick()"></div>
     </div>
-    <div id="gameOver" style="display:none;">
-      <h1>Thanks for playing!</h1>
-      <button class="leaveGame">Leave Game</button>
+  </div>
+  <div class="rightColumn">
+    <div id="players"></div>
+    <div id="gameStats">
+      <div id="total"></div>
+      <div id="rollVal"></div>
+      <div id="currGameState"></div>
     </div>
+    <div id="gameButtons">
+      <button id="rollButton"></button>
+    </div>
+    <iframe src="http://cards.mileshick.kd.io/chat" style="height:50%; width:100%;"></iframe>
+    <button class="leaveGame">Leave Game</button>
+  </div>
+  <div id="gameOver" style="display:none;">
+    <h1>Thanks for playing!</h1>
+    <button class="leaveGame">Leave Game</button>
+  </div>
 </body>
 </html>

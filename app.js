@@ -37,7 +37,9 @@ function Table(id) {
     this.players.push(p);
   };
   this.removePlayer = function(name) {
-    this.nextTurn();
+    if (this.playerTurn == this.players.length-1) {
+      this.playerTurn = 0;
+    }
     for(var i = this.players.length - 1; i >= 0; i--) {
       if (this.players[i].name === name) {
          this.players.splice(i, 1);
@@ -66,7 +68,6 @@ io.sockets.on('connection', function (socket) {
 
   socket.on('roll', function (data) {
     socket.broadcast.to(data.tableNumber).emit('simulate', {sid: data.sid, dieValue1: data.dieValue1, dieValue2: data.dieValue2});
-    //tables[data.tableNumber].nextTurn();
     io.sockets.in(data.tableNumber).emit('tableInfo', {info: tables[data.tableNumber]});
   });
 
@@ -94,12 +95,21 @@ io.sockets.on('connection', function (socket) {
     }
   });
 
+  socket.on('mobileJoinTable', function(data) {
+    socket.join(data.tableNumber);
+    socket.emit('tableInfo', {info: tables[data.tableNumber]});
+  });
+
+  socket.on('mobileRoll', function(data) {
+    io.sockets.in(data.tableNumber).emit('mobileRoll', {sid: data.sid})
+  });
+
   socket.on('leaveTable', function(data) {
     socket.leave(data.tableNumber);
     tables[data.tableNumber].removePlayer(data.name);
     io.sockets.in(data.tableNumber).emit('tableInfo', {info: tables[data.tableNumber]});
   });
-  
+
   socket.on('payouts', function(data) {
   for(var i = 0; i < tables[data.tableNumber].players.length; i++)
 	if(tables[data.tableNumber].players[i].sid == data.sid)
@@ -108,7 +118,5 @@ io.sockets.on('connection', function (socket) {
 		io.sockets.in(data.tableNumber).emit('tableInfo',{info: tables[data.tableNumber]});
 	}
   });
-  
-  
 
 });

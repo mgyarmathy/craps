@@ -4,6 +4,9 @@ $(document).ready(function() {
 
 $('#passLineVert').hover(function() {
 	$('#message').html('Pass Line');
+	if (passLineLocked) {
+		$('#message').append(' [Locked]');
+	}
 	if (passLineLocked && !passLineActive) {
 		$(this).css('background-color', 'red');
 		$('#passLineHori').css('background-color', 'red');
@@ -26,6 +29,9 @@ $('#passLineVert').hover(function() {
 
 $('#passLineHori').hover(function() {
 	$('#message').html('Pass Line');
+	if (passLineLocked) {
+		$('#message').append(' [Locked]');
+	}
 	if (passLineLocked && !passLineActive) {
 		$(this).css('background-color', 'red');
 		$('#passLineVert').css('background-color', 'red');
@@ -48,6 +54,9 @@ $('#passLineHori').hover(function() {
 
 $('#dontPassBarVert').hover(function() {
 	$('#message').html('Don\'t Pass Bar');
+	if (dontPassLineLocked) {
+		$('#message').append(' [Locked]');
+	}
 	if (dontPassLineLocked && !dontPassLineActive) {
 		$(this).css('background-color', 'red');
 		$('#dontPassBarHori').css('background-color', 'red');
@@ -70,6 +79,9 @@ $('#dontPassBarVert').hover(function() {
 
 $('#dontPassBarHori').hover(function() {
 	$('#message').html('Don\'t Pass Bar');
+	if (dontPassLineLocked) {
+		$('#message').append(' [Locked]');
+	}
 	if (dontPassLineLocked && !dontPassLineActive) {
 		$(this).css('background-color', 'red');
 		$('#dontPassBarVert').css('background-color', 'red');
@@ -92,6 +104,9 @@ $('#dontPassBarHori').hover(function() {
 
 $('#placeFour').hover(function() {
 	$('#message').html('Place Four');
+	if (placeFourLocked) {
+		$('#message').append(' [Locked]');
+	}
 	if (placeFourLocked && !placeFourActive) {
 		$(this).css('background-color', 'red');
 		$(this).css('opacity', '0.5');
@@ -109,6 +124,9 @@ $('#placeFour').hover(function() {
 
 $('#placeFive').hover(function() {
 	$('#message').html('Place Five');
+	if (placeFiveLocked) {
+		$('#message').append(' [Locked]');
+	}
 	if (placeFiveLocked && !placeFiveActive) {
 		$(this).css('background-color', 'red');
 		$(this).css('opacity', '0.5');
@@ -126,6 +144,9 @@ $('#placeFive').hover(function() {
 
 $('#placeSix').hover(function() {
 	$('#message').html('Place Six');
+	if (placeSixLocked) {
+		$('#message').append(' [Locked]');
+	}
 	if (placeSixLocked && !placeSixActive) {
 		$(this).css('background-color', 'red');
 		$(this).css('opacity', '0.5');
@@ -143,6 +164,9 @@ $('#placeSix').hover(function() {
 
 $('#placeEight').hover(function() {
 	$('#message').html('Place Eight');
+	if (placeEightLocked) {
+		$('#message').append(' [Locked]');
+	}
 	if (placeEightLocked && !placeEightActive) {
 		$(this).css('background-color', 'red');
 		$(this).css('opacity', '0.5');
@@ -160,6 +184,9 @@ $('#placeEight').hover(function() {
 
 $('#placeNine').hover(function() {
 	$('#message').html('Place Nine');
+	if (placeNineLocked) {
+		$('#message').append(' [Locked]');
+	}
 	if (placeNineLocked && !placeNineActive) {
 		$(this).css('background-color', 'red');
 		$(this).css('opacity', '0.5');
@@ -177,6 +204,9 @@ $('#placeNine').hover(function() {
 
 $('#placeTen').hover(function() {
 	$('#message').html('Place Ten');
+	if (placeTenLocked) {
+		$('#message').append(' [Locked]');
+	}
 	if (placeTenLocked && !placeTenActive) {
 		$(this).css('background-color', 'red');
 		$(this).css('opacity', '0.5');
@@ -231,11 +261,13 @@ $('#dontComeBar').hover(function() {
 });
 
 $('#field').hover(function() {
+	$('#message').html('Field Bet [2, 3, 4, 9, 10, 11, or 12]');
 	if (!fieldActive) {
 		$(this).css('background-color', 'lawngreen');
 		$(this).css('opacity', '0.5');
 	}
 }, function() {
+	$('#message').html('');
 	if (!fieldActive) {
 		$(this).css('opacity', '0.0');
 	}
@@ -243,6 +275,9 @@ $('#field').hover(function() {
 
 $('#passOdds').hover(function() {
 	$('#message').html('Pass Odds');
+	if (passOddsLocked) {
+		$('#message').append(' [Locked]');
+	}
 	if ((passOddsLocked && !passOddsActive) || !passLineActive) {
 		$(this).css('background-color', 'red');
 		$(this).css('opacity', '0.5');
@@ -259,20 +294,23 @@ $('#passOdds').hover(function() {
 });
 
 $('#anySeven').hover(function() {
+	$('#message').html('Seven');
 	if (!anySevenActive) {
 		$(this).css('background-color', 'lawngreen');
 		$(this).css('opacity', '0.5');
-		$('#message').html('Seven');
 	}
 }, function() {
+	$('#message').html('');
 	if (!anySevenActive) {
 		$(this).css('opacity', '0.0');
-		$('#message').html('');
 	}
 });
 
 $('#hardWaySix').hover(function() {
 	$('#message').html('Hard Way Six');
+	if (hardWaySixLocked) {
+		$('#message').append(' [Locked]');
+	}
 	if (hardWaySixLocked && !hardWaySixActive) {
 		$(this).css('background-color', 'red');
 		$(this).css('opacity', '0.5');
@@ -282,14 +320,17 @@ $('#hardWaySix').hover(function() {
 		$(this).css('opacity', '0.5');
 	}
 }, function() {
+	$('#message').html('');
 	if (!hardWaySixActive) {
 		$(this).css('opacity', '0.0');
-		$('#message').html('');
 	}
 });
 
 $('#hardWayTen').hover(function() {
 	$('#message').html('Hard Way Ten');
+	if (hardWayTenLocked) {
+		$('#message').append(' [Locked]');
+	}
 	if (hardWayTenLocked && !hardWayTenActive) {
 		$(this).css('background-color', 'red');
 		$(this).css('opacity', '0.5');
@@ -299,14 +340,17 @@ $('#hardWayTen').hover(function() {
 		$(this).css('opacity', '0.5');
 	}
 }, function() {
+	$('#message').html('');
 	if (!hardWayTenActive) {
 		$(this).css('opacity', '0.0');
-		$('#message').html('');
 	}
 });
 
 $('#hardWayEight').hover(function() {
 	$('#message').html('Hard Way Eight');
+	if (hardWayEightLocked) {
+		$('#message').append(' [Locked]');
+	}
 	if (hardWayEightLocked && !hardWayEightActive) {
 		$(this).css('background-color', 'red');
 		$(this).css('opacity', '0.5');
@@ -316,14 +360,17 @@ $('#hardWayEight').hover(function() {
 		$(this).css('opacity', '0.5');
 	}
 }, function() {
+	$('#message').html('');
 	if (!hardWayEightActive) {
 		$(this).css('opacity', '0.0');
-		$('#message').html('');
 	}
 });
 
 $('#hardWayFour').hover(function() {
 	$('#message').html('Hard Way Four');
+	if (hardWayFourLocked) {
+		$('#message').append(' [Locked]');
+	}
 	if (hardWayFourLocked && !hardWayFourActive) {
 		$(this).css('background-color', 'red');
 		$(this).css('opacity', '0.5');
@@ -333,14 +380,17 @@ $('#hardWayFour').hover(function() {
 		$(this).css('opacity', '0.5');
 	}
 }, function() {
+	$('#message').html('');
 	if (!hardWayFourActive) {
 		$(this).css('opacity', '0.0');
-		$('#message').html('');
 	}
 });
 
 $('#dontPassOdds').hover(function() {
 	$('#message').html('Don\'t Pass Odds');
+	if (dontPassOddsLocked) {
+		$('#message').append(' [Locked]');
+	}
 	if ((dontPassOddsLocked && !dontPassOddsActive) || !dontPassLineActive) {
 		$(this).css('background-color', 'red');
 		$(this).css('opacity', '0.5');
@@ -357,82 +407,106 @@ $('#dontPassOdds').hover(function() {
 });
 
 $('#aceDeuce').hover(function() {
+	$('#message').html('Three');
 	if (!aceDeuceActive) {
 		$(this).css('background-color', 'lawngreen');
 		$(this).css('opacity', '0.5');
-		$('#message').html('Three');
 	}
 }, function() {
+	$('#message').html('');
 	if (!aceDeuceActive) {
 		$(this).css('opacity', '0.0');
-		$('#message').html('');
 	}
 });
 
 $('#snakeEyes').hover(function() {
+	$('#message').html('Two');
 	if (!snakeEyesActive) {
 		$(this).css('background-color', 'lawngreen');
 		$(this).css('opacity', '0.5');
-		$('#message').html('Two');
 	}
 }, function() {
+	$('#message').html('');
 	if (!snakeEyesActive) {
 		$(this).css('opacity', '0.0');
-		$('#message').html('');
 	}
 });
 
 $('#boxcars').hover(function() {
+	$('#message').html('Twelve');
 	if (!boxcarsActive) {
 		$(this).css('background-color', 'lawngreen');
 		$(this).css('opacity', '0.5');
-		$('#message').html('Twelve');
 	}
 }, function() {
+	$('#message').html('');
 	if (!boxcarsActive) {
 		$(this).css('opacity', '0.0');
-		$('#message').html('');
 	}
 });
 
 
 $('#yoLeft').hover(function() {
+	$('#message').html('Eleven');
 	if (!yoLeftActive) {
 		$(this).css('background-color', 'lawngreen');
 		$(this).css('opacity', '0.5');
-		$('#message').html('Eleven');
 	}
 }, function() {
+	$('#message').html('');
 	if (!yoLeftActive) {
 		$(this).css('opacity', '0.0');
-		$('#message').html('');
 	}
 });
 
 $('#yoRight').hover(function() {
+	$('#message').html('Eleven');
 	if (!yoRightActive) {
 		$(this).css('background-color', 'lawngreen');
 		$(this).css('opacity', '0.5');
-		$('#message').html('Eleven');
 	}
 }, function() {
+	$('#message').html('');
 	if (!yoRightActive) {
 		$(this).css('opacity', '0.0');
-		$('#message').html('');
 	}
 });
 
 $('#anyCraps').hover(function() {
+	$('#message').html('Any Craps [2, 3, or 12]');
 	if (!anyCrapsActive) {
 		$(this).css('background-color', 'lawngreen');
 		$(this).css('opacity', '0.5');
-		$('#message').html('Any Craps [2, 3, or 12]');
 	}
 }, function() {
+	$('#message').html('');
 	if (!anyCrapsActive) {
 		$(this).css('opacity', '0.0');
-		$('#message').html('');
 	}
+});
+
+$('#redChip').hover(function() {
+	$('#message').html('$100');
+}, function () {
+	$('#message').html('');
+});
+
+$('#blueChip').hover(function() {
+	$('#message').html('$200');
+}, function () {
+	$('#message').html('');
+});
+
+$('#greenChip').hover(function() {
+	$('#message').html('$500');
+}, function () {
+	$('#message').html('');
+});
+
+$('#blackChip').hover(function() {
+	$('#message').html('$1,000');
+}, function () {
+	$('#message').html('');
 });
 
 

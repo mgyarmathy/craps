@@ -241,7 +241,7 @@ var Roller = (function() {
             1000 // far
         );
         //camera.position.set(0, 94, 0);
-        camera.position.set(65, 65, 0); // for debugging purposes
+        camera.position.set(0, 75, 40); // for debugging purposes
         camera.lookAt(scene.position);
         scene.add(camera);
 

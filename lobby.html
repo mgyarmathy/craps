@@ -1,16 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Web Die Roller - alpha</title>
+  <title>501 Craps</title>
   <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
   <meta charset="UTF-8" />
   <link rel="stylesheet" type="text/css" href="/css/splash.css"/>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
   <script src="/socket.io/socket.io.js"></script>
   <script type="text/javascript">
-    //var socket = io.connect('http://localhost:3000');
-    //var socket = io.connect('http://craps.ngrok.com/');
-    var socket = io.connect('http://craps501.herokuapp.com/');
+    var socket = io.connect('http://'+window.location.hostname+'/');
   </script>
   <script type="text/javascript" src="/js/external/three.min.r55.js"></script>
   <script type="text/javascript" src="/js/external/stats.js"></script>
@@ -19,9 +17,18 @@
   <script type="text/javascript">
     Physijs.scripts.worker = '/js/external/physijs_worker.js';
 
+    var vars = [], hash;
+    var q = document.URL.split('?')[1];
+    if (q != undefined) {
+      q = q.split('&');
+      for (var i = 0; i < q.length; i++) {
+        hash = q[i].split('=');
+        vars.push(hash[1]);
+        vars[hash[0]] = hash[1];
+      }
+    }
+
     $(document).ready(function() {
-      //Roller.init();
-      //Roller.loop();
 
       socket.emit('getTableStatus', {});
 
@@ -34,24 +41,42 @@
         $('.joinTable').removeAttr('disabled');
         console.log(data.tables);
         $.each(data.tables, function(i, table) {
-          $('#t'+i+' .numPlayers').text(table.players.length);
+          $('#t'+i+' .players .player').removeClass('active');
+          $('#t'+i+' .players .player:lt('+table.players.length+')').addClass('active');
           if (table.players.length >= 8) {
-            $('#t'+i+' .numPlayers').text('FULL');
-            $('#t'+i+' .joinTable').attr('disabled', 'disabled');
+            $('#t'+i).addClass('full');
+          } else {
+            $('#t'+i).removeClass('full');
           }
         });
       });
 
-      $.get('http://casino.curtiswendel.me:3000/api/getUser/', function(data) {
-        console.log(data);
-        $.each(data, function(i, user) {
-          $('#userId').append('<option value="'+user.id+'">'+user.screenName+'</option');
+      if (vars['devmode'] == 'enabled') {
+        $('#leftside').append('<label>Username</label>'
+                             +'<select id="userId" style="display:block;"></select>');
+        $.get('http://casino.curtiswendel.me:3000/api/getUser/', function(data) {
+          console.log(data);
+          $.each(data, function(i, user) {
+            $('#userId').append('<option value="'+user.id+'">'+user.screenName+'</option');
+          });
         });
+      }
+
+      $('.table').click(function() {
+        if ( $(this).hasClass('full') ) { return; }
+        if (vars['userID']) {
+          window.location = '/game?t='+ $(this).data('tableNumber')+'&id='+vars['userID'];
+        } else {
+          window.location = '/game?t='+ $(this).data('tableNumber')+'&id='+$('#userId').val();
+        }
       });
 
       $('.joinTable').click(function() {
-        //window.location = 'http://localhost:3000/game?t='+ $(this).parent().data('tableNumber')+'&id='+$('#userId').val();
-        window.location = 'http://craps501.herokuapp.com/game?t='+ $(this).parent().data('tableNumber')+'&id='+$('#userId').val()
+        if (vars['userID']) {
+          window.location = '/game?t='+ $(this).parent().data('tableNumber')+'&id='+vars['userID'];
+        } else {
+          window.location = '/game?t='+ $(this).parent().data('tableNumber')+'&id='+$('#userId').val();
+        }
       });
 
       $('.roll').click(function() {
@@ -65,58 +90,124 @@
   </script>
 </head>
 <body>
-  <h1>501 Craps</h1>
-  <div id="viewport" style="display: inline-block; width: 100%; background-color: black"></div>
-  <label>Username</label>
-  <select id="userId"></select>
+  <div id="leftside" style="display: inline-block; width: 35%; vertical-align: top; padding: 2%;">
+    <h1>501 Craps</h1>
+    <img src="/images/dicerollloop.gif" style="width:100%; background: #fff"/>
+  </div>
   <div id="tableInfo">
     <div id="t0" class="table" data-table-number="0">
-      <h2>Table 0</h2>
-      <div class="numPlayers"></div>
-      <button class="joinTable">Join</button><button class="roll">Roll</button>
-      <button class="passDice">Pass Dice</button>
+      <h2>Table A <span>[full]</span></h2>
+      <div class="tableGraphic">
+        <div class="players">
+          <div class="player"></div>
+          <div class="player"></div>
+          <div class="player"></div>
+          <div class="player"></div>
+          <div class="player"></div>
+          <div class="player"></div>
+          <div class="player"></div>
+          <div class="player"></div>
+        </div>
+        <img style="width:100%;" src="/images/craps-table.png" />
+      </div>
     </div>
     <div id="t1" class="table" data-table-number="1">
-      <h2>Table 1</h2>
-      <div class="numPlayers"></div>
-      <button class="joinTable">Join</button><button class="roll">Roll</button>
-      <button class="passDice">Pass Dice</button>
+      <h2>Table B <span>[full]</span></h2>
+      <div class="players">
+        <div class="player"></div>
+        <div class="player"></div>
+        <div class="player"></div>
+        <div class="player"></div>
+        <div class="player"></div>
+        <div class="player"></div>
+        <div class="player"></div>
+        <div class="player"></div>
+      </div>
+      <img style="width:100%;" src="/images/craps-table.png" />
     </div>
     <div id="t2" class="table" data-table-number="2">
-      <h2>Table 2</h2>
-      <div class="numPlayers"></div>
-      <button class="joinTable">Join</button><button class="roll">Roll</button>
-      <button class="passDice">Pass Dice</button>
+      <h2>Table C <span>[full]</span></h2>
+      <div class="players">
+        <div class="player"></div>
+        <div class="player"></div>
+        <div class="player"></div>
+        <div class="player"></div>
+        <div class="player"></div>
+        <div class="player"></div>
+        <div class="player"></div>
+        <div class="player"></div>
+      </div>
+      <img style="width:100%;" src="/images/craps-table.png" />
     </div>
     <div id="t3" class="table" data-table-number="3">
-      <h2>Table 3</h2>
-      <div class="numPlayers"></div>
-      <button class="joinTable">Join</button><button class="roll">Roll</button>
-      <button class="passDice">Pass Dice</button>
+      <h2>Table D <span>[full]</span></h2>
+      <div class="players">
+        <div class="player"></div>
+        <div class="player"></div>
+        <div class="player"></div>
+        <div class="player"></div>
+        <div class="player"></div>
+        <div class="player"></div>
+        <div class="player"></div>
+        <div class="player"></div>
+      </div>
+      <img style="width:100%;" src="/images/craps-table.png" />
     </div>
     <div id="t4" class="table" data-table-number="4">
-      <h2>Table 4</h2>
-      <div class="numPlayers"></div>
-      <button class="joinTable">Join</button><button class="roll">Roll</button>
-      <button class="passDice">Pass Dice</button>
+      <h2>Table E <span>[full]</span></h2>
+      <div class="players">
+        <div class="player"></div>
+        <div class="player"></div>
+        <div class="player"></div>
+        <div class="player"></div>
+        <div class="player"></div>
+        <div class="player"></div>
+        <div class="player"></div>
+        <div class="player"></div>
+      </div>
+      <img style="width:100%;" src="/images/craps-table.png" />
     </div>
     <div id="t5" class="table" data-table-number="5">
-      <h2>Table 5</h2>
-      <div class="numPlayers"></div>
-      <button class="joinTable">Join</button><button class="roll">Roll</button>
-      <button class="passDice">Pass Dice</button>
+      <h2>Table F <span>[full]</span></h2>
+      <div class="players">
+        <div class="player"></div>
+        <div class="player"></div>
+        <div class="player"></div>
+        <div class="player"></div>
+        <div class="player"></div>
+        <div class="player"></div>
+        <div class="player"></div>
+        <div class="player"></div>
+      </div>
+      <img style="width:100%;" src="/images/craps-table.png" />
     </div>
     <div id="t6" class="table" data-table-number="6">
-      <h2>Table 6</h2>
-      <div class="numPlayers"></div>
-      <button class="joinTable">Join</button><button class="roll">Roll</button>
-      <button class="passDice">Pass Dice</button>
+      <h2>Table G <span>[full]</span></h2>
+      <div class="players">
+        <div class="player"></div>
+        <div class="player"></div>
+        <div class="player"></div>
+        <div class="player"></div>
+        <div class="player"></div>
+        <div class="player"></div>
+        <div class="player"></div>
+        <div class="player"></div>
+      </div>
+      <img style="width:100%;" src="/images/craps-table.png" />
     </div>
     <div id="t7" class="table" data-table-number="7">
-      <h2>Table 7</h2>
-      <div class="numPlayers"></div>
-      <button class="joinTable">Join</button><button class="roll">Roll</button>
-      <button class="passDice">Pass Dice</button>
+      <h2>Table H <span>[full]</span></h2>
+      <div class="players">
+        <div class="player"></div>
+        <div class="player"></div>
+        <div class="player"></div>
+        <div class="player"></div>
+        <div class="player"></div>
+        <div class="player"></div>
+        <div class="player"></div>
+        <div class="player"></div>
+      </div>
+      <img style="width:100%;" src="/images/craps-table.png" />
     </div>
   </div>
 </body>
