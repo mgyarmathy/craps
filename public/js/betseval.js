@@ -1148,7 +1148,7 @@ function betsEval(dice1, dice2)
 			if (placeEightActive) {
 				betResultsString += 'Place 8 Bet: Won $'+Math.ceil(placeEightBetAmt*(1+(7/6)))+'<br>';
 				payout(placeEightBetAmt, (7/6));
-				placeNineBetAmt = 0;
+				placeEightBetAmt = 0;
 				placeEightActive = false;
 				placeEightLocked = false;
 				$('#placeEight').css('opacity', '0.0');
