@@ -146,6 +146,8 @@
         return text;
       }
 
+      $('.rightColumn').append('<iframe id="quicktalk" src="http://students.cse.tamu.edu/ctrinh/QuickTalk/master/chat.html?userID='+playerId+'&room=CrapsTable'+tableNumber+'" style="width:420px; height:430px; border:0px; position:fixed; right:0px; allowtransparency:true; background:transparent;bottom:0px;"></iframe>');
+
       /* jQuery events */
 
       var rollThrottle = true;
@@ -201,6 +203,8 @@
   <div id="helpWindow">
 	 <div id="closeHelp" onclick="closeHelp()">Close Help Window</div>
 	 <iframe id="helpFrame" src="/helpdocs/typesofbets.html"></iframe>
+    <button class="enableMobile">Roll from your phone!</button>
+    <button class="leaveGame">Leave Game</button>
   </div>
   <button class="enableMobile">Roll from your phone!</button>
 </div>
@@ -262,8 +266,6 @@
     <div id="gameButtons">
       <button id="rollButton"></button>
     </div>
-    <iframe src="http://cards.mileshick.kd.io/chat" style="height:50%; width:100%;"></iframe>
-    <button class="leaveGame">Leave Game</button>
   </div>
   <div id="gameOver" style="display:none;">
     <h1>Thanks for playing!</h1>
