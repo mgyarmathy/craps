@@ -474,6 +474,10 @@ h1 {
 	border:1px solid white;
 }
 
+#clearChip {
+	background-image:url('/images/clear_chip.png');
+}
+
 #rollButton {
    cursor: pointer;
    width: 172px;
@@ -538,6 +542,41 @@ h1 {
 .player.playerTurn .turn {
     display: inline-block; 
 }
+
+#help {
+	color:blue;
+	font-size:14px;
+	text-decoration:underline;
+	cursor:pointer;
+	margin-top:15px;
+}
+
+#helpWindow {
+	position:absolute;
+	left:50%;
+	top:20px;
+	width:600px;
+	height:500px;
+	margin-left:-300px;
+	background-color:black;
+	opacity:0.95;
+	z-index:10;
+	display:none;
+}
+
+#closeHelp {
+	color:white;
+	text-align:right;
+	cursor:pointer;
+}
+
+#helpFrame {
+	background-color:white;
+	opacity:0.95;
+	width:600px;
+	height:480px;
+}
+
 /*
 .playerTurn {
    border: 2px solid red;

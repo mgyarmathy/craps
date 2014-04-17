@@ -1,6 +1,20 @@
 /* onClick functions for game board*/
+
+function hasFunds() {
+	var currentAmt = $('#'+sid).find('h3').html();
+	if ((redChipActive && currentAmt < redChipAmt) ||
+	   (blueChipActive && currentAmt < blueChipAmt) ||
+	   (greenChipActive && currentAmt < greenChipAmt) ||
+	   (blackChipActive && currentAmt < blackChipAmt)) {
+		$('#message').html('You don\'t have enough money!');
+		return false;
+	} else {
+		return true;
+	}
+}
+
 function passLineClick() {
-	if (isComeOutRoll && !passLineLocked) {
+	if (isComeOutRoll && !passLineLocked && hasFunds()) {
 		passLineActive = true;
 		if (redChipActive) {
 			passLineBetAmt += redChipAmt;
@@ -42,7 +56,7 @@ function passLineClick() {
 }
 
 function dontPassBarClick() {
-	if (isComeOutRoll && !dontPassLineLocked) {
+	if (isComeOutRoll && !dontPassLineLocked && hasFunds()) {
 		dontPassLineActive = true;
 		if (redChipActive) {
 			dontPassLineBetAmt += redChipAmt;
@@ -84,7 +98,7 @@ function dontPassBarClick() {
 }
 
 function passOddsClick() {
-	if (!isComeOutRoll && !passOddsLocked && passLineActive) {
+	if (!isComeOutRoll && !passOddsLocked && passLineActive && hasFunds()) {
 		passOddsActive = true;
 		if (redChipActive) {
 			passOddsBetAmt += redChipAmt;
@@ -124,7 +138,7 @@ function passOddsClick() {
 }
 
 function dontPassOddsClick() {
-	if (!isComeOutRoll && !dontPassOddsLocked && dontPassLineActive) {
+	if (!isComeOutRoll && !dontPassOddsLocked && dontPassLineActive && hasFunds()) {
 		dontPassOddsActive = true;
 		if (redChipActive) {
 			dontPassOddsBetAmt += redChipAmt;
@@ -164,6 +178,7 @@ function dontPassOddsClick() {
 }
 
 function comeClick() {
+	if (!hasFunds()) return;
 	newComeBet = true;
 	if (redChipActive) {
 		newComeBetAmt += redChipAmt;
@@ -202,6 +217,7 @@ function comeClick() {
 }
 
 function dontComeClick() {
+	if (!hasFunds()) return;
 	newDontComeBet = true;
 	if (redChipActive) {
 		newDontComeBetAmt += redChipAmt;
@@ -240,7 +256,7 @@ function dontComeClick() {
 }
 
 function placeFourClick() {
-	if (!placeFourLocked) {
+	if (!placeFourLocked && hasFunds()) {
 		placeFourActive = true;
 		if (redChipActive) {
 			placeFourBetAmt += redChipAmt;
@@ -280,7 +296,7 @@ function placeFourClick() {
 }
 
 function placeFiveClick() {
-	if (!placeFiveLocked) {
+	if (!placeFiveLocked && hasFunds()) {
 		placeFiveActive = true;
 		if (redChipActive) {
 			placeFiveBetAmt += redChipAmt;
@@ -320,7 +336,7 @@ function placeFiveClick() {
 }
 
 function placeSixClick() {
-	if (!placeSixLocked) {
+	if (!placeSixLocked && hasFunds()) {
 		placeSixActive = true;
 		if (redChipActive) {
 			placeSixBetAmt += redChipAmt;
@@ -360,7 +376,7 @@ function placeSixClick() {
 }
 
 function placeEightClick() {
-	if (!placeEightLocked) {
+	if (!placeEightLocked && hasFunds()) {
 		placeEightActive = true;
 		if (redChipActive) {
 			placeEightBetAmt += redChipAmt;
@@ -400,7 +416,7 @@ function placeEightClick() {
 }
 
 function placeNineClick() {
-	if (!placeNineLocked) {
+	if (!placeNineLocked && hasFunds()) {
 		placeNineActive = true;
 		if (redChipActive) {
 			placeNineBetAmt += redChipAmt;
@@ -440,7 +456,7 @@ function placeNineClick() {
 }
 
 function placeTenClick() {
-	if (!placeTenLocked) {
+	if (!placeTenLocked && hasFunds()) {
 		placeTenActive = true;
 		if (redChipActive) {
 			placeTenBetAmt += redChipAmt;
@@ -480,6 +496,7 @@ function placeTenClick() {
 }
 
 function fieldClick() {
+	if (!hasFunds()) return;
 	fieldActive = true;
 	if (redChipActive) {
 		fieldBetAmt += redChipAmt;
@@ -518,6 +535,7 @@ function fieldClick() {
 }
 
 function anySevenClick() {
+	if (!hasFunds()) return;
 	anySevenActive = true;
 	if (redChipActive) {
 		anySevenBetAmt += redChipAmt;
@@ -556,6 +574,7 @@ function anySevenClick() {
 }
 
 function aceDeuceClick() {
+	if (!hasFunds()) return;
 	aceDeuceActive = true;
 	if (redChipActive) {
 		aceDeuceBetAmt += redChipAmt;
@@ -594,6 +613,7 @@ function aceDeuceClick() {
 }
 
 function snakeEyesClick() {
+	if (!hasFunds()) return;
 	snakeEyesActive = true;
 	if (redChipActive) {
 		snakeEyesBetAmt += redChipAmt;
@@ -632,6 +652,7 @@ function snakeEyesClick() {
 }
 
 function boxcarsClick() {
+	if (!hasFunds()) return;
 	boxcarsActive = true;
 	if (redChipActive) {
 		boxcarsBetAmt += redChipAmt;
@@ -670,6 +691,7 @@ function boxcarsClick() {
 }
 
 function yoLeftClick() {
+	if (!hasFunds()) return;
 	yoLeftActive = true;
 	if (redChipActive) {
 		yoLeftBetAmt += redChipAmt;
@@ -707,6 +729,7 @@ function yoLeftClick() {
 	$('#yoLeft').css('opacity', '.95');
 }
 function yoRightClick() {
+	if (!hasFunds()) return;
 	yoRightActive = true;
 	if (redChipActive) {
 		yoRightBetAmt += redChipAmt;
@@ -744,6 +767,7 @@ function yoRightClick() {
 	$('#yoRight').css('opacity', '.95');
 }
 function anyCrapsClick() {
+	if (!hasFunds()) return;
 	anyCrapsActive = true;
 	if (redChipActive) {
 		anyCrapsBetAmt += redChipAmt;
@@ -782,7 +806,7 @@ function anyCrapsClick() {
 }
 
 function hardWayFourClick() {
-	if (!hardWayFourLocked) {
+	if (!hardWayFourLocked && hasFunds()) {
 		hardWayFourActive = true;
 		if (redChipActive) {
 			hardWayFourBetAmt += redChipAmt;
@@ -822,7 +846,7 @@ function hardWayFourClick() {
 }
 
 function hardWaySixClick() {
-	if (!hardWaySixLocked) {
+	if (!hardWaySixLocked && hasFunds()) {
 		hardWaySixActive = true;
 		if (redChipActive) {
 			hardWaySixBetAmt += redChipAmt;
@@ -862,7 +886,7 @@ function hardWaySixClick() {
 }
 
 function hardWayEightClick() {
-	if (!hardWayEightLocked) {
+	if (!hardWayEightLocked && hasFunds()) {
 		hardWayEightActive = true;
 		if (redChipActive) {
 			hardWayEightBetAmt += redChipAmt;
@@ -902,7 +926,7 @@ function hardWayEightClick() {
 }
 
 function hardWayTenClick() {
-	if (!hardWayTenLocked) {
+	if (!hardWayTenLocked && hasFunds()) {
 		hardWayTenActive = true;
 		if (redChipActive) {
 			hardWayTenBetAmt += redChipAmt;
@@ -983,4 +1007,157 @@ function blackChipClick() {
 	$('#redChip').css('border', 'none');
 	greenChipActive = false;
 	$('#greenChip').css('border', 'none');
+}
+
+function clearBet(divId, betActive, betAmt) {
+	payout(betAmt, 0);
+	$('#'+divId).css('opacity', '0.0');
+	$('#'+divId).html('');
+	betActive = false;
+	betAmt = 0;
+}
+
+function clearDiv(divId) {
+	$('#'+divId).html('');
+	$('#'+divId).css('opacity','0.0');
+}
+
+/* clear all bets that are not locked */
+function clearChips() {
+	if (!passLineLocked) {
+		payout(passLineBetAmt, 0);
+		passLineBetAmt = 0;
+		passLineActive = false;
+		clearDiv('passLineVert');
+		clearDiv('passLineHori');
+	}
+	if (!dontPassLineLocked) {
+		payout(dontPassLineBetAmt, 0);
+		dontPassLineBetAmt = 0;
+		dontPassLineActive = false;
+		clearDiv('dontPassBarVert');
+		clearDiv('dontPassBarHori');
+	}
+	if (!passOddsLocked) {
+		payout(passOddsBetAmt, 0);
+		passOddsBetAmt = 0;
+		passOddsActive = false;
+		clearDiv('passOdds');
+	}
+	if (!dontPassOddsLocked) {
+		payout(dontPassOddsBetAmt, 0);
+		dontPassOddsBetAmt = 0;
+		dontPassOddsActive = false;
+		clearDiv('dontPassOdds');
+	}
+	if (!hardWayFourLocked) {
+		payout(hardWayFourBetAmt, 0);
+		hardWayFourBetAmt = 0;
+		hardWayFourActive = false;
+		clearDiv('hardWayFour');
+	}
+	if (!hardWaySixLocked) {
+		payout(hardWaySixBetAmt, 0);
+		hardWaySixBetAmt = 0;
+		hardWaySixActive = false;
+		clearDiv('hardWaySix');
+	}
+	if (!hardWayEightLocked) {
+		payout(hardWayEightBetAmt, 0);
+		hardWayEightBetAmt = 0;
+		hardWayEightActive = false;
+		clearDiv('hardWayEight');
+	}
+	if (!hardWayTenLocked) {
+		payout(hardWayTenBetAmt, 0);
+		hardWayTenBetAmt = 0;
+		hardWayTenActive = false;
+		clearDiv('hardWayTen');
+	}
+	if (!placeFourLocked) {
+		payout(placeFourBetAmt, 0);
+		placeFourBetAmt = 0;
+		placeFourActive = false;
+		clearDiv('placeFour');
+	}
+	if (!placeFiveLocked) {
+		payout(placeFiveBetAmt, 0);
+		placeFiveBetAmt = 0;
+		placeFiveActive = false;
+		clearDiv('placeFive');
+	}
+	if (!placeSixLocked) {
+		payout(placeSixBetAmt, 0);
+		placeSixBetAmt = 0;
+		placeSixActive = false;
+		clearDiv('placeSix');
+	}
+	if (!placeEightLocked) {
+		payout(placeEightBetAmt, 0);
+		placeEightBetAmt = 0;
+		placeEightActive = false;
+		clearDiv('placeEight');
+	}
+	if (!placeNineLocked) {
+		payout(placeNineBetAmt, 0);
+		placeNineBetAmt = 0;
+		placeNineActive = false;
+		clearDiv('placeNine');
+	}
+	if (!placeTenLocked) {
+		payout(placeTenBetAmt, 0);
+		placeTenBetAmt = 0;
+		placeTenActive = false;
+		clearDiv('placeTen');
+	}
+	
+	payout(snakeEyesBetAmt, 0);
+	snakeEyesBetAmt = 0;
+	snakeEyesActive = false;
+	clearDiv('snakeEyes');
+	
+	payout(aceDeuceBetAmt, 0);
+	aceDeuceBetAmt = 0;
+	aceDeuceActive = false;
+	clearDiv('aceDeuce');
+	
+	payout(yoLeftBetAmt, 0);
+	yoLeftBetAmt = 0;
+	yoLeftActive = false;
+	clearDiv('yoLeft');
+	
+	payout(yoRightBetAmt, 0);
+	yoRightBetAmt = 0;
+	yoRightActive = false;
+	clearDiv('yoRight');
+	
+	payout(boxcarsBetAmt, 0);
+	boxcarsBetAmt = 0;
+	boxcarsActive = false;
+	clearDiv('boxcars');
+	
+	payout(anyCrapsBetAmt, 0);
+	anyCrapsBetAmt = 0;
+	anyCrapsActive = false;
+	clearDiv('anyCraps');
+	
+	payout(anySevenBetAmt, 0);
+	anySevenBetAmt = 0;
+	anySevenActive = false;
+	clearDiv('anySeven');
+	
+	payout(fieldBetAmt, 0);
+	fieldBetAmt = 0;
+	fieldActive = false;
+	clearDiv('field');
+	
+	payout(newComeBetAmt, 0);
+	newComeBetAmt = 0;
+	newComeBet = false;
+	clearDiv('come');
+
+	payout(newDontComeBetAmt, 0);
+	newDontComeBetAmt = 0;
+	newDontComeBet = false;
+	clearDiv('dontComeBar');
 }

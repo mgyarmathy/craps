@@ -509,5 +509,11 @@ $('#blackChip').hover(function() {
 	$('#message').html('');
 });
 
+$('#clearChip').hover(function() {
+	$('#message').html('Clear All Non-Locked Bets');
+}, function() {
+	$('#message').html('');
+});
+
 
 });

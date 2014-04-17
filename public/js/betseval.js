@@ -101,7 +101,7 @@ function payout(bet, fractional) {
 	console.log(sid);
 	console.log(tableNumber);
 	//If we take out money at each bet, we need to add it back to winnings
-	var winnings = bet * (1+fractional);
+	var winnings = Math.ceil(bet * (1+fractional));
 	//var socket = io.connect('http://localhost:3000');
 	socket.emit('payouts',{sid: sid, amount: winnings, tableNumber: tableNumber});
 }
@@ -126,7 +126,7 @@ function userRefund(bet) {
 /* Check each bet with dice and see if winner or loser */
 function betsEval(dice1, dice2)
 {
-	betResultsString = '<strong>Your Earnings:</strong><br><br>';
+	betResultsString = '';
 	diceValue = dice1 + dice2;
 	/* Pass Line, Don't Pass Line, Pass Odds, & Don't Pass Bet Logic */
 	if (isComeOutRoll) {
@@ -135,11 +135,11 @@ function betsEval(dice1, dice2)
 		case 3:
 		case 12:
 			if (passLineActive) {
-				betResultsString += 'Pass Line Bet: Loser (Rolled Craps)<br>';
+				betResultsString += 'Pass Line Bet: Lost $'+passLineBetAmt+'<br>';
 				passLineBetAmt = 0;
 			}
 			if (dontPassLineActive) {
-				betResultsString += 'Dont Pass Line Bet: Winner, Odds Paid 1:1<br>';
+				betResultsString += 'Dont Pass Line Bet: Won $'+dontPassLineBetAmt*2+'<br>';
 				payout(dontPassLineBetAmt, (1/1));
 				dontPassLineBetAmt = 0;
 			}
@@ -159,12 +159,12 @@ function betsEval(dice1, dice2)
 		case 7:
 		case 11:
 			if (passLineActive) {
-				betResultsString += 'Pass Line Bet: Winner, Odds Paid 1:1<br>';
+				betResultsString += 'Pass Line Bet: Won $'+passLineBetAmt*2+'<br>';
 				payout(passLineBetAmt, (1/1));
 				passLineBetAmt = 0;
 			}
 			if (dontPassLineActive) {
-				betResultsString += 'Dont Pass Line Bet: Loser (Rolled 7 or 11)<br>';
+				betResultsString += 'Dont Pass Line Bet: Lost $'+dontPassLineBetAmt+'<br>';
 				dontPassLineBetAmt = 0;
 			}
 			isComeOutRoll = true;
@@ -203,12 +203,6 @@ function betsEval(dice1, dice2)
 				$('#pointChipImg').css('margin-left', '357px');
 				break;
 			}
-			if (passLineActive) {
-				betResultsString += 'Pass Line Bet: The Point is ' + pointValue + '<br>';
-			}
-			if (dontPassLineActive) {
-				betResultsString += 'Dont Pass Line Bet: The Point is ' + pointValue + '<br>';
-			}
 			isComeOutRoll = false;
 			// can now bet on Pass/Don't Pass Odds
 			passOddsLocked = false;
@@ -227,16 +221,16 @@ function betsEval(dice1, dice2)
 		switch(diceValue) {
 		case 7:
 			if (passLineActive) {
-				betResultsString += 'Pass Line Bet: Loser (Rolled 7)<br>';
+				betResultsString += 'Pass Line Bet: Lost $'+passLineBetAmt+'<br>';
 				passLineBetAmt = 0;
 			}
 			if (dontPassLineActive) {
-				betResultsString += 'Dont Pass Line Bet: Winner, Odds Paid 1:1<br>';
+				betResultsString += 'Dont Pass Line Bet: Won $'+dontPassLineBetAmt*2+'<br>';;
 				payout(dontPassLineBetAmt, (1/1));
 				dontPassLineBetAmt = 0;
 			}
 			if (passOddsActive) {
-				betResultsString += 'Pass Odds: Loser<br>';
+				betResultsString += 'Pass Odds: Lost $'+passOddsBetAmt+'<br>';
 				passOddsBetAmt = 0;
 			}
 			// Pass Odds Paid on Don't Pass Odds Paid depend on what the point was
@@ -244,19 +238,19 @@ function betsEval(dice1, dice2)
 				switch(pointValue) {
 					case 4:
 					case 10:
-						betResultsString += 'Dont Pass Odds: Winner, Odds Paid 1:2<br>';
+						betResultsString += 'Dont Pass Odds: Won $'+Math.ceil(dontPassOddsBetAmt*(1+(1/2)))+'<br>';
 						payout(dontPassOddsBetAmt, (1/2));
 						dontPassOddsBetAmt = 0;
 						break;
 					case 5:
 					case 9:
-						betResultsString += 'Dont Pass Odds: Winner, Odds Paid 2:3<br>';
+						betResultsString += 'Dont Pass Odds: Won $'+Math.ceil(dontPassOddsBetAmt*(1+(2/3)))+'<br>';
 						payout(dontPassOddsBetAmt, (2/3));
 						dontPassOddsBetAmt = 0;
 						break;
 					case 6:
 					case 8:
-						betResultsString += 'Dont Pass Odds: Winner, Odds Paid 5:6<br>';
+						betResultsString += 'Dont Pass Odds: Won $'+Math.ceil(dontPassOddsBetAmt*(1+(5/6)))+'<br>';
 						payout(dontPassOddsBetAmt, (5/6));
 						dontPassOddsBetAmt = 0;
 						break;
@@ -292,16 +286,16 @@ function betsEval(dice1, dice2)
 			break;
 		case pointValue:
 			if (passLineActive) {
-				betResultsString += 'Pass Line Bet: Winner, Odds Paid 1:1<br>';
+				betResultsString += 'Pass Line Bet: Won $'+passLineBetAmt*2+'<br>';
 				payout(passLineBetAmt, (1/1));
 				passLineBetAmt = 0;
 			}
 			if (dontPassLineActive) {
-				betResultsString += 'Dont Pass Line Bet: Loser (Rolled Point)<br>';
+				betResultsString += 'Dont Pass Line Bet: Lost $'+dontPassLineBetAmt+'<br>';
 				dontPassLineBetAmt = 0;
 			}
 			if (dontPassOddsActive) {
-				betResultsString += 'Dont Pass Odds: Loser';
+				betResultsString += 'Dont Pass Odds: Lost $'+dontPassOddsBetAmt+'<br>';
 				dontPassOddsBetAmt = 0;
 			}
 			// Pass Odds Paid on Don't Pass Odds Paid depend on what the point was
@@ -309,21 +303,21 @@ function betsEval(dice1, dice2)
 				switch(pointValue) {
 					case 4:
 					case 10:
-						betResultsString += 'Pass Odds: Winner, Odds Paid 2:1<br>';
+						betResultsString += 'Pass Odds: Won $'+Math.ceil(passOddsBetAmt*(1+(2/1)))+'<br>';
 						payout(passOddsBetAmt, (2/1));
-						passOddBetAmt = 0;
+						passOddsBetAmt = 0;
 						break;
 					case 5:
 					case 9:
-						betResultsString += 'Pass Odds: Winner, Odds Paid 3:2<br>';
+						betResultsString += 'Pass Odds: Won $'+Math.ceil(passOddsBetAmt*(1+(3/2)))+'<br>';
 						payout(passOddsBetAmt, (3/2));
-						passOddBetAmt = 0;
+						passOddsBetAmt = 0;
 						break;
 					case 6:
 					case 8:
-						betResultsString += 'Pass Odds: Winner, Odds Paid 6:5<br>';
+						betResultsString += 'Pass Odds: Won $'+Math.ceil(passOddsBetAmt*(1+(6/5)))+'<br>';
 						payout(passOddsBetAmt, (6/5));
-						passOddBetAmt = 0;
+						passOddsBetAmt = 0;
 						break;
 				}
 			}
@@ -356,18 +350,6 @@ function betsEval(dice1, dice2)
 			pointValue = 0;
 			break;
 		default:
-			if (passLineActive) {
-				betResultsString += 'Pass Line Bet: The Point is still ' + pointValue + '<br>';
-			}
-			if (dontPassLineActive) {
-				betResultsString += 'Dont Pass Line Bet: The Point is still ' + pointValue + '<br>';
-			}
-			if (passOddsActive) {
-				betResultsString += 'Pass Odds Bet: The Point is still ' + pointValue + '<br>';
-			}
-			if (dontPassOddsActive) {
-				betResultsString += 'Dont Pass Odds Bet: The Point is still ' + pointValue + '<br>';
-			}
 			break;
 		}
 	}
@@ -378,14 +360,14 @@ function betsEval(dice1, dice2)
 		case 3:
 		case 12:
 			if (newComeBet) {
-				betResultsString += "New Come Bet Loses<br>";
+				betResultsString += 'New Come Bet: Lost $'+newComeBetAmt+'<br>';
 				newComeBetAmt = 0;
 				newComeBet = false;
 				$('#come').css('opacity', '0.0');
 				$('#come').html('');
 			}
 			if (newDontComeBet) {
-				betResultsString += "New Don't Come Bet Wins Odds 1:1<br>";
+				betResultsString += 'New Don\'t Come Bet: Won $'+newDontComeBetAmt*2+'<br>';
 				payout(newDontComeBetAmt, (1/1));
 				newDontComeBetAmt = 0;
 				newDontComeBet = false;
@@ -395,7 +377,7 @@ function betsEval(dice1, dice2)
 			break;
 		case 4:
 			if (comeActiveArray[diceValue]) {
-				betResultsString += "Come Bet on " + diceValue + " wins with odds 1:1<br>";
+				betResultsString += 'Come Bet on ' + diceValue + ': Won $'+comeBetAmtArray[diceValue]*2+'<br>';
 				payout(comeBetAmtArray[diceValue], (1/1));
 				comeBetAmtArray[diceValue] = 0;
 				comeActiveArray[diceValue] = false;
@@ -403,7 +385,7 @@ function betsEval(dice1, dice2)
 				$('#pointFour').html('');
 			}
 			if (dontComeActiveArray[diceValue]) {
-				betResultsString += "Don't Come Bet on " + diceValue + " loses<br>";
+				betResultsString += 'Don\'t Come Bet on ' + diceValue + ': Lost $'+dontComeBetAmtArray[diceValue]+'<br>';
 				dontComeBetAmtArray[diceValue] = 0;
 				dontComeActiveArray[diceValue] = false;
 				$('#pointFour').css('opacity', '0.0');
@@ -456,7 +438,7 @@ function betsEval(dice1, dice2)
 			break;
 		case 5:
 			if (comeActiveArray[diceValue]) {
-				betResultsString += "Come Bet on " + diceValue + " wins with odds 1:1<br>";
+				betResultsString += 'Come Bet on ' + diceValue + ': Won $'+comeBetAmtArray[diceValue]*2+'<br>';
 				payout(comeBetAmtArray[diceValue], (1/1));
 				comeBetAmtArray[diceValue] = 0;
 				comeActiveArray[diceValue] = false;
@@ -464,7 +446,7 @@ function betsEval(dice1, dice2)
 				$('#pointFive').html('');
 			}
 			if (dontComeActiveArray[diceValue]) {
-				betResultsString += "Don't Come Bet on " + diceValue + " loses<br>";
+				betResultsString += 'Don\'t Come Bet on ' + diceValue + ': Lost $'+dontComeBetAmtArray[diceValue]+'<br>';
 				dontComeBetAmtArray[diceValue] = 0;
 				dontComeActiveArray[diceValue] = false;
 				$('#pointFive').css('opacity', '0.0');
@@ -517,7 +499,7 @@ function betsEval(dice1, dice2)
 			break;
 		case 6:
 			if (comeActiveArray[diceValue]) {
-				betResultsString += "Come Bet on " + diceValue + " wins with odds 1:1<br>";
+				betResultsString += 'Come Bet on ' + diceValue + ': Won $'+comeBetAmtArray[diceValue]*2+'<br>';
 				payout(comeBetAmtArray[diceValue], (1/1));
 				comeBetAmtArray[diceValue] = 0;
 				comeActiveArray[diceValue] = false;
@@ -525,7 +507,7 @@ function betsEval(dice1, dice2)
 				$('#pointSix').html('');
 			}
 			if (dontComeActiveArray[diceValue]) {
-				betResultsString += "Don't Come Bet on " + diceValue + " loses<br>";
+				betResultsString += 'Don\'t Come Bet on ' + diceValue + ': Lost $'+dontComeBetAmtArray[diceValue]+'<br>';
 				dontComeBetAmtArray[diceValue] = 0;
 				dontComeActiveArray[diceValue] = false;
 				$('#pointSix').css('opacity', '0.0');
@@ -580,12 +562,12 @@ function betsEval(dice1, dice2)
 			// all current active come bets lose, all current dont come bets win
 			for (var i=0; i<=12; i++) {
 				if (comeActiveArray[i]) {
-					betResultsString += "Come Bet on " + i + " loses<br>";
+					betResultsString += "Come Bet on " + i + ": Lost $"+comeBetAmtArray[i]+"<br>";
 					comeBetAmtArray[i] = 0;
 					comeActiveArray[i] = false;
 				}
 				if (dontComeActiveArray[i]) {
-					betResultsString += "Don't Come Bet on " + i + " wins odds 1:1<br>";
+					betResultsString += "Don't Come Bet on " + i + ": Won $"+dontComeBetAmtArray[i]*2+"<br>";
 					payout(dontComeBetAmtArray[i], (1/1));
 					dontComeBetAmtArray[i] = 0;
 					dontComeActiveArray[i] = false;
@@ -594,7 +576,7 @@ function betsEval(dice1, dice2)
 			$('.point').css('opacity', '0.0');
 			$('.point').html('');
 			if (newComeBet) {
-				betResultsString += "New Come Bet Wins Odds 1:1<br>";
+				betResultsString += 'New Come Bet: Won $'+newComeBetAmt*2+'<br>';
 				payout(newComeBetAmt, (1/1));
 				newComeBetAmt = 0;
 				newComeBet = false;
@@ -602,7 +584,7 @@ function betsEval(dice1, dice2)
 				$('#come').html('');
 			}
 			if (newDontComeBet) {
-				betResultsString += "New Don't Come Bet Loses<br>";
+				betResultsString += 'New Don\'t Come Bet: Lost $'+newDontComeBetAmt+'<br>';
 				newDontComeBetAmt = 0;
 				newDontComeBet = false;
 				$('#dontComeBar').css('opacity', '0.0');
@@ -611,7 +593,7 @@ function betsEval(dice1, dice2)
 			break;
 		case 8:
 			if (comeActiveArray[diceValue]) {
-				betResultsString += "Come Bet on " + diceValue + " wins with odds 1:1<br>";
+				betResultsString += 'Come Bet on ' + diceValue + ': Won $'+comeBetAmtArray[diceValue]*2+'<br>';
 				payout(comeBetAmtArray[diceValue], (1/1));
 				comeBetAmtArray[diceValue] = 0;
 				comeActiveArray[diceValue] = false;
@@ -619,7 +601,7 @@ function betsEval(dice1, dice2)
 				$('#pointEight').html('');
 			}
 			if (dontComeActiveArray[diceValue]) {
-				betResultsString += "Don't Come Bet on " + diceValue + " loses<br>";
+				betResultsString += 'Don\'t Come Bet on ' + diceValue + ': Lost $'+dontComeBetAmtArray[diceValue]+'<br>';
 				dontComeBetAmtArray[diceValue] = 0;
 				dontComeActiveArray[diceValue] = false;
 				$('#pointEight').css('opacity', '0.0');
@@ -672,7 +654,7 @@ function betsEval(dice1, dice2)
 			break;
 		case 9:
 			if (comeActiveArray[diceValue]) {
-				betResultsString += "Come Bet on " + diceValue + " wins with odds 1:1<br>";
+				'Come Bet on ' + diceValue + ': Won $'+comeBetAmtArray[diceValue]*2+'<br>';
 				payout(comeBetAmtArray[diceValue], (1/1));
 				comeBetAmtArray[diceValue] = 0;
 				comeActiveArray[diceValue] = false;
@@ -680,7 +662,7 @@ function betsEval(dice1, dice2)
 				$('#pointNine').html('');
 			}
 			if (dontComeActiveArray[diceValue]) {
-				betResultsString += "Don't Come Bet on " + diceValue + " loses<br>";
+				betResultsString += 'Don\'t Come Bet on ' + diceValue + ': Lost $'+dontComeBetAmtArray[diceValue]+'<br>';
 				dontComeBetAmtArray[diceValue] = 0;
 				dontComeActiveArray[diceValue] = false;
 				$('#pointNine').css('opacity', '0.0');
@@ -733,7 +715,7 @@ function betsEval(dice1, dice2)
 			break;
 		case 10:
 			if (comeActiveArray[diceValue]) {
-				betResultsString += "Come Bet on " + diceValue + " wins with odds 1:1<br>";
+				betResultsString += 'Come Bet on ' + diceValue + ': Won $'+comeBetAmtArray[diceValue]*2+'<br>';
 				payout(comeBetAmtArray[diceValue], (1/1));
 				comeBetAmtArray[diceValue] = 0;
 				comeActiveArray[diceValue] = false;
@@ -741,7 +723,7 @@ function betsEval(dice1, dice2)
 				$('#pointTen').html('');
 			}
 			if (dontComeActiveArray[diceValue]) {
-				betResultsString += "Don't Come Bet on " + diceValue + " loses<br>";
+				betResultsString += 'Don\'t Come Bet on ' + diceValue + ': Lost $'+dontComeBetAmtArray[diceValue]+'<br>';
 				dontComeBetAmtArray[diceValue] = 0;
 				dontComeActiveArray[diceValue] = false;
 				$('#pointTen').css('opacity', '0.0');
@@ -794,7 +776,7 @@ function betsEval(dice1, dice2)
 			break;
 		case 11:
 			if (newComeBet) {
-				betResultsString += "New Come Bet Wins Odds 1:1<br>";
+				betResultsString += 'New Come Bet: Won $'+newComeBetAmt*2+'<br>';
 				payout(newComeBetAmt, (1/1));
 				newComeBetAmt = 0;
 				newComeBet = false;
@@ -802,7 +784,7 @@ function betsEval(dice1, dice2)
 				$('#come').html('');
 			}
 			if (newDontComeBet) {
-				betResultsString += "New Don't Come Bet Loses<br>";
+				betResultsString += 'New Don\'t Come Bet: Lost $'+newDontComeBetAmt+'<br>';
 				newDontComeBetAmt = 0;
 				newDontComeBet = false;
 				$('#dontComeBar').css('opacity', '0.0');
@@ -815,10 +797,10 @@ function betsEval(dice1, dice2)
 	// see if each bet is active and then if it is winner or not
 	if (snakeEyesActive) {
 		if (diceValue == 2) {
-			betResultsString += 'Snake Eyes Bet: Winner, Odds Paid 31:1<br>';
-			payout(aceDeuceBetAmt, (31/1));
+			betResultsString += 'Snake Eyes Bet: Won $'+Math.ceil(snakeEyesBetAmt*31)+'<br>';
+			payout(snakeEyesBetAmt, (30/1));
 		} else {
-			betResultsString += 'Snake Eyes Bet: Loser<br>';
+			betResultsString += 'Snake Eyes Bet: Lost $'+snakeEyesBetAmt+'<br>';
 		}
 		snakeEyesActive = false;
 		snakeEyesBetAmt = 0;
@@ -827,10 +809,10 @@ function betsEval(dice1, dice2)
 	}
 	if (aceDeuceActive) {
 		if (diceValue == 3) {
-			betResultsString += 'Ace Deuce Bet: Winner, Odds Paid 16:1<br>';
-			payout(aceDeuceBetAmt, (16/1));
+			betResultsString += 'Ace Deuce Bet: Won $'+Math.ceil(aceDeuceBetAmt*16)+'<br>';
+			payout(aceDeuceBetAmt, (15/1));
 		} else {
-			betResultsString += 'Ace Deuce Bet: Loser<br>';
+			betResultsString += 'Ace Deuce Bet: Lost $'+aceDeuceBetAmt+'<br>';
 		}
 		aceDeuceActive = false;
 		aceDeuceBetAmt = 0;
@@ -839,10 +821,10 @@ function betsEval(dice1, dice2)
 	}
 	if (yoLeftActive) {
 		if (diceValue == 11) {
-			betResultsString += 'Yo Bet: Winner, Odds Paid 15:1<br>';
+			betResultsString += 'Yo Bet: Won $'+Math.ceil(yoLeftBetAmt*16)+'<br>';
 			payout(yoLeftBetAmt, (15/1));
 		} else {
-			betResultsString += 'Yo Bet: Loser<br>';
+			betResultsString += 'Yo Bet: Lost $'+yoLeftBetAmt+'<br>';
 		}
 		yoLeftActive = false;
 		yoLeftBetAmt = 0;
@@ -851,10 +833,10 @@ function betsEval(dice1, dice2)
 	}
 	if (yoRightActive) {
 		if (diceValue == 11) {
-			betResultsString += 'Yo Bet: Winner, Odds Paid 15:1<br>';
+			betResultsString += 'Yo Bet: Won $'+Math.ceil(yoRightBetAmt*16)+'<br>';
 			payout(yoRightBetAmt, (15/1));
 		} else {
-			betResultsString += 'Yo Bet: Loser<br>';
+			betResultsString += 'Yo Bet: Lost $'+yoRightBetAmt+'<br>';
 		}
 		yoRightActive = false;
 		yoRightBetAmt = 0;
@@ -863,10 +845,10 @@ function betsEval(dice1, dice2)
 	}
 	if (boxcarsActive) {
 		if (diceValue == 12) {
-			betResultsString += 'Boxcars Bet: Winner, Odds Paid 30:1<br>';
+			betResultsString += 'Boxcars Bet: Won $'+Math.ceil(boxcarsBetAmt*31)+'<br>';
 			payout(boxcarsBetAmt, (30/1));
 		} else {
-			betResultsString += 'Boxcars Bet: Loser<br>';
+			betResultsString += 'Boxcars Bet: Lost $'+boxcarsBetAmt+'<br>';
 		}
 		boxcarsActive = false;
 		boxcarsBetAmt = 0;
@@ -875,10 +857,10 @@ function betsEval(dice1, dice2)
 	}
 	if (anyCrapsActive) {
 		if (diceValue == 2 || diceValue == 3 || diceValue == 12) {
-			betResultsString += 'Any Craps Bet: Winner, Odds Paid 7:1<br>';
+			betResultsString += 'Any Craps Bet: Won $'+Math.ceil(anyCrapsBetAmt*8)+'<br>';
 			payout(anyCrapsBetAmt, (7/1));
 		} else {
-			betResultsString += 'Any Craps Bet: Loser<br>';
+			betResultsString += 'Any Craps Bet: Lost $'+anyCrapsBetAmt+'<br>';
 		}
 		anyCrapsActive = false;
 		anyCrapsBetAmt = 0;
@@ -887,10 +869,10 @@ function betsEval(dice1, dice2)
 	}
 	if (anySevenActive) {
 		if (diceValue == 7) {
-			betResultsString += 'Any Seven Bet: Winner, Odds Paid 5:1<br>';
-			payout(anySevenBetAmt, (5/1));
+			betResultsString += 'Any Seven Bet: Won $'+Math.ceil(anySevenBetAmt*5)+'<br>';
+			payout(anySevenBetAmt, (4/1));
 		} else {
-			betResultsString += 'Any Seven Bet: Loser<br>';
+			betResultsString += 'Any Seven Bet: Lost $'+anySevenBetAmt+'<br>';
 		}
 		anySevenActive = false;
 		anySevenBetAmt = 0;
@@ -900,16 +882,16 @@ function betsEval(dice1, dice2)
 	if (fieldActive) {
 		// different dice values have different pay outs
 		if (diceValue == 2) {
-			betResultsString += 'Field Bet: Winner, Odds Paid 2:1<br>';
+			betResultsString += 'Field Bet: Won $'+Math.ceil(fieldBetAmt*3)+'<br>';
 			payout(fieldBetAmt, (2/1));
 		} else if (diceValue == 12) {
-			betResultsString += 'Field Bet: Winner, Odds Paid 3:1<br>';
+			betResultsString += 'Field Bet: Won $'+Math.ceil(fieldBetAmt*4)+'<br>';
 			payout(fieldBetAmt, (3/1));
 		} else if (diceValue == 3 || diceValue == 4 || diceValue == 9 || diceValue == 10 || diceValue == 11) {
-			betResultsString += 'Field Bet: Winner, Odds Paid 1:1<br>';
+			betResultsString += 'Field Bet: Won $'+fieldBetAmt*2+'<br>';
 			payout(fieldBetAmt, (1/1));
 		} else {
-			betResultsString += 'Field Bet: Loser<br>';
+			betResultsString += 'Field Bet: Lost $'+fieldBetAmt+'<br>';
 		}
 		fieldActive = false;
 		fieldBetAmt = 0;
@@ -945,10 +927,10 @@ function betsEval(dice1, dice2)
 		case 4:
 			if (hardWayFourActive) {
 				if (dice1 == dice2) {
-					betResultsString += 'Hard Way 4 Bet: Winner, Odds Paid 7:1<br>';
+					betResultsString += 'Hard Way 4 Bet: Won $'+Math.ceil(hardWayFourBetAmt*8)+'<br>';
 					payout(hardWayFourBetAmt, (7/1));
 				} else {
-					betResultsString += 'Hard Way 4 Bet: Loser<br>';
+					betResultsString += 'Hard Way 4 Bet: Lost $'+hardWayFourBetAmt+'<br>';
 				}
 				hardWayFourActive = false;
 				hardWayFourBetAmt = 0;
@@ -960,10 +942,10 @@ function betsEval(dice1, dice2)
 		case 6:
 			if (hardWaySixActive) {
 				if (dice1 == dice2) {
-					betResultsString += 'Hard Way 6 Bet: Winner, Odds Paid 9:1<br>';
+					betResultsString += 'Hard Way 6 Bet: Won $'+Math.ceil(hardWaySixBetAmt*10)+'<br>';
 					payout(hardWaySixBetAmt, (9/1));
 				} else {
-					betResultsString += 'Hard Way 6 Bet: Loser<br>';
+					betResultsString += 'Hard Way 6 Bet: Lost $'+hardWaySixBetAmt+'<br>';
 				}
 				hardWaySixActive = false;
 				hardWaySixBetAmt = 0;
@@ -974,7 +956,7 @@ function betsEval(dice1, dice2)
 			break;
 		case 7:
 			if (hardWayFourActive) {
-				betResultsString += 'Hard Way 4 Bet: Loser<br>';
+				betResultsString += 'Hard Way 4 Bet: Lost $'+hardWayFourBetAmt+'<br>';
 				hardWayFourActive = false;
 				hardWayFourBetAmt = 0;
 				hardWayFourLocked = false;
@@ -982,7 +964,7 @@ function betsEval(dice1, dice2)
 				$('#hardWayFour').html('');
 			}
 			if (hardWaySixActive) {
-				betResultsString += 'Hard Way 6 Bet: Loser<br>';
+				betResultsString += 'Hard Way 6 Bet: Lost $'+hardWaySixBetAmt+'<br>';
 				hardWaySixActive = false;
 				hardWaySixBetAmt = 0;
 				hardWaySixLocked = false;
@@ -990,7 +972,7 @@ function betsEval(dice1, dice2)
 				$('#hardWaySix').html('');
 			}
 			if (hardWayEightActive) {
-				betResultsString += 'Hard Way 8 Bet: Loser<br>';
+				betResultsString += 'Hard Way 8 Bet: Lost $'+hardWayEightBetAmt+'<br>';
 				hardWayEightActive = false;
 				hardWayEightBetAmt = 0;
 				hardWayEightLocked = false;
@@ -998,7 +980,7 @@ function betsEval(dice1, dice2)
 				$('#hardWayEight').html('');
 			}
 			if (hardWayTenActive) {
-				betResultsString += 'Hard Way 10 Bet: Loser<br>';
+				betResultsString += 'Hard Way 10 Bet: Lost $'+hardWayTenBetAmt+'<br>';
 				hardWayTenActive = false;
 				hardWayTenBetAmt = 0;
 				hardWayTenLocked = false;
@@ -1009,10 +991,10 @@ function betsEval(dice1, dice2)
 		case 8:
 			if (hardWayEightActive) {
 				if (dice1 == dice2) {
-					betResultsString += 'Hard Way 8 Bet: Winner, Odds Paid 9:1<br>';
+					betResultsString += 'Hard Way 8 Bet: Won $'+Math.ceil(hardWayEightBetAmt*10)+'<br>';
 					payout(hardWayEightBetAmt, (9/1));
 				} else {
-					betResultsString += 'Hard Way 8 Bet: Loser<br>';
+					betResultsString += 'Hard Way 8 Bet: Lost $'+hardWayEightBetAmt+'<br>';
 				}
 				hardWayEightActive = false;
 				hardWayEightBetAmt = 0;
@@ -1024,10 +1006,10 @@ function betsEval(dice1, dice2)
 		case 10:
 			if (hardWayTenActive) {
 				if (dice1 == dice2) {
-					betResultsString += 'Hard Way 10 Bet: Winner, Odds Paid 7:1<br>';
+					betResultsString += 'Hard Way 10 Bet: Won $'+Math.ceil(hardWayTenBetAmt*8)+'<br>';
 					payout(hardWayTenBetAmt, (7/1));
 				} else {
-					betResultsString += 'Hard Way 10 Bet: Loser<br>';
+					betResultsString += 'Hard Way 10 Bet: Lost $'+hardWayTenBetAmt+'<br>';
 				}
 				hardWayTenActive = false;
 				hardWayTenBetAmt = 0;
@@ -1081,7 +1063,7 @@ function betsEval(dice1, dice2)
 	switch(diceValue) {
 		case 4:
 			if (placeFourActive) {
-				betResultsString += 'Place 4 Bet: Winner, Odds Paid 9:5<br>';
+				betResultsString += 'Place 4 Bet: Won $'+Math.ceil(placeFourBetAmt*(1+(9/5)))+'<br>';
 				payout(placeFourBetAmt, (9/5));
 				placeFourBetAmt = 0;
 				placeFourActive = false;
@@ -1092,7 +1074,7 @@ function betsEval(dice1, dice2)
 			break;
 		case 5:
 			if (placeFiveActive) {
-				betResultsString += 'Place 5 Bet: Winner, Odds Paid 7:5<br>';
+				betResultsString += 'Place 5 Bet: Won $'+Math.ceil(placeFiveBetAmt*(1+(7/5)))+'<br>';
 				payout(placeFiveBetAmt, (7/5));
 				placeFiveBetAmt = 0;
 				placeFiveActive = false;
@@ -1103,7 +1085,7 @@ function betsEval(dice1, dice2)
 			break;
 		case 6:
 			if (placeSixActive) {
-				betResultsString += 'Place 6 Bet: Winner, Odds Paid 7:6<br>';
+				betResultsString += 'Place 6 Bet: Won $'+Math.ceil(placeSixBetAmt*(1+(7/6)))+'<br>';
 				payout(placeSixBetAmt, (7/6));
 				placeSixBetAmt = 0;
 				placeSixActive = false;
@@ -1114,7 +1096,7 @@ function betsEval(dice1, dice2)
 			break;
 		case 7:
 			if (placeFourActive) {
-				betResultsString += 'Place 4 Bet: Loser<br>';
+				betResultsString += 'Place 4 Bet: Lost $'+placeFourBetAmt+'<br>';
 				placeFourBetAmt = 0;
 				placeFourActive = false;
 				placeFourLocked = false;
@@ -1122,7 +1104,7 @@ function betsEval(dice1, dice2)
 				$('#placeFour').html('');
 			}
 			if (placeFiveActive) {
-				betResultsString += 'Place 5 Bet: Loser<br>';
+				betResultsString += 'Place 5 Bet: Lost $'+placeFiveBetAmt+'<br>';
 				placeFiveBetAmt = 0;
 				placeFiveActive = false;
 				placeFiveLocked = false;
@@ -1130,7 +1112,7 @@ function betsEval(dice1, dice2)
 				$('#placeFive').html('');
 			}
 			if (placeSixActive) {
-				betResultsString += 'Place 6 Bet: Loser<br>';
+				betResultsString += 'Place 6 Bet: Lost $'+placeSixBetAmt+'<br>';
 				placeSixBetAmt = 0;
 				placeSixActive = false;
 				placeSixLocked = false;
@@ -1138,7 +1120,7 @@ function betsEval(dice1, dice2)
 				$('#placeSix').html('');
 			}
 			if (placeEightActive) {
-				betResultsString += 'Place 8 Bet: Loser<br>';
+				betResultsString += 'Place 8 Bet: Lost $'+placeEightBetAmt+'<br>';
 				placeEightBetAmt = 0;
 				placeEightActive = false;
 				placeEightLocked = false;
@@ -1146,7 +1128,7 @@ function betsEval(dice1, dice2)
 				$('#placeEight').html('');
 			}
 			if (placeNineActive) {
-				betResultsString += 'Place 9 Bet: Loser<br>';
+				betResultsString += 'Place 9 Bet: Lost $'+placeNineBetAmt+'<br>';
 				placeNineBetAmt = 0;
 				placeNineActive = false;
 				placeNineLocked = false;
@@ -1154,7 +1136,7 @@ function betsEval(dice1, dice2)
 				$('#placeNine').html('');
 			}
 			if (placeTenActive) {
-				betResultsString += 'Place 10 Bet: Loser<br>';
+				betResultsString += 'Place 10 Bet: Lost $'+placeTenBetAmt+'<br>';
 				placeTenBetAmt = 0;
 				placeTenActive = false;
 				placeTenLocked = false;
@@ -1164,7 +1146,7 @@ function betsEval(dice1, dice2)
 			break;
 		case 8:
 			if (placeEightActive) {
-				betResultsString += 'Place 8 Bet: Winner, Odds Paid 7:6<br>';
+				betResultsString += 'Place 8 Bet: Won $'+Math.ceil(placeEightBetAmt*(1+(7/6)))+'<br>';
 				payout(placeEightBetAmt, (7/6));
 				placeNineBetAmt = 0;
 				placeEightActive = false;
@@ -1175,7 +1157,7 @@ function betsEval(dice1, dice2)
 			break;
 		case 9:
 			if (placeNineActive) {
-				betResultsString += 'Place 9 Bet: Winner, Odds Paid 7:5<br>';
+				betResultsString += 'Place 9 Bet: Won $'+Math.ceil(placeNineBetAmt*(1+(7/5)))+'<br>';
 				payout(placeNineBetAmt, (7/5));
 				placeNineBetAmt = 0;
 				placeNineActive = false;
@@ -1186,7 +1168,7 @@ function betsEval(dice1, dice2)
 			break;
 		case 10:
 			if (placeTenActive) {
-				betResultsString += 'Place 10 Bet: Winner, Odds Paid 9:5<br>';
+				betResultsString += 'Place 10 Bet: Won $'+Math.ceil(placeTenBetAmt*(1+(9/5)))+'<br>';
 				payout(placeTenBetAmt, (9/5));
 				placeTenBetAmt = 0;
 				placeTenActive = false;
@@ -1207,6 +1189,9 @@ function betsEval(dice1, dice2)
 		placeTenLocked = true;
 	}
 	
+	if (betResultsString != '') {
+		betResultsString = '<strong>Your Earnings For That Roll:</strong><br><br>' + betResultsString;
+	}
 	document.getElementById('currGameState').innerHTML = betResultsString;
 	document.getElementById('currGameState').style.display = 'block';
 }

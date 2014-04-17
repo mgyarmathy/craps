@@ -42,6 +42,7 @@
   <script>vex.defaultOptions.className = 'vex-theme-plain';</script>
   <link rel="stylesheet" href="/css/external/vex.css" />
   <link rel="stylesheet" href="/css/external/vex-theme-plain.css" />
+  <script type="text/javascript" src="/js/help.js"></script>
   <script type="text/javascript">
 
     Physijs.scripts.worker = '/js/external/physijs_worker.js';
@@ -150,6 +151,7 @@
       });
 
       $(window).bind('beforeunload', function() {
+		closeHelp();
         $('.leftColumn, .rightColumn').hide();
         $('#gameOver').show();
 
@@ -167,6 +169,10 @@
   </script>
 </head>
 <body>
+  <div id="helpWindow">
+	<div id="closeHelp" onclick="closeHelp()">Close Help Window</div>
+	<iframe id="helpFrame" src="/helpdocs/typesofbets.html"></iframe>
+  </div>
   <div class="leftColumn">
     <div id="viewport" class="diceSimulator"></div>
 	<div id="pointChip">
@@ -212,6 +218,7 @@
       <div class="chip" id="blueChip" onclick="blueChipClick()"></div>
       <div class="chip" id="greenChip" onclick="greenChipClick()"></div>
       <div class="chip" id="blackChip" onclick="blackChipClick()"></div>
+	  <div class="chip" id="clearChip" onclick="clearChips()"></div>
     </div>
   </div>
   <div class="rightColumn">
@@ -226,6 +233,7 @@
     </div>
     <iframe src= "cards.mileshick.kd.io/chat" style="height:50%; width:100%;"></iframe>
     <button class="leaveGame">Leave Game</button>
+	<div id="help" onclick="helpClick()">Need To Learn How Craps Works?</div>
   </div>
   <div id="gameOver" style="display:none;">
     <h1>Thanks for playing!</h1>
