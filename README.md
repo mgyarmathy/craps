@@ -1,7 +1,7 @@
 Craps
 ===============
 
-![Codeship Status](https://www.codeship.io/projects/321924e0-9036-0131-5225-4a89ddb0be9d/status)
+![Codeship Status](https://www.codeship.io/projects/b419d580-a8a2-0131-79ea-22381754a5f1/status)
 
 Description
 -----------
