@@ -72,7 +72,6 @@
       });
 
       $('.joinTable').click(function() {
-        //TODO: remove on final release
         if (vars['userID']) {
           window.location = '/game?t='+ $(this).parent().data('tableNumber')+'&id='+vars['userID'];
         } else {
