@@ -126,6 +126,9 @@
             var letter = player.name.charAt(0).toLocaleLowerCase();
             url = "'http://www.havefunteaching.com/wp-content/uploads/2013/06/letter-" + letter + ".png'";
           }
+          if( sid == player.sid ) {
+            funds = player.funds;
+          }
           $('#players').append('<div class="player" id="'+player.sid+'">'
                               + '<img class="avatar" src=' + url + '></img>'
                               +   '<h2>'+player.name+'</h2>'
